@@ -1,4 +1,5 @@
 import Hero from "@/components/header/Hero";
+import Trailer from "@/components/sections/Trailer";
 
 export default function Home() {
   return (
@@ -7,6 +8,9 @@ export default function Home() {
           <Hero
             height="900px"
           />
+      </section>
+      <section>
+        <Trailer />
       </section>
     </main>
   );

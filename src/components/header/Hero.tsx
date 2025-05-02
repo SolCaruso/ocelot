@@ -28,7 +28,7 @@ const Hero: React.FC<HeroProps> = ({ height}) => {
         alt="Temporary screen"
         className="w-full h-full object-cover"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/[46%] to-black/0 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/[46%] via-black/0 to-black/[46%] pointer-events-none" />
       <div className="absolute inset-0 bg-black/[50%] pointer-events-none" />
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center space-y-8">
         <img
