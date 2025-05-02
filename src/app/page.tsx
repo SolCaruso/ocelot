@@ -5,7 +5,7 @@ export default function Home() {
     <main>
       <section>
           <Hero
-            height="800px"
+            height="900px"
           />
       </section>
     </main>

@@ -76,6 +76,8 @@
   --sidebar-ring: oklch(0.708 0 0);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
+
+  /* Easing */
   --ease-in-quad:    cubic-bezier(.55, .085, .68, .53);
   --ease-in-cubic:   cubic-bezier(.550, .055, .675, .19);
   --ease-in-quart:   cubic-bezier(.895, .03, .685, .22);
@@ -138,5 +140,41 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+
+  /* Max Width */
+  .max-w-8xl {
+    max-width: 2000px;
+  }
+
+  .max-w-9xl {
+    max-width: 2500px;
+  }
+
+  /* Font Family */
+  .font-oldFenris {
+    font-family: 'oldFenris', serif;
+  }
+  .font-quattrocento {
+    font-family: 'Quattrocento', serif;
+  }
+
+  /* Font Size */
+  .text-45xl {
+    font-size: 2.625rem;
+    line-height: 1;
+  }
+
+  /* Text Shadow */
+  .text-shadow-xs {
+    text-shadow: 0px 1px 0px rgb(0 0 0 / 0);
+  }
+  
+  /* Filter */
+  .layer-blur {
+    filter: blur(4.13px);
   }
 }

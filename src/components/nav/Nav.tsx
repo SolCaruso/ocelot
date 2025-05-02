@@ -54,7 +54,7 @@ const components: { title: string; href: string; description: string }[] = [
 
 export default function Nav() {
   return (
-    <div className="flex items-center justify-between px-4 py-2 max-w-7xl mx-auto absolute top-3 left-0 right-0 z-10">
+    <div className="flex items-center justify-between px-4 py-2 max-w-9xl mx-auto absolute top-3 left-0 right-0 z-10">
       {/* Left: Logo */}
       <div>
         <Link href="/" className="inline-block mt-1">
@@ -64,7 +64,7 @@ export default function Nav() {
 
       {/* Center: Navigation */}
       <NavigationMenu>
-        <NavigationMenuList className="flex justify-center space-x-4">
+        <NavigationMenuList className="flex justify-center space-x-2">
           <NavigationMenuItem>
             <NavigationMenuTrigger>GUILD SAGA</NavigationMenuTrigger>
             <NavigationMenuContent>
