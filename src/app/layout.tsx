@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import { oldFenris, quattrocento, montserrat } from "@/fonts"
+import Nav from "@/components/nav/Nav"  
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,13 +16,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`
+      className={`dark
         ${oldFenris.variable}
         ${quattrocento.variable}
         ${montserrat.variable}
       `}
     >
-      <body className="antialiased bg-stone-950 h-screen">
+      <body className="antialiased bg-stone-950 h-screen font-sans">
+        <header>
+         <Nav />
+        </header>
         {children}
       </body>
     </html>

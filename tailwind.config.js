@@ -8,6 +8,11 @@ module.exports = {
     ],
     theme: {
       extend: {
+        fontFamily: {
+          sans: ['var(--font-montserrat)', 'ui-sans-serif', 'system-ui'],
+          fenris: ['var(--font-old-fenris)', 'serif'],
+          quattro: ['var(--font-quattrocento)', 'serif'],
+        },
         screens: {
           "xs": "400px",
           "2xs": "375px",
