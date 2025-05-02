@@ -52,7 +52,7 @@ const Hero: React.FC<HeroProps> = ({ height}) => {
           </h3>
         </div>
         <button
-        className="px-8 py-2 font-oldFenris text-xl bg-black opacity-80 hover:opacity-100 cursor-pointer transition-colors duration-200 ease-[var(--ease-in-out-quad)]"
+        className="px-8 py-2 font-oldFenris text-xl bg-black opacity-80 hover:opacity-100 cursor-pointer transition-opacity duration-200 ease-[var(--ease-in-out-quad)]"
         style={{
           border: '10px solid transparent',
           borderImage: 'url("/webp/temp-btn.webp") 20 round',
@@ -63,16 +63,16 @@ const Hero: React.FC<HeroProps> = ({ height}) => {
         <div className="mt-8 flex items-center justify-center absolute bottom-0">
           {/* Partner logos */}
           <a href="https://store.steampowered.com/" target="_blank" rel="noopener noreferrer">
-            <Steam className="h-18 w-auto opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]" />
+            <Steam className="h-18 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]" />
           </a>
           <a href="https://unity.com/" target="_blank" rel="noopener noreferrer">
-            <Unity className="h-20 ml-6 w-auto opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]"/>
+            <Unity className="h-20 ml-6 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]"/>
           </a>
           <a href="https://ocelot.ltd/" target="_blank" rel="noopener noreferrer">
-            <Ocelot className="h-20 w-auto mb-4 opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]"/>
+            <Ocelot className="h-20 w-auto mb-4 opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]"/>
           </a>
           <a href="https://solana.com/" target="_blank" rel="noopener noreferrer">
-            <Solana className="h-20 w-auto opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]"/>
+            <Solana className="h-20 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]"/>
           </a>
         </div>
       </div>
