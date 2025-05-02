@@ -4,7 +4,9 @@ export default function Home() {
   return (
     <main>
       <section>
-          <Hero height="800px" videoSrc="/videos/hero.mp4" />
+          <Hero
+            height="800px"
+          />
       </section>
     </main>
   );

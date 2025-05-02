@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import Link from "next/link"
-import Image from "next/image"
 import Ocelot from "@/components/logos/OcelotHome";
 import { cn } from "@/lib/utils"
 import {

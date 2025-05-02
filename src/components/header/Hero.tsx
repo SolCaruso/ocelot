@@ -7,10 +7,9 @@ import Ocelot from '@/components/logos/Ocelot';
 
 interface HeroProps {
   height: string;
-  videoSrc: string;
 }
 
-const Hero: React.FC<HeroProps> = ({ height, videoSrc }) => {
+const Hero: React.FC<HeroProps> = ({ height}) => {
   return (
     <div className="w-full relative overflow-hidden" style={{ height }}>
       <img
@@ -45,10 +44,18 @@ const Hero: React.FC<HeroProps> = ({ height, videoSrc }) => {
       </button>
         <div className="mt-8 flex items-center justify-center absolute bottom-0">
           {/* Partner logos */}
-          <Steam className="h-18 w-auto opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]" />
-          <Unity className="h-20 ml-6 w-auto opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]"/>
-          <Ocelot className="h-20 w-auto mb-4 opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]"/>
-          <Solana className="h-20 w-auto opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]"/>
+          <a href="https://store.steampowered.com/" target="_blank" rel="noopener noreferrer">
+            <Steam className="h-18 w-auto opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]" />
+          </a>
+          <a href="https://unity.com/" target="_blank" rel="noopener noreferrer">
+            <Unity className="h-20 ml-6 w-auto opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]"/>
+          </a>
+          <a href="https://ocelot.ltd/" target="_blank" rel="noopener noreferrer">
+            <Ocelot className="h-20 w-auto mb-4 opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]"/>
+          </a>
+          <a href="https://solana.com/" target="_blank" rel="noopener noreferrer">
+            <Solana className="h-20 w-auto opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]"/>
+          </a>
         </div>
       </div>
     </div>
