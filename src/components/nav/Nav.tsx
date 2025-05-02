@@ -3,6 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
+import Ocelot from "@/components/logos/OcelotHome";
 import { cn } from "@/lib/utils"
 import {
   NavigationMenu,
@@ -58,7 +59,7 @@ export default function Nav() {
       {/* Left: Logo */}
       <div>
         <Link href="/" className="inline-block mt-1">
-          <Image src="/webp/ocelot-home.webp" alt="Ocelot Logo" width={130} height={50} />
+          <Ocelot className="h-8 w-auto opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]" />
         </Link>
       </div>
 

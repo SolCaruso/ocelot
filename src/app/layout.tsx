@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import "./globals.css"
-import { oldFenris, quattrocento, montserrat } from "@/fonts"
+import { montserrat } from '@/fonts'
 import Nav from "@/components/nav/Nav"  
 
 export const metadata: Metadata = {
@@ -17,9 +17,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`dark
-        ${oldFenris.variable}
-        ${quattrocento.variable}
-        ${montserrat.variable}
+      ${montserrat.className} ${montserrat.variable}
       `}
     >
       <body className="antialiased bg-stone-950 h-screen font-sans">
