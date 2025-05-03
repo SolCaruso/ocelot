@@ -35,6 +35,12 @@ const Trailer: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (playing && playerRef.current?.playVideo) {
+      playerRef.current.playVideo();
+    }
+  }, [playing]);
+
   const handlePlay = () => {
     setPlaying(true);
     if (playerRef.current && playerRef.current.playVideo) {
@@ -68,7 +74,7 @@ const Trailer: React.FC = () => {
       />
 
         {/* Video and text block */}
-        <div className="relative max-w-7xl mx-auto px-6 py-24 flex flex-col md:flex-row items-center justify-between gap-16 z-30">
+        <div className="relative max-w-7xl mx-auto px-6 py-24 flex flex-col-reverse lg:flex-row items-center justify-between gap-16 z-30">
 
             {/* Video placeholder */}
             <div className="aspect-[16/9] w-[640px] bg-black relative filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] border-[1.5px] border-[#282828] opacity-80 hover:opacity-100 transition-opacity duration-200 ease-[var(--ease-in-out-quad)] cursor-pointer"
@@ -100,7 +106,7 @@ const Trailer: React.FC = () => {
             </div>
 
             {/* Text block */}
-            <div className="mt-8 md:mt-0 md:ml-8 flex-1 text-center md:text-left max-w-xl">
+            <div className=" md:ml-8 flex-1 text-center lg:text-left max-w-xl">
                 <h3 className="text-[#D2C8AE] text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4">
                     FANTASY TACTICS
                 </h3>
