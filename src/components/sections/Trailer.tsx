@@ -82,10 +82,10 @@ const Trailer: React.FC = () => {
       />
 
         {/* Video and text block */}
-        <div className="relative max-w-7xl mx-auto px-6 py-24 flex flex-col-reverse lg:flex-row items-center justify-between gap-16 z-30">
+        <div className="relative sm:max-w-7xl mx-auto px-6 py-24 flex flex-col-reverse lg:flex-row items-center justify-between gap-16 z-30">
 
             {/* Video placeholder */}
-            <div className="aspect-[16/9] w-[640px] bg-black relative filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] border-[1.5px] border-[#282828] opacity-80 hover:opacity-100 transition-opacity duration-200 ease-[var(--ease-in-out-quad)] cursor-pointer"
+            <div className="aspect-[16/9] w-full max-w-[440px] sm:max-w-[540px] md:max-w-[640px] h-auto bg-black relative filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] border-[1.5px] border-[#282828] opacity-80 hover:opacity-100 transition-opacity duration-200 ease-[var(--ease-in-out-quad)] cursor-pointer"
             onClick={handlePlay}>
                 {!playing ? (
                     <>
@@ -117,14 +117,14 @@ const Trailer: React.FC = () => {
 
             {/* Text block */}
             <div className=" md:ml-8 flex-1 text-center lg:text-left max-w-xl">
-                <h3 className="text-[#D2C8AE] text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4">
+                <h3 className="text-[#D2C8AE] text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4">
                     FANTASY TACTICS
                 </h3>
-                <p className="mt-4 text-gray-200 text-xl font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] ">
+                <p className="mt-4 text-gray-200 md:text-xl font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] ">
                     Tactical, isometric turn-based combat draws inspiration from the classic
                     RPGs of old, offering both depth and strategy.
                 </p>
-                <p className="mt-4 text-xl text-gray-200 font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)]">
+                <p className="mt-4 md:text-xl text-gray-200 font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)]">
                     As you recruit and assemble a diverse party, each member’s unique abilities become crucial
                     to your success on the battlefield.
                 </p>

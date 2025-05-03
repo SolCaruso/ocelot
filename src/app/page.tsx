@@ -5,9 +5,7 @@ export default function Home() {
   return (
     <main>
       <section>
-          <Hero
-            height="900px"
-          />
+          <Hero className= 'h-[700px] sm:h-[800px] md:h-[900px]' />
       </section>
       <section>
         <Trailer />
