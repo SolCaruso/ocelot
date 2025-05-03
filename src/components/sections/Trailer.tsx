@@ -9,14 +9,14 @@ const Trailer: React.FC = () => {
   const playerRef = useRef<any>(null);
 
   useEffect(() => {
-    // 1) Load the IFrame Player API code asynchronously.
+    // Load the IFrame Player API code asynchronously
     const tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     document.body.appendChild(tag);
 
-    // 2) This function will be called by the API when it's loaded.
-    window.onYouTubeIframeAPIReady = () => {
-      playerRef.current = new window.YT.Player('yt-player', {
+    // Function called by the API when it's loaded.
+    (window as any).onYouTubeIframeAPIReady = () => {
+      playerRef.current = new (window as any).YT.Player('yt-player', {
         videoId: 'feH6zZBT1g8',
         playerVars: {
           rel: 0,
@@ -26,7 +26,6 @@ const Trailer: React.FC = () => {
         },
         events: {
           onReady: (e: any) => {
-            // Optionally autoplay if already clicked
             if (playing) {
               e.target.playVideo();
             }
@@ -69,7 +68,7 @@ const Trailer: React.FC = () => {
       />
 
         {/* Video and text block */}
-        <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 flex flex-col md:flex-row items-center justify-between gap-16">
+        <div className="relative max-w-7xl mx-auto px-6 py-24 flex flex-col md:flex-row items-center justify-between gap-16 z-30">
 
             {/* Video placeholder */}
             <div className="aspect-[16/9] w-[640px] bg-black relative filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] border-[1.5px] border-[#282828] opacity-80 hover:opacity-100 transition-opacity duration-200 ease-[var(--ease-in-out-quad)] cursor-pointer"
@@ -102,14 +101,14 @@ const Trailer: React.FC = () => {
 
             {/* Text block */}
             <div className="mt-8 md:mt-0 md:ml-8 flex-1 text-center md:text-left max-w-xl">
-                <h3 className="text-white text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4">
+                <h3 className="text-[#D2C8AE] text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4">
                     FANTASY TACTICS
                 </h3>
-                <p className="mt-4 text-xl font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)]">
+                <p className="mt-4 text-gray-200 text-xl font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] ">
                     Tactical, isometric turn-based combat draws inspiration from the classic
                     RPGs of old, offering both depth and strategy.
                 </p>
-                <p className="mt-4 text-xl font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)]">
+                <p className="mt-4 text-xl text-gray-200 font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)]">
                     As you recruit and assemble a diverse party, each member’s unique abilities become crucial
                     to your success on the battlefield.
                 </p>
@@ -118,8 +117,15 @@ const Trailer: React.FC = () => {
         </div>
 
         {/* Undine illustration */}
-        <div className='absolute -right-12 bottom-0 z-20'>
-            <Image src='/webp/undinewebp.webp' alt='Undine Illustration' width={500} height={1200}></Image>
+        <div className="absolute -right-12 -bottom-66 4xl:-bottom-[8.3rem] z-20 xl:block hidden opacity-30 3xl:opacity-100">
+          <div className="relative w-[500px] h-[1200px] 4xl:w-[700px] ">
+            <Image
+              src="/webp/undinewebp.webp"
+              alt="Undine Illustration"
+              fill
+              className="object-contain"
+            />
+          </div>
         </div>
     
     </section>

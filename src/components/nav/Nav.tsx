@@ -1,6 +1,8 @@
 "use client"
 
 import * as React from "react"
+import { useState} from "react"
+import { NavDrawer } from "@/components/nav/Mobile"
 import Link from "next/link"
 import Ocelot from "@/components/logos/OcelotHome";
 import { cn } from "@/lib/utils"
@@ -53,17 +55,20 @@ const components: { title: string; href: string; description: string }[] = [
 ]
 
 export default function Nav() {
+  const [isOpen, setIsOpen] = useState(false)
+
+
   return (
     <div className="flex items-center justify-between px-4 py-2 max-w-9xl mx-auto absolute top-3 left-0 right-0 z-10">
       {/* Left: Logo */}
       <div>
-        <Link href="/" className="inline-block mt-1">
+        <Link href="/" className="inline-block mt-1 ml-2 md:ml-0">
           <Ocelot className="h-8 w-auto opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]" />
         </Link>
       </div>
 
       {/* Center: Navigation */}
-      <NavigationMenu>
+      <NavigationMenu className='hidden md:block'>
         <NavigationMenuList className="flex justify-center space-x-2">
           <NavigationMenuItem>
             <NavigationMenuTrigger>GUILD SAGA</NavigationMenuTrigger>
@@ -116,9 +121,14 @@ export default function Nav() {
           </NavigationMenuItem>
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link href="/docs" className={navigationMenuTriggerStyle()}>
+              <a
+                href="https://docs.guildsaga.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={navigationMenuTriggerStyle()}
+              >
                 DOCS
-              </Link>
+              </a>
             </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
@@ -133,9 +143,38 @@ export default function Nav() {
 
       {/* Right: Button */}
       <div>
-        <button className="hidden lg:inline-flex items-center justify-center py-3 px-2.5 md:px-4 text-[0.75rem] leading-[1rem] font-bold tracking-[0.2px] cursor-pointer border-none rounded-[5px] transition-colors duration-200 ease-in-out bg-[#E6E6E6] hover:bg-[#FFF] shadow-md opacity-90 hover:opacity-100 text-black uppercase">
+        <a
+          href="https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className=" items-center justify-center py-3 px-4 text-[0.75rem] leading-[1rem] font-bold tracking-[0.2px] cursor-pointer border-none rounded-[5px] transition-colors duration-200 ease-in-out bg-[#E6E6E6] hover:bg-[#FFF] shadow-md opacity-90 hover:opacity-100 text-black uppercase md:block hidden"
+        >
           BUY NOW
+        </a>
+      </div>
+
+      {/* Mobile: Hamburger */}
+      <div className="md:hidden flex items-center ml-auto">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="p-4 absolute top-1 right-2"
+          aria-label="Toggle mobile menu"
+        >
+          <div className="relative w-6 h-6">
+            <span className={`absolute block h-[2px] bg-white transition-all duration-300 ${isOpen ? "top-[8px] w-0 left-[50%]" : "top-0 w-full left-0"}`}></span>
+            <span className={`absolute block h-[2px] bg-white transition-all duration-300 origin-center top-[8px] w-full left-0 ${isOpen ? "rotate-45" : ""}`}></span>
+            <span className={`absolute block h-[2px] bg-white transition-all duration-300 origin-center top-[8px] w-full left-0 ${isOpen ? "-rotate-45" : ""}`}></span>
+            <span className={`absolute block h-[2px] bg-white transition-all duration-300 ${isOpen ? "top-[8px] w-0 left-[50%]" : "top-[16px] w-full left-0"}`}></span>
+          </div>
         </button>
+      </div>
+
+      {/* Mobile Drawer */}
+      <div className="md:hidden">
+        <NavDrawer
+          open={isOpen}
+          onOpenChange={(open: boolean) => setIsOpen(open)}
+        />
       </div>
     </div>
   )

@@ -51,15 +51,18 @@ const Hero: React.FC<HeroProps> = ({ height}) => {
             FANTASY RPG
           </h3>
         </div>
-        <button
-        className="px-8 py-2 font-oldFenris text-xl bg-black opacity-80 hover:opacity-100 cursor-pointer transition-opacity duration-200 ease-[var(--ease-in-out-quad)]"
-        style={{
-          border: '10px solid transparent',
-          borderImage: 'url("/webp/temp-btn.webp") 20 round',
-        }}
-      >
-        BUY NOW
-      </button>
+        <a
+          href="https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-8 py-2 font-oldFenris text-xl bg-black opacity-80 hover:opacity-100 cursor-pointer transition-opacity duration-200 ease-[var(--ease-in-out-quad)]"
+          style={{
+            border: '10px solid transparent',
+            borderImage: 'url("/webp/temp-btn.webp") 20 round',
+          }}
+        >
+          BUY NOW
+        </a>
         <div className="mt-8 flex items-center justify-center absolute bottom-0">
           {/* Partner logos */}
           <a href="https://store.steampowered.com/" target="_blank" rel="noopener noreferrer">
