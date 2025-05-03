@@ -82,7 +82,7 @@ const Trailer: React.FC = () => {
       />
 
         {/* Video and text block */}
-        <div className="relative sm:max-w-7xl mx-auto px-6 py-24 flex flex-col-reverse lg:flex-row items-center justify-between gap-16 z-30">
+        <div className="relative sm:max-w-7xl mx-auto px-6 py-24 flex flex-col-reverse lg:flex-row items-center justify-between gap-16 z-40">
 
             {/* Video placeholder */}
             <div className="aspect-[16/9] w-full max-w-[440px] sm:max-w-[540px] md:max-w-[640px] h-auto bg-black relative filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] border-[1.5px] border-[#282828] opacity-80 hover:opacity-100 transition-opacity duration-200 ease-[var(--ease-in-out-quad)] cursor-pointer"
@@ -95,6 +95,7 @@ const Trailer: React.FC = () => {
                         className="w-full h-full object-cover"
                         width={640}
                         height={360}
+                        draggable={false}
                     />
                     <div
                         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-28 h-28"
@@ -116,7 +117,7 @@ const Trailer: React.FC = () => {
             </div>
 
             {/* Text block */}
-            <div className=" md:ml-8 flex-1 text-center lg:text-left max-w-xl">
+            <div className=" md:ml-8 flex-1 text-center lg:text-left max-w-xl min-w-[20rem]">
                 <h3 className="text-[#D2C8AE] text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4">
                     FANTASY TACTICS
                 </h3>
@@ -139,9 +140,21 @@ const Trailer: React.FC = () => {
               src="/webp/undinewebp.webp"
               alt="Undine Illustration"
               fill
-              className="object-contain"
+              className="object-contain select-none"
+              draggable={false}
             />
           </div>
+        </div>
+        
+        {/* Divider */}
+        <div className="z-30 absolute -bottom-[22rem] xs:-bottom-[21rem] sm:-bottom-[23.5rem] md:-bottom-[26rem] lg:-bottom-[17.8rem] w-[80rem] h-full left-1/2 transform -translate-x-1/2 opacity-70">
+          <Image
+            src="/webp/divider.webp"
+            alt="Divider"
+            fill
+            className="object-contain select-none"
+            draggable={false}
+          />
         </div>
     
     </section>

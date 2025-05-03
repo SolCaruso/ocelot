@@ -36,6 +36,7 @@ const Hero: React.FC<HeroProps> = ({ className, height }) => {
         className="w-full h-full object-cover"
         width={1920}
         height={1080}
+        draggable={false}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/[46%] via-black/0 to-black/[46%] pointer-events-none" />
       <div className="absolute inset-0 bg-black/[50%] pointer-events-none" />
@@ -45,9 +46,10 @@ const Hero: React.FC<HeroProps> = ({ className, height }) => {
         <Image
           src="/webp/guildsaga.webp"
           alt="Guild Saga Logo"
-          className="mx-auto h-auto mb-8 sm:w-[35rem] w-[24rem]"
+          className="mx-auto h-auto mb-8 sm:w-[35rem] w-[24rem] select-none"
           width={1920}
           height={1080}
+          draggable={false}
         />
 
         {/* Text */}
@@ -72,7 +74,7 @@ const Hero: React.FC<HeroProps> = ({ className, height }) => {
           href="https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"
           target="_blank"
           rel="noopener noreferrer"
-          className="px-8 py-2 font-oldFenris text-xl bg-black opacity-80 hover:opacity-100 cursor-pointer transition-opacity duration-200 ease-[var(--ease-in-out-quad)]"
+          className="px-8 py-2 font-oldFenris text-xl bg-black hover:bg-[#18160d] opacity-80 hover:opacity-100 cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)]"
           style={{
             border: '10px solid transparent',
             borderImage: 'url("/webp/temp-btn.webp") 20 round',
