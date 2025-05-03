@@ -81,10 +81,12 @@ const Trailer: React.FC = () => {
             onClick={handlePlay}>
                 {!playing ? (
                     <>
-                    <img
+                    <Image
                         src="/webp/thumb.webp"
                         alt="Video thumbnail"
                         className="w-full h-full object-cover"
+                        width={640}
+                        height={360}
                     />
                     <div
                         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-28 h-28"
