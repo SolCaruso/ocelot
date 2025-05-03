@@ -1,12 +1,20 @@
-'use client'; 
+/// <reference types="youtube" />
+'use client';
+
+declare global {
+  interface Window {
+    onYouTubeIframeAPIReady: () => void;
+  }
+}
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+
 import Play from '@/components/ui/icons/Play';
 
 const Trailer: React.FC = () => {
   const [playing, setPlaying] = useState(false);
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef<YT.Player | null>(null);
 
   useEffect(() => {
     // Load the IFrame Player API code asynchronously
@@ -15,8 +23,8 @@ const Trailer: React.FC = () => {
     document.body.appendChild(tag);
 
     // Function called by the API when it's loaded.
-    (window as any).onYouTubeIframeAPIReady = () => {
-      playerRef.current = new (window as any).YT.Player('yt-player', {
+    window.onYouTubeIframeAPIReady = () => {
+      playerRef.current = new YT.Player('yt-player', {
         videoId: 'feH6zZBT1g8',
         playerVars: {
           rel: 0,
@@ -25,7 +33,7 @@ const Trailer: React.FC = () => {
           disablekb: 1,
         },
         events: {
-          onReady: (e: any) => {
+          onReady: (e: YT.PlayerEvent) => {
             if (playing) {
               e.target.playVideo();
             }

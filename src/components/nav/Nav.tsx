@@ -1,5 +1,7 @@
 "use client"
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import * as React from "react"
 import { useState} from "react"
 import { NavDrawer } from "@/components/nav/Mobile"
