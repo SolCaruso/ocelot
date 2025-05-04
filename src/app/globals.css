@@ -51,8 +51,11 @@
   --animate-marquee: marquee var(--marquee-duration) linear infinite;
 
   @keyframes marquee {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
     100% {
-      transform: translateY(-50%);
+      transform: translate3d(0, -50%, 0);
     }
   }
 }
@@ -80,6 +83,13 @@
       transform: rotate(-360deg);
     }
   }
+}
+
+/* Marquee enhancements for smooth continuous scroll */
+.animate-marquee {
+  animation-timing-function: linear !important;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 
