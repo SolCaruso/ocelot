@@ -65,7 +65,7 @@ const Trailer: React.FC = () => {
       {/* Right fade overlay */}
       <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-gs-bg to-transparent z-20" />
 
-      <div className="absolute inset-0"
+      <div className="absolute inset-0 opacity-70"
 
         style={{
 

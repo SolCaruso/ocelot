@@ -27,20 +27,20 @@ const Hero: React.FC<HeroProps> = ({ className, height }) => {
   };
   return (
     <div
-      className={`w-full relative overflow-hidden max-w-9xl mx-auto ${className ?? ''}`}
+      className={`w-full relative z-10 overflow-hidden max-w-9xl mx-auto ${className ?? ''}`}
       style={className ? maskStyles : { ...maskStyles, height }}
     >
       <video
         src="/videos/hero.mp4"
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover z-0"
         autoPlay
         loop
         muted
         playsInline
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/[46%] via-black/0 to-black/[46%] pointer-events-none" />
-      <div className="absolute inset-0 bg-black/[40%] pointer-events-none" />
-      <div className="absolute inset-0 flex flex-col items-center md:justify-center text-center md:space-y-8 mt-32 md:mt-0">
+      <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/[46%] via-black/0 to-black/[46%] pointer-events-none" />
+      <div className="absolute inset-0 z-15 bg-black/[40%] pointer-events-none" />
+      <div className="absolute inset-0 z-20 flex flex-col items-center md:justify-center text-center md:space-y-8 mt-32 md:mt-0">
 
         {/* Logo */}
         <Image

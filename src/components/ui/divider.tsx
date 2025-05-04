@@ -7,10 +7,10 @@ export default function Divider() {
         alt="Divider"
         width={1780}
         height={65}
-        className="z-30 absolute -bottom-12 left-1/2 -translate-x-1/2 select-none max-w-none opacity-60"
+        className="z-30 absolute -bottom-10 left-1/2 -translate-x-1/2 select-none max-w-none"
         draggable={false}
         style={{
-          maskImage: 'linear-gradient(to right, black 70%, transparent 100%)',
+          maskImage: 'linear-gradient(to right, black 10%, transparent 100%)',
           WebkitMaskImage: 'linear-gradient(to right, black 90%, transparent 100%)'
         }}
       />
