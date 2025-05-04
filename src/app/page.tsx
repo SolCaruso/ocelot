@@ -1,7 +1,6 @@
 import Hero from "@/components/header/Hero";
 import Trailer from "@/components/sections/Trailer";
 import { Reviews } from "@/components/sections/Reviews";
-import Divider from "@/components/ui/divider";
 
 export default function Home() {
   return (
