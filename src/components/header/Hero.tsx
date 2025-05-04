@@ -30,13 +30,13 @@ const Hero: React.FC<HeroProps> = ({ className, height }) => {
       className={`w-full relative overflow-hidden max-w-9xl mx-auto ${className ?? ''}`}
       style={className ? maskStyles : { ...maskStyles, height }}
     >
-      <Image
-        src="/webp/temp-screen.png"
-        alt="Temporary screen"
+      <video
+        src="/videos/hero.mp4"
         className="w-full h-full object-cover"
-        width={1920}
-        height={1080}
-        draggable={false}
+        autoPlay
+        loop
+        muted
+        playsInline
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/[46%] via-black/0 to-black/[46%] pointer-events-none" />
       <div className="absolute inset-0 bg-black/[50%] pointer-events-none" />

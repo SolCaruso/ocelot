@@ -9,7 +9,7 @@ declare global {
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-
+import Divider from '@/components/ui/divider';
 import Play from '@/components/ui/icons/Play';
 
 const Trailer: React.FC = () => {
@@ -133,29 +133,17 @@ const Trailer: React.FC = () => {
 
         </div>
 
-        {/* Undine illustration */}
-        <div className="absolute -right-12 -bottom-66 4xl:-bottom-[8.3rem] z-20 xl:block hidden opacity-30 3xl:opacity-100">
-          <div className="relative w-[500px] h-[1200px] 4xl:w-[700px] ">
-            <Image
-              src="/webp/undinewebp.webp"
-              alt="Undine Illustration"
-              fill
-              className="object-contain select-none"
-              draggable={false}
-            />
-          </div>
-        </div>
-        
-        {/* Divider */}
-        <div className="z-30 absolute -bottom-[22rem] xs:-bottom-[21rem] sm:-bottom-[23.5rem] md:-bottom-[26rem] lg:-bottom-[17.8rem] w-[80rem] h-full left-1/2 transform -translate-x-1/2 opacity-70">
-          <Image
-            src="/webp/divider.webp"
-            alt="Divider"
-            fill
-            className="object-contain select-none"
-            draggable={false}
-          />
-        </div>
+      {/* Undine illustration */}
+      <Image
+        src="/webp/undine.webp"
+        alt="Undine Illustration"
+        width={1506}
+        height={2000}
+        className="object-contain w-[500px] 4xl:w-[700px] absolute -right-12 bottom-0 z-20 xl:block hidden opacity-30 3xl:opacity-100 select-none"  
+        draggable={false}
+      />
+
+      <Divider />
     
     </section>
   );

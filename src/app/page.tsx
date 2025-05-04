@@ -1,15 +1,14 @@
 import Hero from "@/components/header/Hero";
 import Trailer from "@/components/sections/Trailer";
+import { Reviews } from "@/components/sections/Reviews";
+import Divider from "@/components/ui/divider";
 
 export default function Home() {
   return (
     <main>
-      <section>
-          <Hero className= 'h-[700px] sm:h-[800px] md:h-[900px]' />
-      </section>
-      <section>
+        <Hero className= 'h-[700px] sm:h-[800px] md:h-[900px]' />
         <Trailer />
-      </section>
+        <Reviews />
     </main>
   );
 }
