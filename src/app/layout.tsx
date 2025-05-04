@@ -20,7 +20,7 @@ export default function RootLayout({
       ${montserrat.className} ${montserrat.variable}
       `}
     >
-      <body className="antialiased bg-stone-950 h-screen font-sans">
+      <body className="antialiased bg-gs-bg h-screen font-sans">
         <header>
          <Nav />
         </header>

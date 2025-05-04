@@ -60,9 +60,16 @@
   }
 }
 
-/* Reviews */
+
 @theme {
 
+  /* Tailwind Utilities */
+  --container-8xl: 96rem;
+  --container-9xl: 130rem;
+  --container-10xl: 175rem;
+  --color-gs-bg: #090806;
+
+  /* Reviews */
   --animate-fade-in: fade-in 0.5s linear forwards;
   --animate-spin-slow: spin 4s linear infinite;
   --animate-spin-slower: spin 6s linear infinite;
@@ -91,7 +98,6 @@
   will-change: transform;
   backface-visibility: hidden;
 }
-
 
 
 :root {
@@ -198,7 +204,7 @@
   }
 }
 
-/* Tailwind Utilities */
+/* CSS Utilities */
 @layer utilities {
 
   /* Max Width */

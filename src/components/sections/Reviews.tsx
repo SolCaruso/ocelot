@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import clsx from 'clsx'
 import { useInView } from 'framer-motion'
-
+import DividerTop from '@/components/ui/divider-top';
+import DividerBottom from '@/components/ui/divider-bottom';
 import { Container } from '@/components/ui/container'
 
 interface Review {
@@ -104,10 +105,10 @@ function StarIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
     <svg viewBox="0 0 20 20" aria-hidden="true" {...props}>
       <defs>
-        <linearGradient id="starGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#FBAA6D" />
-          <stop offset="50%" stopColor="#F8F289" />
-          <stop offset="100%" stopColor="#FC8A52" />
+        <linearGradient id="starGradient" x1="100%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#fff" />
+          <stop offset="66%" stopColor="#fbcea0" />
+          <stop offset="100%" stopColor="#fbcfa0" />
         </linearGradient>
       </defs>
       <path fill="url(#starGradient)" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -237,40 +238,44 @@ function ReviewGrid() {
   const column3 = splitArray(columns[2], 2)
 
   return (
-    <div
-      ref={containerRef}
-      className="relative -mx-4 mt-16 grid h-[49rem] max-h-[150vh] grid-cols-1 items-start gap-8 overflow-hidden px-4 sm:mt-20 md:grid-cols-2 lg:grid-cols-3"
-    >
-      {isInView && (
-        <>
-          <ReviewColumn
-            reviews={[...column1, ...column3.flat(), ...column2]}
-            reviewClassName={(reviewIndex) =>
-              clsx(
-                reviewIndex >= column1.length + column3[0].length &&
-                  'md:hidden',
-                reviewIndex >= column1.length && 'lg:hidden',
-              )
-            }
-            msPerPixel={10}
-          />
-          <ReviewColumn
-            reviews={[...column2, ...column3[1]]}
-            className="hidden md:block"
-            reviewClassName={(reviewIndex) =>
-              reviewIndex >= column2.length ? 'lg:hidden' : ''
-            }
-            msPerPixel={15}
-          />
-          <ReviewColumn
-            reviews={column3.flat()}
-            className="hidden lg:block"
-            msPerPixel={10}
-          />
-        </>
-      )}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-stone-950 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-stone-950 to-transparent" />
+    <div className='relative overflow-x-clip'>
+      <DividerTop />
+      <div
+        ref={containerRef}
+        className="relative -mx-4 mt-16 grid h-[49rem] max-h-[150vh] grid-cols-1 items-start gap-8 overflow-hidden px-4 sm:mt-20 md:grid-cols-2 lg:grid-cols-3"
+      >
+        {isInView && (
+          <>
+            <ReviewColumn
+              reviews={[...column1, ...column3.flat(), ...column2]}
+              reviewClassName={(reviewIndex) =>
+                clsx(
+                  reviewIndex >= column1.length + column3[0].length &&
+                    'md:hidden',
+                  reviewIndex >= column1.length && 'lg:hidden',
+                )
+              }
+              msPerPixel={10}
+            />
+            <ReviewColumn
+              reviews={[...column2, ...column3[1]]}
+              className="hidden md:block"
+              reviewClassName={(reviewIndex) =>
+                reviewIndex >= column2.length ? 'lg:hidden' : ''
+              }
+              msPerPixel={15}
+            />
+            <ReviewColumn
+              reviews={column3.flat()}
+              className="hidden lg:block"
+              msPerPixel={10}
+            />
+          </>
+        )}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-22 bg-gradient-to-b from-gs-bg to-transparent mx-4" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-gs-bg to-transparent mx-4"/>
+      </div>
+      <DividerBottom />
     </div>
   )
 }
@@ -280,16 +285,17 @@ export function Reviews() {
     <section
       id="reviews"
       aria-labelledby="reviews-title"
-      className="pt-20 pb-16 sm:pt-32 sm:pb-24 relative"
+      className="pt-20 pb-16 sm:pt-32 sm:pb-24 relative bg-[url('/webp/smoke.webp')] bg-cover bg-center bg-no-repeat"
     >
       <Container>
         <h2
           id="reviews-title"
-          className="text-3xl font-medium tracking-tight text-stone-100 text-center font-oldFenris uppercase text-pretty mt-8"
+          className="text-3xl font-medium tracking-tight  text-center font-oldFenris uppercase text-pretty mt-8 text-transparent bg-clip-text"
+          style={{ backgroundImage: 'linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)' }}
         >
           What Guildies are saying
         </h2>
-        <p className="mt-6 sm:mt-3 text-xl text-stone-400 text-center font-quattrocento text-pretty max-w-xl mx-auto">
+        <p className="mt-6 sm:mt-3 text-xl text-stone-50 text-center font-quattrocento text-pretty max-w-xl mx-auto">
           Real reviews from adventurers playing Guild Saga: Vanished Worlds Early Access on Steam.
         </p>
         <ReviewGrid />

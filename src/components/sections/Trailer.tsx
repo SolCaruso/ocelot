@@ -59,11 +59,11 @@ const Trailer: React.FC = () => {
   return (
     <section className="relative overflow-x-clip">
 
-      {/* Left black fade overlay */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-black to-transparent z-20" />
+      {/* Left fade overlay */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-gs-bg to-transparent z-20" />
 
-      {/* Right black fade overlay */}
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-black to-transparent z-20" />
+      {/* Right fade overlay */}
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-gs-bg to-transparent z-20" />
 
       <div className="absolute inset-0"
 
@@ -85,7 +85,7 @@ const Trailer: React.FC = () => {
         <div className="relative sm:max-w-7xl mx-auto px-6 py-24 flex flex-col-reverse lg:flex-row items-center justify-between gap-16 z-40">
 
             {/* Video placeholder */}
-            <div className="aspect-[16/9] w-full max-w-[440px] sm:max-w-[540px] md:max-w-[640px] h-auto bg-black relative filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] border-[1.5px] border-[#282828] opacity-80 hover:opacity-100 transition-opacity duration-200 ease-[var(--ease-in-out-quad)] cursor-pointer"
+            <div className="aspect-[16/9] w-full max-w-[440px] sm:max-w-[540px] md:max-w-[640px] h-auto bg-gs-bg relative filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] border-[1.5px] border-[#282828] opacity-80 hover:opacity-100 transition-opacity duration-200 ease-[var(--ease-in-out-quad)] cursor-pointer"
             onClick={handlePlay}>
                 {!playing ? (
                     <>
@@ -118,14 +118,17 @@ const Trailer: React.FC = () => {
 
             {/* Text block */}
             <div className=" md:ml-8 flex-1 text-center lg:text-left max-w-xl min-w-[20rem]">
-                <h3 className="text-[#D2C8AE] text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4">
-                    FANTASY TACTICS
+                <h3
+                  className="bg-clip-text text-transparent text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4"
+                  style={{ backgroundImage: 'linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)' }}
+                >
+                  FANTASY TACTICS
                 </h3>
-                <p className="mt-4 text-gray-200 md:text-xl font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] ">
+                <p className="mt-4 text-stone-50 md:text-xl font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] ">
                     Tactical, isometric turn-based combat draws inspiration from the classic
                     RPGs of old, offering both depth and strategy.
                 </p>
-                <p className="mt-4 md:text-xl text-gray-200 font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)]">
+                <p className="mt-4 md:text-xl text-stone-50 font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)]">
                     As you recruit and assemble a diverse party, each member’s unique abilities become crucial
                     to your success on the battlefield.
                 </p>

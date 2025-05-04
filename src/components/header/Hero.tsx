@@ -18,8 +18,8 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ className, height }) => {
   const maskStyles = {
-    WebkitMaskImage: 'radial-gradient(circle at center, white 40%, transparent 100%)',
-    maskImage: 'radial-gradient(circle at center, white 40%, transparent 100%)',
+    WebkitMaskImage: 'radial-gradient(circle at center, white 20%, transparent 85%)',
+    maskImage: 'radial-gradient(circle at center, white 20%, transparent 85%)',
     WebkitMaskRepeat: 'no-repeat',
     maskRepeat: 'no-repeat',
     WebkitMaskPosition: 'center',
@@ -39,7 +39,7 @@ const Hero: React.FC<HeroProps> = ({ className, height }) => {
         playsInline
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/[46%] via-black/0 to-black/[46%] pointer-events-none" />
-      <div className="absolute inset-0 bg-black/[50%] pointer-events-none" />
+      <div className="absolute inset-0 bg-black/[40%] pointer-events-none" />
       <div className="absolute inset-0 flex flex-col items-center md:justify-center text-center md:space-y-8 mt-32 md:mt-0">
 
         {/* Logo */}
@@ -83,23 +83,23 @@ const Hero: React.FC<HeroProps> = ({ className, height }) => {
           BUY NOW
         </a>
 
-        <div className="mt-8 flex items-center justify-center absolute bottom-0">
+        <div className="mt-8 flex items-center justify-center absolute bottom-0 mb-8 lg:mb-0">
           {/* Partner logos */}
           <a href="https://store.steampowered.com/" target="_blank" rel="noopener noreferrer">
-            <Steam className="h-18 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] hidden md:block" />
-            <SteamMobile className="h-14 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] md:hidden" />
+            <Steam className="h-18 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] hidden lg:block" />
+            <SteamMobile className="h-14 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] lg:hidden" />
           </a>
           <a href="https://unity.com/" target="_blank" rel="noopener noreferrer">
-            <Unity className="h-20 ml-6 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] hidden md:block"/>
-            <UnityMobile className="h-14 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] md:hidden"/>
+            <Unity className="h-20 ml-6 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] hidden lg:block"/>
+            <UnityMobile className="h-14 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] lg:hidden"/>
           </a>
           <a href="https://ocelot.ltd/" target="_blank" rel="noopener noreferrer">
-            <Ocelot className="h-20 w-auto mb-4 opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] hidden md:block"/>
-            <OcelotMobile className="h-14 w-auto mb-4 opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] md:hidden"/>
+            <Ocelot className="h-20 w-auto mb-4 opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] hidden lg:block"/>
+            <OcelotMobile className="h-14 w-auto mb-4 opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] lg:hidden"/>
           </a>
           <a href="https://solana.com/" target="_blank" rel="noopener noreferrer">
-            <Solana className="h-20 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] hidden md:block"/>
-            <SolanaMobile className="h-14 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] md:hidden"/>
+            <Solana className="h-20 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] hidden lg:block"/>
+            <SolanaMobile className="h-14 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] lg:hidden"/>
           </a>
         </div>
       </div>
