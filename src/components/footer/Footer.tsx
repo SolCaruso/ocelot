@@ -2,7 +2,12 @@
 import React from 'react';
 import Divider from '@/components/ui/divider-footer';
 import { Language } from '@/components/footer/Language';
-import Ocelot from '@/components/logos/mobile/Ocelot';
+import Ocelot from '@/components/logos/OcelotFooter';
+import X from '@/components/logos/social/X';
+import Youtube from '@/components/logos/social/Youtube';
+import Discord from '@/components/logos/social/Discord';
+import Steam from '@/components/logos/social/Steam';
+import Image from 'next/image';
 
 const Trailer: React.FC = () => {
   
@@ -32,57 +37,96 @@ const Trailer: React.FC = () => {
       />
 
         {/* Footer*/}
-        <footer className="relative py-22 z-30 px-12">
+        <footer className="relative py-14 lg:py-22 z-30 px-12">
             <div className='max-w-7xl mx-auto'>
                 {/* Socials */}
-                <div className="w-full py-22">
-                    <h3
-                    className="bg-clip-text text-transparent text-3xl md:text-4xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4 text-center"
+                <div className="w-full pb-6 lg:pb-22 pt-18">
+                <h3
+                    className="bg-clip-text text-transparent text-4xl lg:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4 text-center"
                     style={{ backgroundImage: 'linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)' }}
-                    >
+                >
                     JOIN THE GUILD
-                    </h3>
-                    <ul className='flex gap-4 justify-center mt-6'>
-                        <li><a href="" className="text-stone-50 hover:text-white">Discord</a></li>
-                        <li><a href="" className="text-stone-50 hover:text-white">Twitter</a></li>
-                        <li><a href="" className="text-stone-50 hover:text-white">Instagram</a></li>
-                        <li><a href="" className="text-stone-50 hover:text-white">Youtube</a></li>
-                    </ul>
+                </h3>
+                <ul className="flex gap-4 justify-center mt-3 lg:mt-6">
+                    <li>
+                    <a
+                        href="https://x.com/GuildSaga"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <X className="w-12 lg:w-14 h-auto opacity-60 hover:opacity-100 transition-all duration-200 ease-[var(--ease-in-out-quad)]" />
+                    </a>
+                    </li>
+                    <li>
+                    <a
+                        href="https://discord.gg/GuildSaga"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <Discord className="w-10 lg:w-13 h-auto m-2 opacity-60 hover:opacity-100 transition-all duration-200 ease-[var(--ease-in-out-quad)]" />
+                    </a>
+                    </li>
+                    <li>
+                    <a
+                        href="https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <Steam className="w-9 lg:w-11 h-auto m-1.5 opacity-60 hover:opacity-100 transition-all duration-200 ease-[var(--ease-in-out-quad)]" />
+                    </a>
+                    </li>
+                    <li>
+                    <a
+                        href="https://www.youtube.com/@GuildSaga"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <Youtube className="w-12 lg:w-14 h-auto opacity-60 hover:opacity-100 transition-all duration-200 ease-[var(--ease-in-out-quad)]" />
+                    </a>
+                    </li>
+                </ul>
                 </div>
 
                 {/* Links */}
-                <div className='flex flex-col gap-4 mt-6 md:mt-0 md:flex-row justify-between py-12'>
-                    <ul className=' rounded-md uppercase font-semibold flex gap-4'>
-                        <li><a href="" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 transition-all duration-200 ease-[var(--ease-in-out-quad)]">Guild Saga</a></li>
-                        <li><a href="" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 transition-all duration-200 ease-[var(--ease-in-out-quad)]">Blog</a></li>
-                        <li><a href="" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 transition-all duration-200 ease-[var(--ease-in-out-quad)]">Docs</a></li>
-                        <li><a href="" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 transition-all duration-200 ease-[var(--ease-in-out-quad)]">Database</a></li>
-                        <li><a href="" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 transition-all duration-200 ease-[var(--ease-in-out-quad)]">Contact</a></li>
+                <div className='flex flex-col-reverse gap-4 lg:flex-row justify-between mt-12 lg:py-6 items-center mb-2'>
+                    <ul className='w-full flex flex-wrap justify-center gap-x-1 gap-y-5 lg:gap-4 rounded-md uppercase font-semibold transition-all duration-200 ease-[var(--ease-in-out-quad)] lg:w-auto lg:justify-start'>
+                        <li><a href="" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Guild Saga</a></li>
+                        <li><a href="" className="text-stone-50  hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Blog</a></li>
+                        <li><a href="" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 ">Docs</a></li>
+                        <li><a href="" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Database</a></li>
+                        <li><a href="" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Contact</a></li>
                     </ul>
-                    <Language className=''/>
+                    <div className='mb-12 lg:mb-0 '>
+                        <Language/>
+                    </div>
                 </div>
 
                 {/* Divider */}
-                <div className='border-b w-full px-4'></div>
+                <div className='border-b w-full px-4 hidden lg:block'></div>
 
                 {/* Copyright */}
-                <div>
-                    <div className="flex flex-col gap-4 mt-6 md:mt-0 md:flex-row py-12">
-                        <Ocelot className=" h-32 w-auto opacity-80 cursor-pointer "/>
+                <div className='flex flex-col lg:flex-row lg:justify-between justify-center items-center'>
+                    <div className="flex flex-col items-center lg:gap-6 lg:mt-6 md:mt-0 md:flex-row py-12 align-middle">
+                        <Ocelot className="h-60 md:h-40 w-auto opacity-80 cursor-pointer"/>
                         <div>
                             <div className='mb-3 pl-2'>
-                                <p className="text-stone-400 text-center mt-10 md:text-left text-sm font-semibold mb-1">
-                                    © 2023 Ocelot Technologies
-                                </p>
-                                <p className='text-stone-400 text-sm font-semibold text-center md:text-left'>All <a href="" className='underline rounded-sm text-stone-200 hover:text-white focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1'>trademarks</a> referenced herein are the properties of their respective owners.</p>
+                            <p className="text-stone-400 text-center mt-10 md:text-left text-sm font-semibold mb-1">
+                            © {new Date().getFullYear()} Ocelot Technologies
+                            </p>
+                                <p className='text-stone-400 text-sm font-semibold text-center md:text-left lg:max-w-none max-w-lg'>All <a href="" className='underline rounded-sm text-stone-300 hover:text-white focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 transition-all duration-200 ease-[var(--ease-in-out-quad)]'>trademarks</a> referenced herein are the properties of their respective owners.</p>
                             </div>
-                            <div className='flex gap-1 mt-12 md:mt-4 text-sm font-semibold'>
-                                <a href="" className="text-stone-200 hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 transition-all duration-200 ease-[var(--ease-in-out-quad)]">Privacy</a>
-                                <a href="" className="text-stone-200 hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 transition-all duration-200 ease-[var(--ease-in-out-quad)]">Terms</a>
-                                <a href="" className="text-stone-200 hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 transition-all duration-200 ease-[var(--ease-in-out-quad)]">Cookie Policy</a>
-                                <a href="" className="text-stone-200 hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 transition-all duration-200 ease-[var(--ease-in-out-quad)]">Cookie Settings</a>
+                            <div className='flex justify-center md:justify-normal gap-1 mt-12 md:mt-4 lg:text-sm text-xs font-semibold transition-all duration-200 ease-[var(--ease-in-out-quad)]'>
+                                <a href="" className="text-stone-200 hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 ">Privacy</a>
+                                <a href="" className="text-stone-200 hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Terms</a>
+                                <a href="" className="text-stone-200 hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Cookie Policy</a>
+                                <a href="" className="text-stone-200 hidden md:block hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Cookie Settings</a>
                             </div>
                         </div>
+                    </div>
+                    {/* Rating */}
+                    <div className='flex gap-2 mt-5'>
+                        <Image src={'/webp/esrb.webp'} alt={'ESRB'} width={65} height={97} ></Image>
+                        <Image src={'/webp/mature.webp'} alt={'Mature'} width={65} height={97} ></Image>
                     </div>
                 </div>
             </div>

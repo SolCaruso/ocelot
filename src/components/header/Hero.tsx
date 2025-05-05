@@ -1,12 +1,12 @@
 import React from 'react';
-import Steam from '@/components/logos/Steam';
-import Unity from '@/components/logos/Unity';
-import Solana from '@/components/logos/Solana';
-import Ocelot from '@/components/logos/Ocelot';
-import SteamMobile from '@/components/logos/mobile/Steam';
-import UnityMobile from '@/components/logos/mobile/Unity';
-import SolanaMobile from '@/components/logos/mobile/Solana';
-import OcelotMobile from '@/components/logos/mobile/Ocelot';
+import Steam from '@/components/logos/partners/Steam';
+import Unity from '@/components/logos/partners/Unity';
+import Solana from '@/components/logos/partners/Solana';
+import Ocelot from '@/components/logos/partners/Ocelot';
+import SteamMobile from '@/components/logos/partners-mobile/Steam';
+import UnityMobile from '@/components/logos/partners-mobile/Unity';
+import SolanaMobile from '@/components/logos/partners-mobile/Solana';
+import OcelotMobile from '@/components/logos/partners-mobile/Ocelot';
 import Image from 'next/image';
 
 interface HeroProps {
@@ -40,13 +40,13 @@ const Hero: React.FC<HeroProps> = ({ className, height }) => {
       />
       <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/[46%] via-black/0 to-black/[46%] pointer-events-none" />
       <div className="absolute inset-0 z-15 bg-black/[40%] pointer-events-none" />
-      <div className="absolute inset-0 z-20 flex flex-col items-center md:justify-center text-center md:space-y-8 mt-32 md:mt-0">
+      <div className="absolute inset-x-0 top-0 bottom-0 transform-gpu z-20 flex flex-col items-center justify-center md:justify-start text-center md:pt-44">
 
         {/* Logo */}
         <Image
           src="/webp/guildsaga.webp"
           alt="Guild Saga Logo"
-          className="mx-auto h-auto mb-8 sm:w-[35rem] w-[24rem] select-none"
+          className="mx-auto h-auto mb-4 w-[24rem] md:w-[35rem] select-none"
           width={1920}
           height={1080}
           draggable={false}
@@ -56,11 +56,11 @@ const Hero: React.FC<HeroProps> = ({ className, height }) => {
         <div className="space-y-4 md:space-y-6 mb-8 md:mb-12 text-center">
           <div className="relative inline-block">
             {/* Beneath, stationary text */}
-            <h2 className="text-[#E0A970] text-4xl md:text-5xl font-oldFenris layer-blur">
+            <h2 className="text-[#E0A970] text-4xl lg:text-5xl font-oldFenris layer-blur">
               EARLY ACCESS <br/> AVAILABLE NOW
             </h2>
             {/* Overlaying text */}
-            <h2 className="absolute inset-0 text-[#E7E7E7] text-4xl md:text-5xl font-oldFenris text-shadow-xs">
+            <h2 className="absolute inset-0 text-[#E7E7E7] text-4xl lg:text-5xl font-oldFenris text-shadow-xs">
               EARLY ACCESS <br/> AVAILABLE NOW
             </h2>
           </div>
@@ -82,25 +82,25 @@ const Hero: React.FC<HeroProps> = ({ className, height }) => {
         >
           BUY NOW
         </a>
+      </div>
 
-        <div className="mt-8 flex items-center justify-center absolute bottom-0 mb-8 lg:mb-0">
-          {/* Partner logos */}
-          <a href="https://store.steampowered.com/" target="_blank" rel="noopener noreferrer">
-            <Steam className="h-18 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] hidden lg:block" />
-            <SteamMobile className="h-14 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] lg:hidden" />
-          </a>
-          <a href="https://unity.com/" target="_blank" rel="noopener noreferrer">
-            <Unity className="h-20 ml-6 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] hidden lg:block"/>
-            <UnityMobile className="h-14 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] lg:hidden"/>
-          </a>
-          <a href="https://ocelot.ltd/" target="_blank" rel="noopener noreferrer">
-            <Ocelot className="h-20 w-auto mb-4 opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] hidden lg:block"/>
-            <OcelotMobile className="h-14 w-auto mb-4 opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] lg:hidden"/>
-          </a>
-          <a href="https://solana.com/" target="_blank" rel="noopener noreferrer">
-            <Solana className="h-20 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] hidden lg:block"/>
-            <SolanaMobile className="h-14 w-auto opacity-60 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)] lg:hidden"/>
-          </a>
+      <div className="absolute inset-x-0 bottom-0 mb-8 flex items-center justify-center">
+        {/* Partner logos */}
+        <div>
+          <Steam className="h-18 w-auto hidden lg:block" />
+          <SteamMobile className="h-14 w-auto lg:hidden" />
+        </div>
+        <div>
+          <Unity className="h-20 ml-6 w-auto hidden lg:block"/>
+          <UnityMobile className="h-14 w-auto lg:hidden"/>
+        </div>
+        <div>
+          <Ocelot className="h-20 w-auto mb-4 hidden lg:block"/>
+          <OcelotMobile className="h-14 w-auto mb-4 lg:hidden"/>
+        </div>
+        <div>
+          <Solana className="h-20 w-auto hidden lg:block"/>
+          <SolanaMobile className="h-14 w-auto lg:hidden"/>
         </div>
       </div>
     </div>

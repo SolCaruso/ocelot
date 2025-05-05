@@ -5,7 +5,7 @@ import { Reviews } from "@/components/sections/Reviews";
 export default function Home() {
   return (
     <main>
-        <Hero className= 'h-[700px] sm:h-[800px] md:h-[900px]' />
+        <Hero className= 'h-[700px] md:h-[800px] lg:h-[900px]' />
         <Trailer />
         <Reviews />
     </main>
