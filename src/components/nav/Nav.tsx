@@ -3,10 +3,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import * as React from "react"
-import { useState} from "react"
+import { useState, useRef } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { NavDrawer } from "@/components/nav/Mobile"
 import Link from "next/link"
 import Ocelot from "@/components/logos/OcelotHome";
+import Steam from "@/components/logos/partners-mobile/Steam";
+import Solana from "@/components/logos/partners-mobile/Solana";
 import { cn } from "@/lib/utils"
 import {
   NavigationMenu,
@@ -57,8 +60,21 @@ const components: { title: string; href: string; description: string }[] = [
 ]
 
 export default function Nav() {
+  const defaultImage = '/gif/vw.gif';
   const [isOpen, setIsOpen] = useState(false)
+  const [previewImage, setPreviewImage] = useState<string>(defaultImage);
+  const imageOrder = [
+    '/gif/vw.gif',
+    '/gif/lab.gif',
+    '/gif/world.gif',
+  ];
+  const prevIndexRef = useRef(imageOrder.indexOf(defaultImage));
 
+  const handlePreview = (img: string) => {
+    const newIndex = imageOrder.indexOf(img);
+    prevIndexRef.current = newIndex;
+    setPreviewImage(img);
+  };
 
   return (
     <div className="flex items-center justify-between px-4 py-2 max-w-9xl mx-auto absolute top-3 left-0 right-0 z-30">
@@ -79,28 +95,101 @@ export default function Nav() {
                 <li className="row-span-3">
                   <NavigationMenuLink asChild>
                     <Link
-                      className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                      className="relative flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                       href="/"
                     >
-                      <div className="h-6 w-6" />
-                      <div className="mb-2 mt-4 text-lg font-medium">
-                        shadcn/ui
-                      </div>
-                      <p className="text-sm leading-tight text-muted-foreground">
-                        Beautifully designed components built with Radix UI and
-                        Tailwind CSS.
-                      </p>
+                      {previewImage ? (
+                        // AnimatePresence and motion.div for preview background
+                        <>
+                          <AnimatePresence>
+                            <motion.div
+                              key={previewImage}
+                              className="absolute inset-0 h-full w-full rounded-md"
+                              style={{
+                                backgroundImage: `url(${previewImage})`,
+                                // Increase height slightly for the Labyrinth GIF to hide its white top edge
+                                backgroundSize: previewImage === '/gif/lab.gif' ? 'auto 110%' : 'cover',
+                                backgroundPosition: 'center',
+                              }}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 0.25, ease: [0.455, 0.03, 0.515, 0.955] }}
+                            />
+                          </AnimatePresence>
+                          {/* Shader overlay sits above GIF, below logos */}
+                          <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+                        </>
+                      ) : (
+                        <div className="h-6 w-6" />
+                      )}
+                      <AnimatePresence>
+                        {previewImage === '/gif/vw.gif' && (
+                          <motion.img
+                            key="logo-vw"
+                            src="/webp/vw.webp"
+                            alt="VW logo overlay"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.25, ease: [0.455, 0.03, 0.515, 0.955] }}
+                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none h-42 w-auto"
+                          />
+                        )}
+                        {previewImage === '/gif/lab.gif' && (
+                          <motion.img
+                            key="logo-lab"
+                            src="/webp/labyrinths.webp"
+                            alt="Labyrinths logo overlay"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.25, ease: [0.455, 0.03, 0.515, 0.955] }}
+                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none h-42 w-auto"
+                          />
+                        )}
+                      </AnimatePresence>
                     </Link>
                   </NavigationMenuLink>
                 </li>
-                <ListItem href="/docs" title="Introduction">
-                  Re-usable components built using Radix UI and Tailwind CSS.
+                <ListItem
+                  href="/"
+                  title={
+                    <div className="flex items-center">
+                      <span>Vanished Worlds</span>
+                      <Steam className="ml-1 h-4 w-auto" />
+                    </div>
+                  }
+                  className={cn(previewImage === '/gif/vw.gif' && 'bg-accent/70')}
+                  onMouseEnter={() => handlePreview('/gif/vw.gif')}
+                >
+                  Fantasy tactics CRPG, early access available now on Steam.
                 </ListItem>
-                <ListItem href="/docs/installation" title="Installation">
-                  How to install dependencies and structure your app.
+                <ListItem
+                  href="/"
+                  title={
+                    <div className="flex items-center">
+                      <span>Labyrinths</span>
+                      <Solana className="ml-1 h-4 w-auto" />
+                    </div>
+                  }
+                  className={cn(previewImage === '/gif/lab.gif' && 'bg-accent/70')}
+                  onMouseEnter={() => handlePreview('/gif/lab.gif')}
+                >
+                  Pvp gauntlet mode game built on Solana (coming soon).
                 </ListItem>
-                <ListItem href="/docs/primitives/typography" title="Typography">
-                  Styles for headings, paragraphs, lists...etc
+                <ListItem
+                  href="https://world.guildsaga.com/" target="_blank" rel="noopener noreferrer"
+                  title={
+                    <div className="flex items-center">
+                      <span>World Mode</span>
+                      <Solana className="ml-1 h-4 w-auto" />
+                    </div>
+                  }
+                  className={cn(previewImage === '/gif/world.gif' && 'bg-accent/70')}
+                  onMouseEnter={() => handlePreview('/gif/world.gif')}
+                >
+                  Gamified staking web app built on Solana.
                 </ListItem>
               </ul>
             </NavigationMenuContent>
@@ -135,8 +224,8 @@ export default function Nav() {
           </NavigationMenuItem>
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link href="/docs" className={navigationMenuTriggerStyle()}>
-                CONTACT
+              <Link href="/#socials" className={navigationMenuTriggerStyle()}>
+                SOCIALS
               </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
@@ -182,9 +271,13 @@ export default function Nav() {
   )
 }
 
+type ListItemProps = Omit<React.ComponentPropsWithoutRef<'a'>, 'title'> & {
+  title: React.ReactNode;
+};
+
 const ListItem = React.forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
+  React.ElementRef<'a'>,
+  ListItemProps
 >(({ className, title, children, ...props }, ref) => {
   return (
     <li>

@@ -8,6 +8,7 @@ import Youtube from '@/components/logos/social/Youtube';
 import Discord from '@/components/logos/social/Discord';
 import Steam from '@/components/logos/social/Steam';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Trailer: React.FC = () => {
   
@@ -20,7 +21,7 @@ const Trailer: React.FC = () => {
       {/* Right fade overlay */}
       <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-gs-bg to-transparent z-20" />
 
-      <div className="absolute inset-0 opacity-40"
+      <div className="absolute inset-0"
 
         style={{
 
@@ -38,7 +39,7 @@ const Trailer: React.FC = () => {
 
         {/* Footer*/}
         <footer className="relative py-14 lg:py-22 z-30 px-12">
-            <div className='max-w-7xl mx-auto'>
+            <div className='max-w-7xl mx-auto' id='socials'>
                 {/* Socials */}
                 <div className="w-full pb-6 lg:pb-22 pt-18">
                 <h3
@@ -90,11 +91,12 @@ const Trailer: React.FC = () => {
                 {/* Links */}
                 <div className='flex flex-col-reverse gap-4 lg:flex-row justify-between mt-12 lg:py-6 items-center mb-2'>
                     <ul className='w-full flex flex-wrap justify-center gap-x-1 gap-y-5 lg:gap-4 rounded-md uppercase font-semibold transition-all duration-200 ease-[var(--ease-in-out-quad)] lg:w-auto lg:justify-start'>
-                        <li><a href="" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Guild Saga</a></li>
-                        <li><a href="" className="text-stone-50  hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Blog</a></li>
-                        <li><a href="" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 ">Docs</a></li>
-                        <li><a href="" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Database</a></li>
-                        <li><a href="" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Contact</a></li>
+                        <li><Link href='/' rel="noopener noreferrer" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Vanished Worlds</Link></li>
+                        <li><a href="https://world.guildsaga.com/" target="_blank" rel="noopener noreferrer" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">World Mode</a></li>
+                        <li><Link href='/' className="text-stone-50  hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Blog</Link></li>
+                        <li><a href="https://docs.guildsaga.com/" target="_blank" rel="noopener noreferrer" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 ">Docs</a></li>
+                        <li><a href="https://db.guildsaga.com/items" target="_blank" rel="noopener noreferrer" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Database</a></li>
+                        <li><Link href="/" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Contact</Link></li>
                     </ul>
                     <div className='mb-12 lg:mb-0 '>
                         <Language/>
@@ -106,25 +108,27 @@ const Trailer: React.FC = () => {
 
                 {/* Copyright */}
                 <div className='flex flex-col lg:flex-row lg:justify-between justify-center items-center'>
-                    <div className="flex flex-col items-center lg:gap-6 lg:mt-6 md:mt-0 md:flex-row py-12 align-middle">
-                        <Ocelot className="h-60 md:h-40 w-auto opacity-80 cursor-pointer"/>
+                    <div className="flex flex-col items-center lg:gap-6 md:mt-6 lg:mt-0 lg:flex-row py-6 lg:py-12 align-middle">
+                        <Link href='/'>
+                            <Ocelot className="h-40 w-auto opacity-80 cursor-pointer"/>
+                        </Link>
                         <div>
                             <div className='mb-3 pl-2'>
-                            <p className="text-stone-400 text-center mt-10 md:text-left text-sm font-semibold mb-1">
-                            © {new Date().getFullYear()} Ocelot Technologies
-                            </p>
-                                <p className='text-stone-400 text-sm font-semibold text-center md:text-left lg:max-w-none max-w-lg'>All <a href="" className='underline rounded-sm text-stone-300 hover:text-white focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 transition-all duration-200 ease-[var(--ease-in-out-quad)]'>trademarks</a> referenced herein are the properties of their respective owners.</p>
+                                <p className="text-stone-400 text-center mt-10 lg:text-left text-sm font-semibold mb-1">
+                                © {new Date().getFullYear()} Ocelot Technologies
+                                </p>
+                                <p className='text-stone-400 text-sm font-semibold text-center lg:text-left lg:max-w-none max-w-lg'>All <a href="" className='underline rounded-sm text-stone-300 hover:text-white focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 transition-all duration-200 ease-[var(--ease-in-out-quad)]'>trademarks</a> referenced herein are the properties of their respective owners.</p>
                             </div>
-                            <div className='flex justify-center md:justify-normal gap-1 mt-12 md:mt-4 lg:text-sm text-xs font-semibold transition-all duration-200 ease-[var(--ease-in-out-quad)]'>
+                            <div className='flex justify-center lg:justify-normal gap-1 mt-6 lg:mt-4 lg:text-sm text-xs font-semibold transition-all duration-200 ease-[var(--ease-in-out-quad)]'>
                                 <a href="" className="text-stone-200 hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 ">Privacy</a>
                                 <a href="" className="text-stone-200 hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Terms</a>
                                 <a href="" className="text-stone-200 hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Cookie Policy</a>
-                                <a href="" className="text-stone-200 hidden md:block hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Cookie Settings</a>
+                                <a href="" className="text-stone-200 hidden lg:block hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Cookie Settings</a>
                             </div>
                         </div>
                     </div>
                     {/* Rating */}
-                    <div className='flex gap-2 mt-5'>
+                    <div className='flex gap-2 mt-5 w-24 md:w-auto'>
                         <Image src={'/webp/esrb.webp'} alt={'ESRB'} width={65} height={97} ></Image>
                         <Image src={'/webp/mature.webp'} alt={'Mature'} width={65} height={97} ></Image>
                     </div>

@@ -65,7 +65,7 @@ const Trailer: React.FC = () => {
       {/* Right fade overlay */}
       <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-gs-bg to-transparent z-20" />
 
-      <div className="absolute inset-0 opacity-70"
+      <div className="absolute inset-0"
 
         style={{
 
@@ -85,7 +85,7 @@ const Trailer: React.FC = () => {
         <div className="relative sm:max-w-7xl mx-auto px-6 py-24 flex flex-col-reverse lg:flex-row items-center justify-between gap-16 z-40">
 
             {/* Video placeholder */}
-            <div className="aspect-[16/9] w-full max-w-[440px] sm:max-w-[540px] md:max-w-[640px] h-auto bg-gs-bg relative filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] border-[1.5px] border-[#282828] opacity-80 hover:opacity-100 transition-opacity duration-200 ease-[var(--ease-in-out-quad)] cursor-pointer"
+            <div className="aspect-[16/9] w-full max-w-[440px] sm:max-w-[540px] md:max-w-[640px] h-auto bg-gs-bg relative filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] border-[1.5px] border-[#282828] md:opacity-80 hover:opacity-100 transition-opacity duration-200 ease-[var(--ease-in-out-quad)] cursor-pointer"
             onClick={handlePlay}>
                 {!playing ? (
                     <>

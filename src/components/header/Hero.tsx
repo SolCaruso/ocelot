@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import Steam from '@/components/logos/partners/Steam';
 import Unity from '@/components/logos/partners/Unity';
 import Solana from '@/components/logos/partners/Solana';
@@ -17,36 +18,40 @@ interface HeroProps {
 }
 
 const Hero: React.FC<HeroProps> = ({ className, height }) => {
-  const maskStyles = {
-    WebkitMaskImage: 'radial-gradient(circle at center, white 20%, transparent 85%)',
-    maskImage: 'radial-gradient(circle at center, white 20%, transparent 85%)',
-    WebkitMaskRepeat: 'no-repeat',
-    maskRepeat: 'no-repeat',
-    WebkitMaskPosition: 'center',
-    maskPosition: 'center',
-  };
   return (
     <div
-      className={`w-full relative z-10 overflow-hidden max-w-9xl mx-auto ${className ?? ''}`}
-      style={className ? maskStyles : { ...maskStyles, height }}
+      className={clsx(
+        "w-full relative z-10 overflow-hidden max-w-9xl mx-auto",
+        className,
+        "xl:[-webkit-mask-image:radial-gradient(circle_at_center,_white_40%,_transparent_85%)]",
+        "xl:[mask-image:radial-gradient(circle_at_center,_white_40%,_transparent_85%)]",
+        "xl:[-webkit-mask-repeat:no-repeat]",
+        "xl:[mask-repeat:no-repeat]",
+        "xl:[-webkit-mask-position:center]",
+        "xl:[mask-position:center]"
+      )}
+      style={height ? { height } : undefined}
     >
       <video
-        src="/videos/hero.mp4"
+        src="/video/hero.mp4"
         className="w-full h-full object-cover z-0"
         autoPlay
         loop
         muted
         playsInline
       />
-      <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/[46%] via-black/0 to-black/[46%] pointer-events-none" />
-      <div className="absolute inset-0 z-15 bg-black/[40%] pointer-events-none" />
+
+      {/* Masks/Shaders */}
+      <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/[36%] via-black/0 to-black/[36%] pointer-events-none hidden md:block"/>
+      <div className="absolute inset-0 z-15 bg-black/[30%] pointer-events-none"/>
+
       <div className="absolute inset-x-0 top-0 bottom-0 transform-gpu z-20 flex flex-col items-center justify-center md:justify-start text-center md:pt-44">
 
         {/* Logo */}
         <Image
           src="/webp/guildsaga.webp"
           alt="Guild Saga Logo"
-          className="mx-auto h-auto mb-4 w-[24rem] md:w-[35rem] select-none"
+          className="mx-auto h-auto mb-4 w-[24rem] lg:w-[35rem] select-none"
           width={1920}
           height={1080}
           draggable={false}
@@ -84,7 +89,7 @@ const Hero: React.FC<HeroProps> = ({ className, height }) => {
         </a>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 mb-8 flex items-center justify-center">
+      <div className="absolute inset-x-0 bottom-0 md:mb-8 flex items-center justify-center">
         {/* Partner logos */}
         <div>
           <Steam className="h-18 w-auto hidden lg:block" />
