@@ -1,0 +1,21 @@
+[
+  {
+    "title": "My First Blog Post",
+    "date": "2025-05-14T00:00:00.000Z",
+    "summary": "Getting started with Next.js, MDX, and Contentlayer.",
+    "body": {
+      "raw": "\n# Hello World\n\nThis is my first post using MDX + Contentlayer!",
+      "code": "var Component=(()=>{var x=Object.create;var s=Object.defineProperty;var h=Object.getOwnPropertyDescriptor;var u=Object.getOwnPropertyNames;var p=Object.getPrototypeOf,_=Object.prototype.hasOwnProperty;var f=(t,n)=>()=>(n||t((n={exports:{}}).exports,n),n.exports),j=(t,n)=>{for(var r in n)s(t,r,{get:n[r],enumerable:!0})},i=(t,n,r,a)=>{if(n&&typeof n==\"object\"||typeof n==\"function\")for(let o of u(n))!_.call(t,o)&&o!==r&&s(t,o,{get:()=>n[o],enumerable:!(a=h(n,o))||a.enumerable});return t};var y=(t,n,r)=>(r=t!=null?x(p(t)):{},i(n||!t||!t.__esModule?s(r,\"default\",{value:t,enumerable:!0}):r,t)),M=t=>i(s({},\"__esModule\",{value:!0}),t);var l=f((X,c)=>{c.exports=_jsx_runtime});var C={};j(C,{default:()=>d,frontmatter:()=>g});var e=y(l()),g={title:\"My First Blog Post\",date:\"2025-05-14\",summary:\"Getting started with Next.js, MDX, and Contentlayer.\"};function m(t){let n={h1:\"h1\",p:\"p\",...t.components};return(0,e.jsxs)(e.Fragment,{children:[(0,e.jsx)(n.h1,{children:\"Hello World\"}),`\n`,(0,e.jsx)(n.p,{children:\"This is my first post using MDX + Contentlayer!\"})]})}function d(t={}){let{wrapper:n}=t.components||{};return n?(0,e.jsx)(n,{...t,children:(0,e.jsx)(m,{...t})}):m(t)}return M(C);})();\n;return Component;"
+    },
+    "_id": "my-first-post.mdx",
+    "_raw": {
+      "sourceFilePath": "my-first-post.mdx",
+      "sourceFileName": "my-first-post.mdx",
+      "sourceFileDir": ".",
+      "contentType": "mdx",
+      "flattenedPath": "my-first-post"
+    },
+    "type": "Post",
+    "url": "/blog/my-first-post"
+  }
+]
