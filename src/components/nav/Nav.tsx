@@ -195,7 +195,7 @@ export default function Nav() {
             </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>BLOG</NavigationMenuTrigger>
+            <NavigationMenuTrigger>UPDATES</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                 {components.map((component) => (
@@ -229,6 +229,17 @@ export default function Nav() {
               </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
+          
+          {/* test */}
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild>
+              <Link href="/blog" className={navigationMenuTriggerStyle()}>
+                UPDATES
+              </Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          {/* test */}
+
         </NavigationMenuList>
       </NavigationMenu>
 

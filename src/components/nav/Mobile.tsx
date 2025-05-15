@@ -83,7 +83,7 @@ export function NavDrawer({ open, onOpenChange }: NavDrawerProps) {
                     </li>
                     <li>
                       <Link href="/blog" onClick={() => onOpenChange(false)}>
-                        <DrawerTitle>Blog</DrawerTitle>
+                        <DrawerTitle>Updates</DrawerTitle>
                       </Link>
                     </li>
                     <li>

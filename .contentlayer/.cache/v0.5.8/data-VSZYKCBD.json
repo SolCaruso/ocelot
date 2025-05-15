@@ -1,6 +1,30 @@
 {
   "cacheItemsMap": {
-    "my-first-post.mdx": {
+    "post.mdx": {
+      "document": {
+        "title": "My First Blog Post",
+        "date": "2025-05-14T00:00:00.000Z",
+        "summary": "Getting started…",
+        "body": {
+          "raw": "\n# Hello World\n\nThis is my first post using MDX + Contentlayer! \n\n![Image]('/jpg/post.jpg)",
+          "code": "var Component=(()=>{var l=Object.create;var o=Object.defineProperty;var d=Object.getOwnPropertyDescriptor;var h=Object.getOwnPropertyNames;var j=Object.getPrototypeOf,u=Object.prototype.hasOwnProperty;var x=(n,t)=>()=>(t||n((t={exports:{}}).exports,t),t.exports),_=(n,t)=>{for(var r in t)o(n,r,{get:t[r],enumerable:!0})},a=(n,t,r,i)=>{if(t&&typeof t==\"object\"||typeof t==\"function\")for(let s of h(t))!u.call(n,s)&&s!==r&&o(n,s,{get:()=>t[s],enumerable:!(i=d(t,s))||i.enumerable});return n};var f=(n,t,r)=>(r=n!=null?l(j(n)):{},a(t||!n||!n.__esModule?o(r,\"default\",{value:n,enumerable:!0}):r,n)),y=n=>a(o({},\"__esModule\",{value:!0}),n);var c=x((F,m)=>{m.exports=_jsx_runtime});var C={};_(C,{default:()=>p,frontmatter:()=>M});var e=f(c()),M={title:\"My First Blog Post\",date:\"2025-05-14\",summary:\"Getting started\\u2026\",image:\"/jpg/post.jpg\"};function g(n){let t={h1:\"h1\",img:\"img\",p:\"p\",...n.components};return(0,e.jsxs)(e.Fragment,{children:[(0,e.jsx)(t.h1,{children:\"Hello World\"}),`\n`,(0,e.jsx)(t.p,{children:\"This is my first post using MDX + Contentlayer!\\xA0\"}),`\n`,(0,e.jsx)(t.p,{children:(0,e.jsx)(t.img,{src:\"'/jpg/post.jpg\",alt:\"Image\"})})]})}function p(n={}){let{wrapper:t}=n.components||{};return t?(0,e.jsx)(t,{...n,children:(0,e.jsx)(g,{...n})}):g(n)}return y(C);})();\n;return Component;"
+        },
+        "_id": "post.mdx",
+        "_raw": {
+          "sourceFilePath": "post.mdx",
+          "sourceFileName": "post.mdx",
+          "sourceFileDir": ".",
+          "contentType": "mdx",
+          "flattenedPath": "post"
+        },
+        "type": "Post",
+        "url": "/blog/post"
+      },
+      "documentHash": "1747335151373",
+      "hasWarnings": true,
+      "documentTypeName": "Post"
+    },
+    "post1.mdx": {
       "document": {
         "title": "My First Blog Post",
         "date": "2025-05-14T00:00:00.000Z",
@@ -9,18 +33,18 @@
           "raw": "\n# Hello World\n\nThis is my first post using MDX + Contentlayer!",
           "code": "var Component=(()=>{var x=Object.create;var s=Object.defineProperty;var h=Object.getOwnPropertyDescriptor;var u=Object.getOwnPropertyNames;var p=Object.getPrototypeOf,_=Object.prototype.hasOwnProperty;var f=(t,n)=>()=>(n||t((n={exports:{}}).exports,n),n.exports),j=(t,n)=>{for(var r in n)s(t,r,{get:n[r],enumerable:!0})},i=(t,n,r,a)=>{if(n&&typeof n==\"object\"||typeof n==\"function\")for(let o of u(n))!_.call(t,o)&&o!==r&&s(t,o,{get:()=>n[o],enumerable:!(a=h(n,o))||a.enumerable});return t};var y=(t,n,r)=>(r=t!=null?x(p(t)):{},i(n||!t||!t.__esModule?s(r,\"default\",{value:t,enumerable:!0}):r,t)),M=t=>i(s({},\"__esModule\",{value:!0}),t);var l=f((X,c)=>{c.exports=_jsx_runtime});var C={};j(C,{default:()=>d,frontmatter:()=>g});var e=y(l()),g={title:\"My First Blog Post\",date:\"2025-05-14\",summary:\"Getting started with Next.js, MDX, and Contentlayer.\"};function m(t){let n={h1:\"h1\",p:\"p\",...t.components};return(0,e.jsxs)(e.Fragment,{children:[(0,e.jsx)(n.h1,{children:\"Hello World\"}),`\n`,(0,e.jsx)(n.p,{children:\"This is my first post using MDX + Contentlayer!\"})]})}function d(t={}){let{wrapper:n}=t.components||{};return n?(0,e.jsx)(n,{...t,children:(0,e.jsx)(m,{...t})}):m(t)}return M(C);})();\n;return Component;"
         },
-        "_id": "my-first-post.mdx",
+        "_id": "post1.mdx",
         "_raw": {
-          "sourceFilePath": "my-first-post.mdx",
-          "sourceFileName": "my-first-post.mdx",
+          "sourceFilePath": "post1.mdx",
+          "sourceFileName": "post1.mdx",
           "sourceFileDir": ".",
           "contentType": "mdx",
-          "flattenedPath": "my-first-post"
+          "flattenedPath": "post1"
         },
         "type": "Post",
-        "url": "/blog/my-first-post"
+        "url": "/blog/post1"
       },
-      "documentHash": "1747256584471",
+      "documentHash": "1747270013220",
       "hasWarnings": false,
       "documentTypeName": "Post"
     }

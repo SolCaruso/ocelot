@@ -7,7 +7,8 @@ var Post = defineDocumentType(() => ({
   fields: {
     title: { type: "string", required: true },
     date: { type: "date", required: true },
-    summary: { type: "string", required: true }
+    summary: { type: "string", required: true },
+    image: { type: "string", required: false }
   },
   computedFields: {
     url: {
@@ -24,4 +25,4 @@ export {
   Post,
   contentlayer_config_default as default
 };
-//# sourceMappingURL=compiled-contentlayer-config-VSZYKCBD.mjs.map
+//# sourceMappingURL=compiled-contentlayer-config-UN5P5LPE.mjs.map
