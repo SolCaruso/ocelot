@@ -1,24 +1,45 @@
 // src/app/blog/[slug]/page.tsx
 import { allPosts } from 'contentlayer/generated'
 import { notFound } from 'next/navigation'
+import PostHero from '@/components/blog/PostHero'
 import { ClientPost } from '@/components/blog/ClientPost'
 
-// 1. still async so Next can statically generate
-export async function generateStaticParams() {
-  return allPosts.map((post) => ({ slug: post._raw.flattenedPath }))
+interface PostPageProps {
+  params: {
+    slug: string
+  }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default async function PostPage(props: any) {
-  const { params } = props;
+// Generate all static routes
+export async function generateStaticParams() {
+  return allPosts.map((post) => ({
+    slug: post._raw.flattenedPath,
+  }))
+}
+
+export default function PostPage({ params }: PostPageProps) {
   const post = allPosts.find((p) => p._raw.flattenedPath === params.slug)
   if (!post) notFound()
 
   return (
-    <ClientPost
+    <section className="relative mx-auto px-4 pb-64 bg-[url('/jpg/smoke.jpg')] bg-fixed bg-center bg-cover overflow-x-hidden">
+      {/* Hero Post */}
+      <PostHero
+        post={{
+          image: post.image!,
+          title: post.title,
+          summary: post.summary,
+          date: post.date,
+        }}
+      />
+
+      {/* Body Content */}
+      <div className="max-w-7xl mx-auto px-4 mt-12 text-white …">
+      <ClientPost
       code={post.body.code}
-      title={post.title}
-      date={post.date}
-    />
+      showHeader={false}
+      />
+      </div>
+    </section>
   )
 }

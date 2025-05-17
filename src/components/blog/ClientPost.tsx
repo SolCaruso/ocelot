@@ -5,7 +5,8 @@ import React from 'react'
 import { useMDXComponent } from 'next-contentlayer2/hooks'
 import type { MDXComponents } from 'mdx/types'
 import Link from 'next/link'
-import BlogImage from '@/components/blog/BlogImage'      
+import BlogImage from '@/components/blog/BlogImage'
+import ShareButtons from './ShareButtons'      
 
 // extend your overrides
 const mdxComponents: MDXComponents = {
@@ -17,31 +18,38 @@ export function ClientPost({
   code,
   title,
   date,
+  showHeader = true,
 }: {
   code: string
-  title: string
-  date: string
+  title?: string
+  date?: string
+  showHeader?: boolean
 }) {
   const MDXContent = useMDXComponent(code)
 
   return (
-    <article className="max-w-3xl mx-auto px-4 py-8 prose lg:prose-lg dark:prose-invert h-screen">
-      <header className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">{title}</h1>
-        <time
-          dateTime={date}
-          className="block text-sm uppercase text-gray-500 dark:text-gray-400"
-        >
-          {new Date(date).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}
-        </time>
-      </header>
+    <article className="relative max-w-3xl mx-auto px-4 py-8 prose lg:prose-lg dark:prose-invert">
+      <div className="absolute -top-2 right-4 z-20">
+        <ShareButtons title={title ?? ''} />
+      </div>
+      {showHeader && (
+        <header className="mb-8">
+          <h1 className="text-4xl font-bold mb-2">{title}</h1>
+          <time
+            dateTime={date}
+            className="block text-sm uppercase text-gray-500 dark:text-gray-400"
+          >
+            {date &&
+              new Date(date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+          </time>
+        </header>
+      )}
       <div className="prose dark:prose-invert">
         <MDXContent components={mdxComponents} />
-
       </div>
     </article>
   )

@@ -21,6 +21,7 @@ export default function BlogPage() {
   const heroPost = posts[0];
   const MAX_TITLE_LENGTH = 26; // adjust this value to set the truncation limit
   const MAX_SUMMARY_LENGTH = 71; // adjust to set the truncation limit for card summaries
+  const HERO_TITLE_MAX_LENGTH = 33; // e.g. length of "April nip top of the world planet"
   const gridPosts = posts.slice(1);
   const [heroLoaded, setHeroLoaded] = useState(false);
   const [showFullSummary, setShowFullSummary] = useState(false);
@@ -83,40 +84,46 @@ export default function BlogPage() {
       {/* Hero Post */}
       <article className="mb-12 w-screen relative h-auto lg:h-[500px] lg:overflow-hidden max-w-7xl mx-auto">
         {/* Left: Masked Image */}
-        <div
-          className="relative w-full h-64 lg:h-full overflow-hidden"
-          style={{
-            maskImage: "url('/webp/smoke-mask-2.webp')",
-            maskSize: "cover",
-            maskPosition: "bottom center",
-            maskRepeat: "no-repeat",
-            WebkitMaskImage: "url('/webp/smoke-mask-2.webp')",
-            WebkitMaskSize: "cover",
-            WebkitMaskPosition: "bottom center",
-            WebkitMaskRepeat: "no-repeat",
-          }}
-        >
+        <div className="relative w-full h-64 lg:h-full overflow-hidden">
+          {/* Hero gradient overlay */}
+          <div className="absolute inset-0 z-10 bg-gradient-to-l from-black/20 to-black/0 pointer-events-none"></div>
           <div
-            className={`w-full h-full transition-opacity duration-200 ease-[var(--ease-in-out-quad)] ${
-              heroLoaded ? 'opacity-100' : 'opacity-0'
-            }`}
+            className="relative z-0 w-full h-full"
+            style={{
+              maskImage: "url('/webp/smoke-mask-2.webp')",
+              maskSize: "cover",
+              maskPosition: "bottom center",
+              maskRepeat: "no-repeat",
+              WebkitMaskImage: "url('/webp/smoke-mask-2.webp')",
+              WebkitMaskSize: "cover",
+              WebkitMaskPosition: "bottom center",
+              WebkitMaskRepeat: "no-repeat",
+            }}
           >
-            <BlogImage
-              src={heroPost.image!}
-              alt={heroPost.title}
-              fill
-              className="object-cover w-full h-full select-none"
-              draggable={false}
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/0"></div>
+            <div
+              className={`w-full h-full transition-opacity duration-200 ease-[var(--ease-in-out-quad)] ${
+                heroLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <BlogImage
+                src={heroPost.image!}
+                alt={heroPost.title}
+                fill
+                className="object-cover w-full h-full select-none"
+                draggable={false}
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/0"></div>
+            </div>
           </div>
         </div>
         
         {/* Text Content */}
-        <div className="absolute top-32 -left-6 inset-x-4 xl:inset-x-auto xl:right-0 w-[80%] lg:w-1/2 flex-col justify-center items-start p-8 text-white z-10 hidden 2xs:flex">
+        <div className="absolute top-32 -left-6 inset-x-4 xl:inset-x-auto xl:right-0 w-[80%] lg:w-1/2 flex-col justify-center items-start p-8 text-white z-20 hidden 2xs:flex">
           <div className="bg-clip-text text-transparent text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-2 uppercase"
           style={{ backgroundImage: 'linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)' }}>
-            {heroPost.title}
+            {heroPost.title.length > HERO_TITLE_MAX_LENGTH
+              ? `${heroPost.title.slice(0, HERO_TITLE_MAX_LENGTH)}...`
+              : heroPost.title}
           </div>
           <div className="w-full h-px bg-[#B4906D] my-4 max-w-3xl" />
           <p className="text-base mb-4 transition-all duration-200 ease-[var(--ease-in-out-quad)] max-w-3xl">
