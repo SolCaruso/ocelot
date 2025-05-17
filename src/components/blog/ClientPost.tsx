@@ -41,6 +41,7 @@ export function ClientPost({
       </header>
       <div className="prose dark:prose-invert">
         <MDXContent components={mdxComponents} />
+
       </div>
     </article>
   )

@@ -240,4 +240,19 @@
     filter: blur(4.13px);
   }
 
+  /* styles/globals.css or similar */
+  .gradient-border-top {
+    position: relative;
+  }
+  .gradient-border-top::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1.2px;
+    width: 100%;
+    background: linear-gradient(to right, #AC8B6A 0%, #ac8b6a68 20%, rgba(172,139,106,0.1) 50%, #ac8b6a52 65%, #AC8B6A 100%);
+    z-index: 10;
+  }
+
 }
