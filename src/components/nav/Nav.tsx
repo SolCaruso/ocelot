@@ -194,6 +194,7 @@ export default function Nav() {
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
+
           {/* <NavigationMenuItem>
             <NavigationMenuTrigger>UPDATES</NavigationMenuTrigger>
             <NavigationMenuContent>
@@ -210,6 +211,17 @@ export default function Nav() {
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem> */}
+
+          {/* test */}
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild>
+              <Link href="/blog" className={navigationMenuTriggerStyle()}>
+                UPDATES
+              </Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          {/* test */}
+
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
               <a
@@ -222,6 +234,7 @@ export default function Nav() {
               </a>
             </NavigationMenuLink>
           </NavigationMenuItem>
+
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
               <Link href="/#socials" className={navigationMenuTriggerStyle()}>
@@ -229,16 +242,6 @@ export default function Nav() {
               </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
-          
-          {/* test */}
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild>
-              <Link href="/blog" className={navigationMenuTriggerStyle()}>
-                UPDATES
-              </Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-          {/* test */}
 
         </NavigationMenuList>
       </NavigationMenu>

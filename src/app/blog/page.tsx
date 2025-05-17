@@ -27,7 +27,16 @@ export default function BlogPage() {
 
   // Pagination state and calculations
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 9;
+  const [postsPerPage, setPostsPerPage] = useState(() => {
+    if (typeof window === 'undefined') return 9;
+    if (window.matchMedia('(min-width: 1024px)').matches) {
+      return 9;
+    } else if (window.matchMedia('(min-width: 640px)').matches) {
+      return 8;
+    } else {
+      return 5;
+    }
+  });
   const totalPages = Math.ceil(gridPosts.length / postsPerPage);
   const paginatedPosts = gridPosts.slice(
     (currentPage - 1) * postsPerPage,
@@ -48,13 +57,34 @@ export default function BlogPage() {
     setHeroLoaded(true);
   }, []);
 
+  useEffect(() => {
+    const smQuery = window.matchMedia('(min-width: 640px)');
+    const lgQuery = window.matchMedia('(min-width: 1024px)');
+    function updatePostsPerPage() {
+      if (lgQuery.matches) {
+        setPostsPerPage(9);
+      } else if (smQuery.matches) {
+        setPostsPerPage(8);
+      } else {
+        setPostsPerPage(5);
+      }
+    }
+    updatePostsPerPage();
+    smQuery.addEventListener('change', updatePostsPerPage);
+    lgQuery.addEventListener('change', updatePostsPerPage);
+    return () => {
+      smQuery.removeEventListener('change', updatePostsPerPage);
+      lgQuery.removeEventListener('change', updatePostsPerPage);
+    };
+  }, []);
+
   return (
     <section className="relative mx-auto px-4 pb-64 min-h-[1100px] bg-[url('/jpg/smoke.jpg')] bg-fixed bg-center bg-cover overflow-x-hidden">
       {/* Hero Post */}
-      <article className="mb-12 w-screen relative  h-64 lg:h-[500px] overflow-hidden max-w-7xl mx-auto">
+      <article className="mb-12 w-screen relative h-auto lg:h-[500px] lg:overflow-hidden max-w-7xl mx-auto">
         {/* Left: Masked Image */}
         <div
-          className="relative w-full h-full overflow-hidden"
+          className="relative w-full h-64 lg:h-full overflow-hidden"
           style={{
             maskImage: "url('/webp/smoke-mask-2.webp')",
             maskSize: "cover",
@@ -83,13 +113,13 @@ export default function BlogPage() {
         </div>
         
         {/* Text Content */}
-        <div className="absolute top-32 right-0 w-full lg:w-1/2 flex flex-col justify-center items-start p-8 text-white z-10">
+        <div className="absolute top-32 -left-6 inset-x-4 xl:inset-x-auto xl:right-0 w-[80%] lg:w-1/2 flex-col justify-center items-start p-8 text-white z-10 hidden 2xs:flex">
           <div className="bg-clip-text text-transparent text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-2 uppercase"
           style={{ backgroundImage: 'linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)' }}>
             {heroPost.title}
           </div>
-          <div className="w-full h-px bg-[#B4906D] my-4" />
-          <p className="text-base mb-4 transition-all duration-200 ease-[var(--ease-in-out-quad)]">
+          <div className="w-full h-px bg-[#B4906D] my-4 max-w-3xl" />
+          <p className="text-base mb-4 transition-all duration-200 ease-[var(--ease-in-out-quad)] max-w-3xl">
             {showFullSummary || heroPost.summary.length <= 123
               ? heroPost.summary
               : heroPost.summary.slice(0, 123)}
@@ -117,14 +147,14 @@ export default function BlogPage() {
               </>
             )}
           </p>
-          <div className="flex justify-between items-center w-full pt-4">
+          <div className="flex justify-between items-center w-full pt-4 max-w-3xl">
             <Link
               href={heroPost.url}
-              className=" items-center justify-center py-3 px-6 text-[0.75rem] leading-[1rem] font-bold tracking-[0.2px] cursor-pointer border-none rounded-[5px] transition-colors duration-200 ease-in-out bg-[#E6E6E6] hover:bg-[#FFF] shadow-md  text-black uppercase md:block hidden"
+              className=" items-center justify-center py-3 px-6 text-[0.75rem] leading-[1rem] font-bold tracking-[0.2px] cursor-pointer border-none rounded-[5px] transition-colors duration-200 ease-in-out bg-[#E6E6E6] hover:bg-[#FFF] shadow-md  text-black uppercase"
             >
               Read more
             </Link>
-            <time className="text-[#fbcea0] font-quattrocento block font-semibold">
+            <time className="text-[#fbcea0] font-quattrocento font-semibold hidden md:block">
               {new Date(heroPost.date).toLocaleDateString('en-US', {
                 month: 'long',
                 day:   'numeric',
@@ -137,7 +167,7 @@ export default function BlogPage() {
 
       <div className='max-w-7xl mx-auto relative z-5'>
         {/* Grid Posts */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-12 pb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 2xs:pt-72 xs:pt-62 lg:pt-12 pb-12">
           {paginatedPosts.map(post => (
             <Link key={post._id} href={post.url}>
               <article className="group cursor-pointer relative overflow-hidden w-full aspect-[450/530] gradient-border-top transition-shadow duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]"

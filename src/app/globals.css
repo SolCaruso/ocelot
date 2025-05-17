@@ -68,6 +68,8 @@
   --container-9xl: 130rem;
   --container-10xl: 175rem;
   --color-gs-bg: #090806;
+  --breakpoint-2xs: 350px;
+  --breakpoint-xs: 450px;
 
   /* Reviews */
   --animate-fade-in: fade-in 0.5s linear forwards;
