@@ -2,6 +2,7 @@
 
 import postMdx from './post.mdx.json' with { type: 'json' }
 import post1Mdx from './post1.mdx.json' with { type: 'json' }
+import post10Mdx from './post10.mdx.json' with { type: 'json' }
 import post2Mdx from './post2.mdx.json' with { type: 'json' }
 import post3Mdx from './post3.mdx.json' with { type: 'json' }
 import post4Mdx from './post4.mdx.json' with { type: 'json' }
@@ -10,6 +11,5 @@ import post6Mdx from './post6.mdx.json' with { type: 'json' }
 import post7Mdx from './post7.mdx.json' with { type: 'json' }
 import post8Mdx from './post8.mdx.json' with { type: 'json' }
 import post9Mdx from './post9.mdx.json' with { type: 'json' }
-import post10Mdx from './post10.mdx.json' with { type: 'json' }
 
-export const allPosts = [postMdx, post1Mdx, post2Mdx, post3Mdx, post4Mdx, post5Mdx, post6Mdx, post7Mdx, post8Mdx, post9Mdx, post10Mdx]
+export const allPosts = [postMdx, post1Mdx, post10Mdx, post2Mdx, post3Mdx, post4Mdx, post5Mdx, post6Mdx, post7Mdx, post8Mdx, post9Mdx]

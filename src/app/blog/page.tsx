@@ -36,7 +36,7 @@ export default function BlogPage() {
   // Determine sliding window of page numbers (max 3 at a time)
   const maxPageButtons = 3;
   let startPage = Math.max(1, currentPage - 1);
-  let endPage = Math.min(totalPages, startPage + maxPageButtons - 1);
+  const endPage = Math.min(totalPages, startPage + maxPageButtons - 1);
   if (endPage - startPage + 1 < maxPageButtons) {
     startPage = Math.max(1, endPage - maxPageButtons + 1);
   }
