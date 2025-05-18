@@ -11,9 +11,14 @@ var Post = defineDocumentType(() => ({
     image: { type: "string", required: false }
   },
   computedFields: {
+    slugBase: {
+      type: "string",
+      resolve: (post) => new Date(post.date).toLocaleDateString("en-CA").replace(/-/g, ".")
+      // YYYY.MM.DD
+    },
     url: {
       type: "string",
-      resolve: (post) => `/blog/${post._raw.flattenedPath}`
+      resolve: (post) => `/updates/${new Date(post.date).toLocaleDateString("en-CA")}`
     }
   }
 }));
@@ -25,4 +30,4 @@ export {
   Post,
   contentlayer_config_default as default
 };
-//# sourceMappingURL=compiled-contentlayer-config-UN5P5LPE.mjs.map
+//# sourceMappingURL=compiled-contentlayer-config-SAY3W6SE.mjs.map

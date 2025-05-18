@@ -1,69 +1,77 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Clipboard, Share2 } from 'lucide-react'
+import { ClipboardCopy, Link, Share2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
-import X from '@/components/logos/social/X';
+import { toast } from 'sonner'
+import X from '@/components/logos/social/X'
+import Facebook from '@/components/logos/social/Facebook'
 
 export default function ShareButtons({ title }: { title: string }) {
-  const [shareUrl, setShareUrl] = useState<string>('')
+  const [shareUrl, setShareUrl] = useState('')
+  const [open, setOpen] = useState(false)
 
-  // only grab URL on the client
   useEffect(() => {
     setShareUrl(window.location.href)
   }, [])
 
-  if (!shareUrl) return null
-
-  const copyLink = () => navigator.clipboard.writeText(shareUrl)
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl)
+      toast(
+        <div className="flex items-center gap-2">
+          <ClipboardCopy className="w-4 h-4 text-white/70" />
+          <span>Link copied to clipboard</span>
+        </div>
+      )
+      setOpen(false)
+    } catch (err) {
+      toast.error('Failed to copy link')
+    }
+  }
 
   return (
-    <Popover>
-      {/* The “Share” trigger */}
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="outline" className="flex items-center">
-          <Share2 className="w-5 h-5 " />
+          <Share2 className="w-5 h-5" />
           <span>Share</span>
         </Button>
       </PopoverTrigger>
 
-      {/* The pop-over content */}
       <PopoverContent className="w-42">
-        {/* Copy link */}
         <button
           onClick={copyLink}
           className="flex items-center space-x-2.5 w-full text-left p-2 hover:bg-stone-50/5 rounded"
         >
-          <Clipboard className="w-4 h-4 text-white/70" />
+          <Link className="w-4 h-4 text-white/70" />
           <span>Copy link</span>
         </button>
 
-        {/* Twitter */}
         <a
           href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
             shareUrl
           )}&text=${encodeURIComponent(title)}`}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => setOpen(false)} // ✅ Close on click
           className="flex items-center space-x-2 p-2 hover:bg-stone-50/5 rounded"
         >
-            <X className="w-5 h-5 text-white/70" />
-            <span>X</span>
+          <X className="w-5 h-5 text-white/70" />
+          <span>X</span>
         </a>
 
-        {/* Facebook */}
         <a
-          href={
-            `https://www.facebook.com/sharer/sharer.php?` +
-            `u=${encodeURIComponent(shareUrl)}` +
-            `&quote=${encodeURIComponent(title)}`
-          }
+          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+            shareUrl
+          )}&quote=${encodeURIComponent(title)}`}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => setOpen(false)} // ✅ Close on click
           className="flex items-center space-x-2 p-2 hover:bg-stone-50/5 rounded"
         >
-          {/* <FaFacebook className="w-5 h-5 " /> */}
+          <Facebook className="w-5 h-5 text-white/70" />
           <span>Facebook</span>
         </a>
       </PopoverContent>

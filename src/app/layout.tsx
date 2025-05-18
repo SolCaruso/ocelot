@@ -3,6 +3,7 @@ import "./globals.css"
 import { montserrat } from '@/fonts'
 import Nav from "@/components/nav/Nav"  
 import Footer from '@/components/footer/Footer';
+import { Toaster } from '@/components/ui/sonner'
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,6 +27,7 @@ export default function RootLayout({
          <Nav />
         </header>
         {children}
+        <Toaster position="bottom-right" />
         <Footer/>
       </body>
     </html>

@@ -16,5 +16,6 @@
     "flattenedPath": "post1"
   },
   "type": "Post",
-  "url": "/blog/post1"
+  "slugBase": "2025.05.07",
+  "url": "/updates/2025-05-07"
 }

@@ -17,7 +17,8 @@
       "flattenedPath": "post"
     },
     "type": "Post",
-    "url": "/blog/post"
+    "slugBase": "2025.04.07",
+    "url": "/updates/2025-04-07"
   },
   {
     "title": "April nip top of the world planet planet planet",
@@ -37,7 +38,8 @@
       "flattenedPath": "post1"
     },
     "type": "Post",
-    "url": "/blog/post1"
+    "slugBase": "2025.05.07",
+    "url": "/updates/2025-05-07"
   },
   {
     "title": "April Development Preview",
@@ -57,7 +59,8 @@
       "flattenedPath": "post10"
     },
     "type": "Post",
-    "url": "/blog/post10"
+    "slugBase": "2025.04.07",
+    "url": "/updates/2025-04-07"
   },
   {
     "title": "April Development Preview",
@@ -77,7 +80,8 @@
       "flattenedPath": "post2"
     },
     "type": "Post",
-    "url": "/blog/post2"
+    "slugBase": "2025.04.07",
+    "url": "/updates/2025-04-07"
   },
   {
     "title": "April Development Preview",
@@ -97,7 +101,8 @@
       "flattenedPath": "post3"
     },
     "type": "Post",
-    "url": "/blog/post3"
+    "slugBase": "2025.04.07",
+    "url": "/updates/2025-04-07"
   },
   {
     "title": "April Development Preview",
@@ -117,7 +122,8 @@
       "flattenedPath": "post4"
     },
     "type": "Post",
-    "url": "/blog/post4"
+    "slugBase": "2025.04.07",
+    "url": "/updates/2025-04-07"
   },
   {
     "title": "April Development Preview",
@@ -137,7 +143,8 @@
       "flattenedPath": "post5"
     },
     "type": "Post",
-    "url": "/blog/post5"
+    "slugBase": "2025.04.07",
+    "url": "/updates/2025-04-07"
   },
   {
     "title": "April Development Preview",
@@ -157,7 +164,8 @@
       "flattenedPath": "post6"
     },
     "type": "Post",
-    "url": "/blog/post6"
+    "slugBase": "2025.04.07",
+    "url": "/updates/2025-04-07"
   },
   {
     "title": "April Development Preview",
@@ -177,7 +185,8 @@
       "flattenedPath": "post7"
     },
     "type": "Post",
-    "url": "/blog/post7"
+    "slugBase": "2025.04.07",
+    "url": "/updates/2025-04-07"
   },
   {
     "title": "April Development Preview",
@@ -197,7 +206,8 @@
       "flattenedPath": "post8"
     },
     "type": "Post",
-    "url": "/blog/post8"
+    "slugBase": "2025.04.07",
+    "url": "/updates/2025-04-07"
   },
   {
     "title": "April Development Preview",
@@ -217,6 +227,7 @@
       "flattenedPath": "post9"
     },
     "type": "Post",
-    "url": "/blog/post9"
+    "slugBase": "2025.04.07",
+    "url": "/updates/2025-04-07"
   }
 ]

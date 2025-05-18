@@ -19,6 +19,7 @@ export type Post = {
   image?: string | undefined
   /** MDX file body */
   body: MDX
+  slugBase: string
   url: string
 }  
 

@@ -16,5 +16,6 @@
     "flattenedPath": "post8"
   },
   "type": "Post",
-  "url": "/blog/post8"
+  "slugBase": "2025.04.07",
+  "url": "/updates/2025-04-07"
 }

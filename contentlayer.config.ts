@@ -12,9 +12,14 @@ export const Post = defineDocumentType(() => ({
     image:   { type: 'string', required: false },
   },
   computedFields: {
+    slugBase: {
+      type: 'string',
+      resolve: (post) =>
+        new Date(post.date).toLocaleDateString('en-CA').replace(/-/g, '.'), // YYYY.MM.DD
+    },
     url: {
       type: 'string',
-      resolve: (post) => `/blog/${post._raw.flattenedPath}`,
+      resolve: (post) => `/updates/${new Date(post.date).toLocaleDateString('en-CA')}`,
     },
   },
 }))

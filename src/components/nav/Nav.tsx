@@ -215,7 +215,7 @@ export default function Nav() {
           {/* test */}
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link href="/blog" className={navigationMenuTriggerStyle()}>
+              <Link href="/updates" className={navigationMenuTriggerStyle()}>
                 UPDATES
               </Link>
             </NavigationMenuLink>
