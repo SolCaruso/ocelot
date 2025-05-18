@@ -41,7 +41,7 @@ const Trailer: React.FC = () => {
         },
       });
     };
-  }, []);
+  }, [playing]);
 
   useEffect(() => {
     if (playing && playerRef.current?.playVideo) {

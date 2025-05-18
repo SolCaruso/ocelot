@@ -17,18 +17,14 @@ export default function ShareButtons({ title }: { title: string }) {
   }, [])
 
   const copyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(shareUrl)
-      toast(
-        <div className="flex items-center gap-2">
-          <ClipboardCopy className="w-4 h-4 text-white/70" />
-          <span>Link copied to clipboard</span>
-        </div>
-      )
-      setOpen(false)
-    } catch (err) {
-      toast.error('Failed to copy link')
-    }
+    await navigator.clipboard.writeText(shareUrl)
+    toast(
+      <div className="flex items-center gap-2">
+        <ClipboardCopy className="w-4 h-4 text-white/70" />
+        <span>Link copied to clipboard</span>
+      </div>
+    )
+    setOpen(false)
   }
 
   return (

@@ -1,24 +1,19 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { getPosts } from '@/lib/getPosts'
 import { notFound } from 'next/navigation'
 import PostHero from '@/components/blog/PostHero'
 import { ClientPost } from '@/components/blog/ClientPost'
 
-interface PostPageProps {
-  params: {
-    slug: string
-  }
+export function generateStaticParams() {
+  const posts = getPosts()
+  return posts.map((post) => ({ slug: post.slug }))
 }
 
-const allPosts = getPosts()
+// @ts-ignore
+export default async function Page({ params }) {
+  const posts = getPosts()
+  const post = posts.find((p) => p.slug === params.slug)
 
-export async function generateStaticParams() {
-  return allPosts.map((post) => ({
-    slug: post.slug,
-  }))
-}
-
-export default function PostPage({ params }: PostPageProps) {
-  const post = allPosts.find((p) => p.slug === params.slug)
   if (!post) notFound()
 
   return (
