@@ -86,7 +86,7 @@ export default function Nav() {
       </div>
 
       {/* Center: Navigation */}
-      <NavigationMenu className='hidden md:block'>
+      <NavigationMenu className='hidden md:block absolute top-3 left-1/2 transform -translate-x-1/2'>
         <NavigationMenuList className="flex justify-center space-x-2">
           <NavigationMenuItem>
             <NavigationMenuTrigger>GUILD SAGA</NavigationMenuTrigger>
@@ -153,7 +153,7 @@ export default function Nav() {
                   </NavigationMenuLink>
                 </li>
                 <ListItem
-                  href="/"
+                  href="/vw"
                   title={
                     <div className="flex items-center">
                       <span>Vanished Worlds</span>

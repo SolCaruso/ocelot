@@ -19,31 +19,32 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ className, height }) => {
   return (
-    <div
-      className={clsx(
-        "w-full relative z-10 overflow-hidden max-w-9xl mx-auto",
-        className,
-        "xl:[-webkit-mask-image:radial-gradient(circle_at_center,_white_40%,_transparent_85%)]",
-        "xl:[mask-image:radial-gradient(circle_at_center,_white_40%,_transparent_85%)]",
-        "xl:[-webkit-mask-repeat:no-repeat]",
-        "xl:[mask-repeat:no-repeat]",
-        "xl:[-webkit-mask-position:center]",
-        "xl:[mask-position:center]"
-      )}
-      style={height ? { height } : undefined}
-    >
-      <video
-        src="/video/hero.mp4"
-        className="w-full h-full object-cover z-0"
-        autoPlay
-        loop
-        muted
-        playsInline
-      />
+    <div className="w-full relative bg-[url('/webp/smoke.webp')] bg-cover bg-center">
+      {/* Smoke gradient overlay */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-tr from-black/30 to-black/0 pointer-events-none" />
+      <div
+        className={clsx(
+          "w-full relative z-10 overflow-hidden max-w-8xl mx-auto",
+          className
+        )}
+        style={height ? { height } : undefined}
+      >
+      <div
+        className="[mask-image:radial-gradient(circle_at_center,_white_40%,_transparent_85%)] [mask-repeat:no-repeat] [mask-position:center] relative w-full h-full"
+      >
+        <video
+          src="/video/hero.mp4"
+          className="w-full h-full object-cover z-0 scale-x-[-1]"
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
 
-      {/* Masks/Shaders */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/[36%] via-black/0 to-black/[36%] pointer-events-none hidden md:block"/>
-      <div className="absolute inset-0 z-15 bg-black/[30%] pointer-events-none"/>
+        {/* Masks/Shaders */}
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/[36%] via-black/0 to-black/[36%] pointer-events-none hidden md:block"/>
+        <div className="absolute inset-0 z-15 bg-black/[30%] pointer-events-none"/>
+      </div>
 
       <div className="absolute inset-x-0 top-0 bottom-0 transform-gpu z-20 flex flex-col items-center justify-center md:justify-start text-center md:pt-44">
 
@@ -107,6 +108,7 @@ const Hero: React.FC<HeroProps> = ({ className, height }) => {
           <Solana className="h-20 w-auto hidden lg:block"/>
           <SolanaMobile className="h-14 w-auto lg:hidden"/>
         </div>
+      </div>
       </div>
     </div>
   );
