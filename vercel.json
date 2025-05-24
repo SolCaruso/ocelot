@@ -1,0 +1,9 @@
+{
+    "functions": {
+      "api/discord-sync": {
+        "schedule": "*/5 * * * *",
+        "memory": 128,
+        "maxDuration": 10
+      }
+    }
+  }
