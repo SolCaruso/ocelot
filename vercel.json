@@ -1,18 +1,12 @@
 {
   "functions": {
-    "api/discord-sync": {
+    "api/discord-sync/route.ts": {
       "memory": 128,
       "maxDuration": 10
     }
   },
   "crons": [
-    {
-      "path": "/api/discord-sync",
-      "schedule": "0 0 * * *"
-    },
-    {
-      "path": "/api/discord-sync",
-      "schedule": "0 12 * * *"
-    }
+    { "path": "/api/discord-sync", "schedule": "0 0 * * *" },
+    { "path": "/api/discord-sync", "schedule": "0 12 * * *" }
   ]
 }
