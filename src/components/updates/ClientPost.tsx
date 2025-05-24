@@ -5,7 +5,7 @@ import React from 'react'
 import { useMDXComponent } from 'next-contentlayer2/hooks'
 import type { MDXComponents } from 'mdx/types'
 import Link from 'next/link'
-import BlogImage from '@/components/blog/BlogImage'
+import BlogImage from '@/components/updates/BlogImage'
 import ShareButtons from './ShareButtons'
 import {
   Breadcrumb,

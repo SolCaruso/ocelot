@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { getPosts } from '@/lib/getPosts'
 import { notFound } from 'next/navigation'
-import PostHero from '@/components/blog/PostHero'
-import { ClientPost } from '@/components/blog/ClientPost'
+import PostHero from '@/components/updates/PostHero'
+import { ClientPost } from '@/components/updates/ClientPost'
 
 export function generateStaticParams() {
   return getPosts().map((post) => ({ slug: post.slug }))

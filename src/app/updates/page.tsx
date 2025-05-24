@@ -73,10 +73,10 @@ export default function BlogPage() {
   }, [])
 
   return (
-    <section className="relative mx-auto px-4 pb-64 min-h-[1100px] bg-[url('/jpg/smoke.jpg')] bg-fixed bg-center bg-cover overflow-x-hidden">
+    <section className="relative mx-auto pb-64 min-h-[1100px] bg-[url('/jpg/smoke.jpg')] bg-fixed bg-center bg-cover overflow-x-hidden">
       {/* Hero */}
       <article className="mb-12 relative h-auto lg:h-[500px] max-w-7xl mx-auto">
-        <div className="relative w-full h-64 lg:h-full overflow-hidden">
+        <div className="relative w-full h-64 lg:h-full">
           <div
             className="relative z-0 w-full h-full"
             style={{
@@ -104,7 +104,7 @@ export default function BlogPage() {
             </div>
           </div>
 
-          <div className="absolute top-32 -left-6 inset-x-4 xl:inset-x-auto xl:right-0 w-[80%] lg:w-1/2 flex-col justify-center items-start p-8 text-white z-20 hidden 2xs:flex">
+          <div className="absolute top-32 -left-2 inset-x-4 xl:inset-x-auto xl:right-0 w-[80%] lg:w-1/2 flex-col justify-center items-start p-8 text-white z-20 hidden 2xs:flex">
             <div
               className="bg-clip-text text-transparent text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-2 uppercase"
               style={{ backgroundImage: 'linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)' }}
@@ -146,12 +146,13 @@ export default function BlogPage() {
         </div>
       </article>
 
-      {/* Grid */}
-      <div className="max-w-7xl mx-auto relative z-5">
+      {/* Cards Grid */}
+      <div className="max-w-7xl mx-auto relative z-5 px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 2xs:pt-72 xs:pt-62 lg:pt-12 pb-12">
           {paginatedPosts.map((post) => (
             <Link key={post._id} href={`/updates/${post.slug}`}>
-              <article className="group cursor-pointer relative overflow-hidden aspect-[450/530] border border-transparent gradient-border-top hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-shadow">
+              <article className="group cursor-pointer relative overflow-hidden w-full aspect-[450/530] gradient-border-top transition-shadow duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]"
+              style={{ borderStyle: 'solid', borderWidth: '0 1px 1px 1px', borderImage: 'linear-gradient(to top, #534C3F, #B4906C) 1' }}>
                 <div
                   className="relative w-full h-2/3 bg-black overflow-hidden"
                   style={{
