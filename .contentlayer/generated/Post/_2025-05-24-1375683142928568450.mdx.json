@@ -1,0 +1,21 @@
+{
+  "title": "Your title",
+  "date": "2025-05-26T00:00:00.000Z",
+  "summary": "Short summary",
+  "image": "https://cdn.discordapp.com/attachments/1373805897855270973/1375683142471647372/post3.jpg?ex=68329444&is=683142c4&hm=08d05d245e29f11cc53603548691e755c236de56dc59af4a7a9ed9800ae0bc8a&",
+  "body": {
+    "raw": "\n# Your heading\n\nYour body content goes here.\n",
+    "code": "var Component=(()=>{var u=Object.create;var c=Object.defineProperty;var p=Object.getOwnPropertyDescriptor;var x=Object.getOwnPropertyNames;var f=Object.getPrototypeOf,l=Object.prototype.hasOwnProperty;var _=(t,e)=>()=>(e||t((e={exports:{}}).exports,e),e.exports),g=(t,e)=>{for(var o in e)c(t,o,{get:e[o],enumerable:!0})},s=(t,e,o,a)=>{if(e&&typeof e==\"object\"||typeof e==\"function\")for(let r of x(e))!l.call(t,r)&&r!==o&&c(t,r,{get:()=>e[r],enumerable:!(a=p(e,r))||a.enumerable});return t};var j=(t,e,o)=>(o=t!=null?u(f(t)):{},s(e||!t||!t.__esModule?c(o,\"default\",{value:t,enumerable:!0}):o,t)),y=t=>s(c({},\"__esModule\",{value:!0}),t);var m=_((C,d)=>{d.exports=_jsx_runtime});var Y={};g(Y,{default:()=>h,frontmatter:()=>M});var n=j(m()),M={title:\"Your title\",date:\"2025-05-26\",summary:\"Short summary\",image:\"https://cdn.discordapp.com/attachments/1373805897855270973/1375683142471647372/post3.jpg?ex=68329444&is=683142c4&hm=08d05d245e29f11cc53603548691e755c236de56dc59af4a7a9ed9800ae0bc8a&\"};function i(t){let e={h1:\"h1\",p:\"p\",...t.components};return(0,n.jsxs)(n.Fragment,{children:[(0,n.jsx)(e.h1,{children:\"Your heading\"}),`\n`,(0,n.jsx)(e.p,{children:\"Your body content goes here.\"})]})}function h(t={}){let{wrapper:e}=t.components||{};return e?(0,n.jsx)(e,{...t,children:(0,n.jsx)(i,{...t})}):i(t)}return y(Y);})();\n;return Component;"
+  },
+  "_id": "2025-05-24-1375683142928568450.mdx",
+  "_raw": {
+    "sourceFilePath": "2025-05-24-1375683142928568450.mdx",
+    "sourceFileName": "2025-05-24-1375683142928568450.mdx",
+    "sourceFileDir": ".",
+    "contentType": "mdx",
+    "flattenedPath": "2025-05-24-1375683142928568450"
+  },
+  "type": "Post",
+  "slugBase": "2025.05.25",
+  "url": "/updates/2025-05-25"
+}

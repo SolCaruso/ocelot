@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "fetch": "node src/components/blog/scripts/fetchMessages.js",
+    "dev": "npm run fetch && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -21,6 +22,8 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "contentlayer2": "^0.5.8",
+    "discord.js": "^14.19.3",
+    "dotenv": "^16.5.0",
     "framer-motion": "^12.9.4",
     "hls.js": "^1.6.2",
     "lucide-react": "^0.503.0",
@@ -45,6 +48,7 @@
     "@types/react-dom": "^19",
     "@types/youtube": "^0.1.0",
     "autoprefixer": "^10.4.21",
+    "concurrently": "^9.1.2",
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
     "postcss": "^8.5.3",

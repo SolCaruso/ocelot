@@ -2,7 +2,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import BlogImage from '@/components/blog/BlogImage'
+import Image from 'next/image'
 
 interface PostHeroProps {
   post: {
@@ -36,11 +36,16 @@ export default function PostHero({ post }: PostHeroProps) {
           WebkitMaskRepeat: "no-repeat",
         }}
       >
-        <div className={`relative w-full h-64 lg:h-full overflow-hidden transition-opacity duration-200 ease-[var(--ease-in-out-quad)] ${loaded ? 'opacity-100' : 'opacity-0'}`}>
-          <BlogImage
-            src={post.image}
+        <div
+          className={`relative w-full h-64 lg:h-full overflow-hidden transition-opacity duration-200 ease-[var(--ease-in-out-quad)] ${
+            loaded ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <Image
+            src={post.image}             // ← no prefixing here
             alt={post.title}
             fill
+            sizes="100vw"
             className="object-cover w-full h-full select-none scale-110"
             draggable={false}
           />
