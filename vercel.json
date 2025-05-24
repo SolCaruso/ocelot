@@ -8,7 +8,11 @@
   "crons": [
     {
       "path": "/api/discord-sync",
-      "schedule": "*/5 * * * *"
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/discord-sync",
+      "schedule": "0 12 * * *"
     }
   ]
 }
