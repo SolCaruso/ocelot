@@ -4,6 +4,7 @@ import { NextRequest } from 'next/server';
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN!;
 const CHANNEL_ID = process.env.CHANNEL_ID!;
 
+// Fix the params type to match Next.js expectations
 export async function GET(
   request: NextRequest,
   { params }: { params: { slug: string } }
@@ -52,7 +53,8 @@ export async function GET(
       bodyMd,
       imageUrl,
     });
-  } catch {
+  } catch (error) {
+    console.error('Error fetching post:', error);
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }
