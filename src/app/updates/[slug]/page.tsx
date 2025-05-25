@@ -32,18 +32,34 @@ export default async function Page({
   // await the params promise to get your slug
   const { slug } = await params
 
-  const res = await fetch(
-    `https://discord.com/api/v10/channels/${process.env.CHANNEL_ID}/messages/${slug}`,
-    {
-      headers: { Authorization: `Bot ${process.env.DISCORD_TOKEN}` },
-      cache: 'no-store',
-    }
-  )
-  if (!res.ok) return notFound()
-  const m = (await res.json()) as DiscordMessage
+let m: DiscordMessage
 
-  // Strip ```md fences
-  const raw = m.content.trim()
+  try {
+    const res = await fetch(
+      `https://discord.com/api/v10/channels/${process.env.CHANNEL_ID}/messages/${slug}`,
+      {
+        headers: { Authorization: `Bot ${process.env.DISCORD_TOKEN}` },
+        cache:   'no-store',
+      }
+    )
+
+    console.log(`[slug:${slug}] Discord status:`, res.status)
+    const text = await res.text()
+    console.log(`[slug:${slug}] Discord body:`, text)
+
+    if (!res.ok) {
+      console.error(`[slug:${slug}] fetch failed, returning 404`)
+      return notFound()
+    }
+
+    m = JSON.parse(text) as DiscordMessage
+  } catch (err) {
+    console.error(`[slug:${slug}] fetch threw:`, err)
+    return notFound()
+  }
+
+  // … the rest of your parsing + JSX …
+  const raw    = m.content.trim()
   const bodyMd = raw.startsWith('```md')
     ? raw.replace(/^```md/, '').replace(/```$/, '').trim()
     : raw

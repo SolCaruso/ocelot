@@ -37,21 +37,22 @@ export default function BlogPage() {
   // Fetch posts whenever the page changes
   useEffect(() => {
     async function load() {
-      const res = await fetch(`/api/discord-sync/posts?page=${currentPage}`)
-      if (!res.ok) {
-        console.error('Failed to load posts', res.status)
-        return
+      console.log(`🔄 Fetching posts for page ${currentPage}`)
+      try {
+        const res = await fetch(`/api/discord-sync/posts?page=${currentPage}`)
+        console.log(`⬅️  Response status: ${res.status}`)
+        if (!res.ok) {
+          throw new Error(`Discord API returned HTTP ${res.status}`)
+        }
+        const data = await res.json() as { total: number; posts: DiscordPost[] }
+        console.log('✅ Received posts:', data.posts)
+        setPosts(data.posts)
+      } catch (err) {
+        console.error('🚨 Error loading posts:', err)
       }
-      const { posts } = await res.json()
-      setPosts(posts)
     }
     load()
   }, [currentPage])
-
-  // Hero fade-in
-  useEffect(() => {
-    setHeroLoaded(true)
-  }, [])
 
   // Adjust posts per page on resize
   useEffect(() => {
