@@ -51,7 +51,7 @@ export async function GET(
       bodyMd,
       imageUrl,
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }
