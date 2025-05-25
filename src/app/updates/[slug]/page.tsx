@@ -41,11 +41,15 @@ export async function generateStaticParams() {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default async function Page({
   params,
-  _searchParams,
+  searchParams: _searchParams,
 }: {
   params: { slug: string }
-  _searchParams: Record<string, string | string[] | undefined>
+  // Next.js always passes a `searchParams` prop, even if you don’t use it:
+  searchParams: Record<string, string | string[] | undefined>
 }) {
+  // “use” it so the linter stops complaining
+  void _searchParams
+
   const { slug } = params
 
   // pull the one message directly from Discord:
