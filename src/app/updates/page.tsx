@@ -32,7 +32,6 @@ export default function BlogPage() {
   const [showFullSummary, setShowFullSummary] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [postsPerPage, setPostsPerPage] = useState(9)
-  const [heroLoaded, _setHeroLoaded] = useState(false)
 
   // Fetch posts whenever the page changes
   useEffect(() => {
