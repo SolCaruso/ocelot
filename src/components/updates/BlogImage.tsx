@@ -1,14 +1,17 @@
-// src/components/blog/BlogImage.tsx
+// src/components/updates/BlogImage.tsx
 import Image, { ImageProps } from 'next/image'
 
 type BlogImageProps = {
-  src: string
+  src: string | null
   alt: string
   className?: string
   width?: number
   height?: number
   fill?: boolean
-} & Omit<ImageProps, 'src' | 'alt' | 'width' | 'height' | 'fill' | 'className'>
+} & Omit<
+  ImageProps,
+  'src' | 'alt' | 'width' | 'height' | 'fill' | 'className'
+>
 
 export default function BlogImage({
   src,
@@ -19,22 +22,26 @@ export default function BlogImage({
   fill = false,
   ...rest
 }: BlogImageProps) {
-  // normalize relative paths (e.g. “foo.jpg” ⇒ “/jpg/foo.jpg”)
-  const _src = src.startsWith('/') ? src : `/jpg/${src}`
-
-  if (fill) {
-    return (
-      <Image
-        src={_src}
-        alt={alt}
-        fill
-        className={className}
-        {...rest}
-      />
-    )
+  // If there's no src, render nothing
+  if (!src) {
+    return null
   }
 
-  return (
+  // Normalize src: if it's not a full URL or a leading slash, prefix with /jpg/
+  let _src = src
+  if (!/^https?:\/\//.test(_src) && !_src.startsWith('/')) {
+    _src = `/jpg/${_src}`
+  }
+
+  return fill ? (
+    <Image
+      src={_src}
+      alt={alt}
+      fill
+      className={className}
+      {...rest}
+    />
+  ) : (
     <Image
       src={_src}
       alt={alt}

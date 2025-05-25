@@ -1,11 +1,10 @@
-// components/blog/ClientPost.tsx
 'use client'
 
-import React from 'react'
-import { useMDXComponent } from 'next-contentlayer2/hooks'
-import type { MDXComponents } from 'mdx/types'
+import React, { ReactNode } from 'react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import Link from 'next/link'
-import BlogImage from '@/components/updates/BlogImage'
+import Image from 'next/image'
 import ShareButtons from './ShareButtons'
 import {
   Breadcrumb,
@@ -14,13 +13,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-
-// extend your overrides
-const mdxComponents: MDXComponents = {
-  a: ({ href, children }) => <Link href={href as string}>{children}</Link>,
-  img: (props) => <BlogImage {...props} />
-}
+} from '@/components/ui/breadcrumb'
 
 export function ClientPost({
   code,
@@ -33,14 +26,10 @@ export function ClientPost({
   date?: string
   showHeader?: boolean
 }) {
-  const MDXContent = useMDXComponent(code)
-
   return (
     <article className="relative max-w-3xl mx-auto px-4 py-8 prose lg:prose-lg dark:prose-invert">
-
-      {/* Top Row: Breadcrumb on left, Share on right */}
+      {/* Breadcrumb & Share */}
       <div className="flex justify-between items-center mb-6">
-        {/* Breadcrumb on Left */}
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -53,16 +42,12 @@ export function ClientPost({
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbPage>
-                {title?.split(" ").slice(0, 6).join(" ")}...
+                {title?.split(' ').slice(0, 6).join(' ')}...
               </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-
-        {/* Share Button on Right */}
-        <div className="z-20">
-          <ShareButtons title={title ?? ""} />
-        </div>
+        <ShareButtons title={title || ''} />
       </div>
 
       {showHeader && (
@@ -83,9 +68,26 @@ export function ClientPost({
       )}
 
       <div className="prose dark:prose-invert">
-        <MDXContent components={mdxComponents} />
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={{
+            a: ({ href, children }: { href?: string; children?: ReactNode }) => (
+              <Link href={href ?? '#'}>{children}</Link>
+            ),
+            img: ({ src, alt }: { src?: string; alt?: string }) => (
+              <Image
+                src={src!}
+                alt={alt!}
+                width={800}
+                height={400}
+                className="my-4"
+              />
+            ),
+          }}
+        >
+          {code}
+        </ReactMarkdown>
       </div>
-
     </article>
   )
 }
