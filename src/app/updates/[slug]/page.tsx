@@ -38,6 +38,7 @@ export async function generateStaticParams() {
 //
 // 2) For each slug, re-fetch that single message and render:
 //
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default async function Page({
   params,
   _searchParams,
