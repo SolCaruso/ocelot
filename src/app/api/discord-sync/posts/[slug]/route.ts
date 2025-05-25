@@ -4,18 +4,11 @@ import { NextRequest } from 'next/server';
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN!;
 const CHANNEL_ID = process.env.CHANNEL_ID!;
 
-// Use the correct type for context parameter
-type RouteParams = {
-  params: {
-    slug: string;
-  };
-};
-
 export async function GET(
   request: NextRequest,
-  context: RouteParams
+  { params }: { params: { slug: string } }
 ) {
-  const { slug } = context.params;
+  const { slug } = params;
 
   try {
     const res = await fetch(
