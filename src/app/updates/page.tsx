@@ -29,7 +29,7 @@ interface DiscordPost {
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<DiscordPost[]>([])  
-  const [heroLoaded, setHeroLoaded] = useState(false)
+  const [heroLoaded, _setHeroLoaded] = useState(false)
   const [showFullSummary, setShowFullSummary] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [postsPerPage, setPostsPerPage] = useState(9)
