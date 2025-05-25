@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN!;
 const CHANNEL_ID = process.env.CHANNEL_ID!;
 
 export async function GET(
-  req: Request,
+  request: NextRequest,
   { params }: { params: { slug: string } }
 ) {
   const { slug } = params;
