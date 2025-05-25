@@ -14,8 +14,21 @@ import {
 } from '@/components/ui/pagination'
 import BlogImage from '@/components/updates/BlogImage'
 
+/** Exactly the shape your API returns for each post */
+interface DiscordPost {
+  id: string
+  slug: string
+  author: string
+  date: string
+  title: string
+  summary: string
+  bodyMd: string
+  imageUrl: string | null
+  // you can add `title?`, `summary?`, `slug?` if you normalize them client-side
+}
+
 export default function BlogPage() {
-  const [posts, setPosts] = useState<any[]>([])
+  const [posts, setPosts] = useState<DiscordPost[]>([])  
   const [heroLoaded, setHeroLoaded] = useState(false)
   const [showFullSummary, setShowFullSummary] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
@@ -24,16 +37,12 @@ export default function BlogPage() {
   // Fetch posts whenever the page changes
   useEffect(() => {
     async function load() {
-      console.log('🔄 Loading posts for page', currentPage)
       const res = await fetch(`/api/discord-sync/posts?page=${currentPage}`)
-      console.log('➡️ Fetching /api/discord-sync/posts?page=' + currentPage)
-      console.log('⬅️ Response status:', res.status)
       if (!res.ok) {
         console.error('Failed to load posts', res.status)
         return
       }
-      const { total, posts } = await res.json()
-      console.log('🔍 Received posts:', posts)
+      const { posts } = await res.json()
       setPosts(posts)
     }
     load()
@@ -62,7 +71,7 @@ export default function BlogPage() {
     }
   }, [])
 
-  const heroPost = posts[0] ?? {}
+  const heroPost = posts[0] ?? ({} as DiscordPost)
   const gridPosts = posts.slice(1)
 
   const MAX_TITLE_LENGTH = 26
@@ -85,11 +94,14 @@ export default function BlogPage() {
   const visiblePages = []
   for (let i = startPage; i <= endPage; i++) visiblePages.push(i)
 
-  // Pull title & summary out of markdown if you like, otherwise you can use
-  // heroPost.frontmatter.title / summary if available. For now assumed
-  // you’ve normalized to { title, summary } fields.
-  const heroTitle = heroPost.title ?? ''
-  const heroSummary = heroPost.summary ?? ''
+  // Pull title & summary out of markdown
+  const lines = (heroPost.bodyMd || '').split('\n').map((l) => l.trim())
+  const titleLine = lines.find((l) => l.startsWith('# ')) || ''
+  const heroTitle = titleLine.replace(/^#\s*/, '') || ''
+  const heroSummary =
+    lines
+      .slice(lines.indexOf(titleLine) + 1)
+      .find((l) => !!l && !l.startsWith('```')) || ''
 
   return (
     <section className="relative mx-auto px-4 pb-64 min-h-[1100px] bg-[url('/jpg/smoke.jpg')] bg-fixed bg-center bg-cover overflow-x-hidden">
@@ -149,12 +161,12 @@ export default function BlogPage() {
           </p>
           <div className="flex justify-between items-center w-full pt-4 max-w-3xl">
             <Link
-              href={`/updates/${heroPost.slug ?? ''}`}
+              href={`/updates/${heroPost.id ?? ''}`}
               className="py-3 px-6 text-[0.75rem] leading-[1rem] font-bold tracking-[0.2px] rounded-[5px] bg-[#E6E6E6] hover:bg-[#FFF] shadow-md text-black uppercase transition-colors"
             >
               Read more
             </Link>
-            <time className="text-[#fbcea0] font-quattrocento font-semibold hidden md:block">
+            <time className="text-[#fbcea0] font-quattrocento hidden md:block">
               {heroPost.date &&
                 new Date(heroPost.date).toLocaleDateString('en-US', {
                   month: 'long',
@@ -170,7 +182,7 @@ export default function BlogPage() {
       <div className="max-w-7xl mx-auto relative z-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 2xs:pt-72 xs:pt-62 lg:pt-12 pb-12">
           {paginatedPosts.map((post) => (
-            <Link key={post.id} href={`/updates/${post.slug ?? ''}`}>
+            <Link key={post.id} href={`/updates/${post.id}`}>
               <article
                 className="group cursor-pointer relative overflow-hidden w-full aspect-[450/530] gradient-border-top transition-shadow duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]"
                 style={{
