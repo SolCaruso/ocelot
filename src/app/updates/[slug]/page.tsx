@@ -40,10 +40,10 @@ export async function generateStaticParams() {
 //
 export default async function Page({
   params,
-  searchParams,
+  _searchParams,
 }: {
   params: { slug: string }
-  searchParams: Record<string, string | string[] | undefined>
+  _searchParams: Record<string, string | string[] | undefined>
 }) {
   const { slug } = params
 
