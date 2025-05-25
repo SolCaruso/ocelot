@@ -29,10 +29,10 @@ interface DiscordPost {
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<DiscordPost[]>([])  
-  const [heroLoaded, _setHeroLoaded] = useState(false)
   const [showFullSummary, setShowFullSummary] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [postsPerPage, setPostsPerPage] = useState(9)
+  const [heroLoaded, _setHeroLoaded] = useState(false)
 
   // Fetch posts whenever the page changes
   useEffect(() => {
@@ -122,7 +122,7 @@ export default function BlogPage() {
               WebkitMaskRepeat: 'no-repeat',
             }}
           >
-            <div className={`w-full h-full transition-opacity duration-200 ease-[var(--ease-in-out-quad)] ${heroLoaded ? 'opacity-100' : 'opacity-0'}`}>
+            <div className="w-full h-full transition-opacity duration-200 ease-[var(--ease-in-out-quad)] opacity-100">
               <BlogImage
                 src={heroPost.imageUrl ?? null}
                 alt={heroTitle}
