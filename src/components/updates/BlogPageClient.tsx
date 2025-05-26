@@ -12,6 +12,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface DiscordPost {
   id: string;
@@ -40,6 +41,22 @@ function formatDiscordDate(timestamp: string): string {
     console.error("Error formatting date:", error, timestamp);
     return "Invalid Date";
   }
+}
+
+export function SkeletonCard() {
+  return (
+    <div className="group cursor-pointer relative overflow-hidden w-full aspect-[450/530] gradient-border-top transition-opacity duration-200 ease-[var(--ease-in-out-quad)] opacity-40 bg-accent rounded-xl backdrop-blur-lg">
+      <div className="relative w-full h-2/3 bg-black overflow-hidden">
+        <Skeleton className="absolute inset-0 w-full h-full rounded-none" />
+      </div>
+      <div className="absolute inset-x-0 bottom-0 p-8 space-y-2">
+        <Skeleton className="h-4 w-1/3 mb-2" />
+        <Skeleton className="h-8 w-2/3 mb-2" />
+        <Skeleton className="h-4 w-3/4 mb-2" />
+        <Skeleton className="h-4 w-1/2" />
+      </div>
+    </div>
+  );
 }
 
 export default function BlogPageClient({ heroPost }: { heroPost: DiscordPost }) {
@@ -221,8 +238,10 @@ export default function BlogPageClient({ heroPost }: { heroPost: DiscordPost }) 
       {/* CARDS GRID: show loading only for this part */}
       <div className="max-w-7xl mx-auto relative z-5">
         {loading ? (
-          <div className="flex items-center justify-center min-h-[300px]">
-            <div className="text-white text-xl">Loading posts...</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 2xs:pt-72 xs:pt-62 lg:pt-12 pb-12">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 2xs:pt-72 xs:pt-62 lg:pt-12 pb-12">
