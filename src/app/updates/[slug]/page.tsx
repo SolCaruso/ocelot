@@ -23,10 +23,8 @@ export default async function Page({
   const { slug } = await params
 
   try {
-    // Use the API route which now has the correct fallback logic
-    const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"
-
-    const res = await fetch(`${baseUrl}/api/discord-sync/posts/${slug}`, {
+    // Use relative URL which works in both development and production
+    const res = await fetch(`/api/discord-sync/posts/${slug}`, {
       cache: "no-store", // Ensure fresh data
     })
 
