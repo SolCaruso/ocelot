@@ -14,22 +14,6 @@ interface DiscordMessage {
   timestamp: string
 }
 
-function formatDateSlug(timestamp: string): string {
-  try {
-    const date = new Date(timestamp)
-    if (isNaN(date.getTime())) {
-      return "invalid-date"
-    }
-    // Format as MM-DD-YYYY
-    const month = String(date.getMonth() + 1).padStart(2, "0")
-    const day = String(date.getDate()).padStart(2, "0")
-    const year = date.getFullYear()
-    return `${month}-${day}-${year}`
-  } catch (error) {
-    return "invalid-date"
-  }
-}
-
 function parseDateSlug(slug: string): Date | null {
   try {
     // Parse MM-DD-YYYY format
@@ -46,9 +30,14 @@ function parseDateSlug(slug: string): Date | null {
     if (isNaN(date.getTime())) return null
 
     return date
-  } catch (error) {
+  } catch {
     return null
   }
+}
+
+function extractFrontmatterDate(content: string): string | null {
+  const match = content.match(/date:\s*["']?(\d{4}-\d{2}-\d{2})["']?/);
+  return match ? match[1] : null;
 }
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
@@ -87,24 +76,28 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     const messages: DiscordMessage[] = await res.json()
 
-    // Find the message with matching date
+    // Find the message with matching frontmatter date
     let targetMessage: DiscordMessage | null = null
     let messageIndex = -1
+    let frontmatterDateStr: string | null = null
 
     for (let i = 0; i < messages.length; i++) {
       const m = messages[i]
-      const messageDate = new Date(m.timestamp)
-
-      // Check if the dates match (same day, month, year)
-      if (
-        messageDate.getDate() === targetDate.getDate() &&
-        messageDate.getMonth() === targetDate.getMonth() &&
-        messageDate.getFullYear() === targetDate.getFullYear()
-      ) {
-        targetMessage = m
-        messageIndex = i
-        console.log(`Found matching message at index ${i}, timestamp: ${m.timestamp}`)
-        break
+      const fmDateStr = extractFrontmatterDate(m.content)
+      if (fmDateStr) {
+        const [year, month, day] = fmDateStr.split("-").map(Number)
+        const fmDate = new Date(year, month - 1, day)
+        if (
+          fmDate.getDate() === targetDate.getDate() &&
+          fmDate.getMonth() === targetDate.getMonth() &&
+          fmDate.getFullYear() === targetDate.getFullYear()
+        ) {
+          targetMessage = m
+          messageIndex = i
+          frontmatterDateStr = fmDateStr
+          console.log(`Found matching message at index ${i}, frontmatter date: ${fmDateStr}`)
+          break
+        }
       }
     }
 
@@ -125,7 +118,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const lines = bodyMd.split("\n").map((l: string) => l.trim())
     const titleLine = lines.find((l: string) => l.startsWith("# ")) || ""
     const title = titleLine.replace(/^#\s*/, "") || "Untitled"
-    const summary = lines.slice(lines.indexOf(titleLine) + 1).find((l: string) => !!l && !l.startsWith("```")) || ""
+    const summary = lines.slice(lines.indexOf(titleLine) + 1).find((l: string) => !!l && !l.startsWith("```") ) || ""
 
     const fallback = FALLBACKS[messageIndex % FALLBACKS.length]
     const imageUrl = targetMessage.attachments[0]?.url ?? `/jpg/${fallback}`
@@ -133,7 +126,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const result = {
       id: targetMessage.id,
       author: targetMessage.author?.username ?? "",
-      date: targetMessage.timestamp,
+      date: frontmatterDateStr ?? targetMessage.timestamp,
       title,
       summary,
       bodyMd,

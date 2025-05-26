@@ -14,6 +14,25 @@ interface DiscordMessage {
   timestamp: string
 }
 
+function extractFrontmatterDate(content: string): string | null {
+  const match = content.match(/date:\s*["']?(\d{4}-\d{2}-\d{2})["']?/);
+  return match ? match[1] : null;
+}
+
+function formatDateSlugFromDateString(dateString: string): string {
+  try {
+    const [year, month, day] = dateString.split("-").map(Number);
+    const date = new Date(year, month - 1, day);
+    if (isNaN(date.getTime())) return "invalid-date";
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+    const yyyy = date.getFullYear();
+    return `${mm}-${dd}-${yyyy}`;
+  } catch {
+    return "invalid-date";
+  }
+}
+
 function formatDateSlug(timestamp: string): string {
   try {
     const date = new Date(timestamp)
@@ -76,21 +95,30 @@ export async function GET(request: NextRequest) {
       const lines = bodyMd.split("\n").map((l: string) => l.trim())
       const titleLine = lines.find((l: string) => l.startsWith("# ")) || ""
       const title = titleLine.replace(/^#\s*/, "") || "Untitled"
-      const summary = lines.slice(lines.indexOf(titleLine) + 1).find((l: string) => !!l && !l.startsWith("```")) || ""
+      const summary = lines.slice(lines.indexOf(titleLine) + 1).find((l: string) => !!l && !l.startsWith("```") ) || ""
 
-      // Create date-based slug
-      const dateSlug = formatDateSlug(m.timestamp)
+      // Extract frontmatter date
+      const frontmatterDate = extractFrontmatterDate(m.content)
+      let dateSlug: string
+      let postDate: string
+      if (frontmatterDate) {
+        dateSlug = formatDateSlugFromDateString(frontmatterDate)
+        postDate = frontmatterDate
+      } else {
+        dateSlug = formatDateSlug(m.timestamp)
+        postDate = m.timestamp
+      }
 
       const fallback = FALLBACKS[index % FALLBACKS.length]
       const imageUrl = m.attachments[0]?.url ?? `/jpg/${fallback}`
 
-      console.log(`Message ${index}: timestamp="${m.timestamp}", dateSlug="${dateSlug}", title="${title}"`)
+      console.log(`Message ${index}: timestamp="${m.timestamp}", dateSlug="${dateSlug}", title="${title}", frontmatterDate="${frontmatterDate}"`)
 
       return {
         id: m.id,
         slug: dateSlug,
         author: m.author?.username ?? "",
-        date: m.timestamp,
+        date: postDate,
         title,
         summary,
         bodyMd,
