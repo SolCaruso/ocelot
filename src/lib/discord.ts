@@ -101,6 +101,11 @@ export async function getPostBySlug(slug: string) {
   const fallback = FALLBACKS[messageIndex % FALLBACKS.length]
   const imageUrl = targetMessage.attachments[0]?.url ?? `/jpg/${fallback}`
 
+  // Compute the slug from the date, as in the rest of the codebase
+  const dateSlug = frontmatterDateStr
+    ? frontmatterDateStr.split('-').reverse().join('-')
+    : targetMessage.timestamp.split('T')[0].split('-').reverse().join('-');
+
   return {
     id: targetMessage.id,
     author: targetMessage.author?.username ?? "",
@@ -109,5 +114,6 @@ export async function getPostBySlug(slug: string) {
     summary,
     bodyMd,
     imageUrl,
+    slug: dateSlug,
   }
 }
