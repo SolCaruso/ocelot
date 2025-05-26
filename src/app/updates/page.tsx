@@ -22,7 +22,7 @@ async function fetchInitialPosts(): Promise<DiscordPost[]> {
     if (posts && posts.length > 0) {
       return posts;
     }
-  } catch (err) {
+  } catch {
     // Ignore and fall back to API
   }
   // Fallback to API fetch

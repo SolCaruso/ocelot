@@ -8,6 +8,17 @@ import path from "path"
 // Revalidate every 5 minutes
 export const revalidate = 300
 
+interface DiscordPost {
+  id: string;
+  slug: string;
+  author: string;
+  date: string;
+  title: string;
+  summary: string;
+  bodyMd: string;
+  imageUrl: string | null;
+}
+
 export default async function Page({
   params,
 }: {
@@ -15,15 +26,15 @@ export default async function Page({
 }) {
   const { slug } = await params
 
-  let post = null
+  let post: DiscordPost | null = null
 
   // Try to load from latestPosts.json first
   try {
     const filePath = path.join(process.cwd(), "public", "latestPosts.json")
     const file = await fs.readFile(filePath, "utf-8")
-    const posts = JSON.parse(file)
-    post = posts.find((p: any) => p.slug === slug)
-  } catch (err) {
+    const posts: DiscordPost[] = JSON.parse(file)
+    post = posts.find((p) => p.slug === slug) || null
+  } catch {
     // Ignore and fall back to API
   }
 
@@ -31,8 +42,8 @@ export default async function Page({
   if (!post) {
     try {
       post = await getPostBySlug(slug)
-    } catch (err) {
-      console.error(`Error fetching post for slug ${slug}:`, err)
+    } catch (error) {
+      console.error(`Error fetching post for slug ${slug}:`, error)
       return notFound()
     }
   }
@@ -45,7 +56,7 @@ export default async function Page({
     <section className="relative mx-auto px-4 pb-64 bg-[url('/jpg/smoke.jpg')] bg-fixed bg-center bg-cover overflow-x-hidden">
       <PostHero
         post={{
-          image: post.imageUrl,
+          image: post.imageUrl || '',
           title: post.title,
           summary: post.summary,
           date: post.date,

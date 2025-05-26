@@ -107,7 +107,7 @@ export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: D
             setLoading(false)
             setTimeout(() => setAnimateIn(true), 10)
             return
-          } catch (err) {
+          } catch {
             // Fallback to API fetch if /latestPosts.json fails
           }
         }
