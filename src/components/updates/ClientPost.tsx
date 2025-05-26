@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import type { ReactNode } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
@@ -58,9 +57,9 @@ function hasHrefProp(children: ReactNode): children is React.ReactElement<{ href
     typeof children === "object" &&
     children !== null &&
     "props" in children &&
-    typeof (children as any).props === "object" &&
-    (children as any).props !== null &&
-    typeof (children as any).props.href === "string"
+    typeof (children as React.ReactElement).props === "object" &&
+    (children as React.ReactElement).props !== null &&
+    typeof (children as React.ReactElement<{ href: string }>).props.href === "string"
   )
 }
 
@@ -68,12 +67,10 @@ export function ClientPost({
   code,
   title,
   date,
-  summary,
 }: {
   code: string
   title?: string
   date?: string
-  summary?: string
 }) {
   // Clean the markdown content
   const cleanedCode = cleanMarkdownContent(code)
@@ -225,7 +222,7 @@ export function ClientPost({
             // Enhanced table styling
             table: ({ children }: { children: ReactNode }) => (
               <div className="overflow-x-auto my-6">
-                <table className="w-full border-collapse border border-[#B4906D] rounded-lg">{children}</table>
+                <table className="w-full border-collapse border border-[#B4906C] rounded-lg">{children}</table>
               </div>
             ),
             th: ({ children }: { children: ReactNode }) => (

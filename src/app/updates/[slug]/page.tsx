@@ -51,7 +51,7 @@ export default async function Page({
         />
 
         <div className="max-w-7xl mx-auto px-4 mt-12 text-white">
-          <ClientPost code={post.bodyMd} title={post.title} date={post.date} summary={post.summary} />
+          <ClientPost code={post.bodyMd} title={post.title} date={post.date} />
         </div>
       </section>
     )
