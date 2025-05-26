@@ -54,7 +54,7 @@ export function SkeletonCard() {
   )
 }
 
-export default function BlogPageClient({ heroPost }: { heroPost: DiscordPost }) {
+export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: DiscordPost, initialPosts?: DiscordPost[] }) {
   const [posts, setPosts] = useState<DiscordPost[]>([])
   const [showFullSummary, setShowFullSummary] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
@@ -67,13 +67,30 @@ export default function BlogPageClient({ heroPost }: { heroPost: DiscordPost }) 
       setLoading(true)
       setAnimateIn(false)
       try {
+        if (currentPage === 1 && initialPosts && initialPosts.length > 0) {
+          setPosts(initialPosts)
+          // Fetch total count from API for correct pagination
+          try {
+            const totalRes = await fetch('/api/discord-sync/posts?limit=1')
+            if (totalRes.ok) {
+              const totalData = await totalRes.json()
+              setTotalPosts(totalData.total)
+            } else {
+              setTotalPosts(initialPosts.length + 1) // +1 for hero
+            }
+          } catch {
+            setTotalPosts(initialPosts.length + 1)
+          }
+          setLoading(false)
+          setTimeout(() => setAnimateIn(true), 10)
+          return
+        }
         if (currentPage === 1) {
-          // Try to load from /latestPosts.json first
+          // Try to load from /latestPosts.json first (fallback)
           try {
             const res = await fetch('/latestPosts.json', { cache: 'no-store' })
             if (!res.ok) throw new Error('No latestPosts.json')
             const postsJson = await res.json()
-            // Use posts 1-9 for the cards grid (skip the hero post)
             setPosts(postsJson.slice(1, 10))
             // Fetch total count from API for correct pagination
             try {
@@ -108,7 +125,7 @@ export default function BlogPageClient({ heroPost }: { heroPost: DiscordPost }) 
       }
     }
     loadPosts()
-  }, [currentPage])
+  }, [currentPage, initialPosts])
 
   const postsPerPage = 9
   const totalPages = totalPosts > 0 ? Math.ceil((totalPosts - 1) / postsPerPage) + 1 : 1
