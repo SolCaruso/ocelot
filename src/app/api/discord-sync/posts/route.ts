@@ -14,6 +14,24 @@ interface DiscordMessage {
   timestamp: string
 }
 
+function formatDateSlug(timestamp: string): string {
+  try {
+    const date = new Date(timestamp)
+    if (isNaN(date.getTime())) {
+      console.error("Invalid date for slug:", timestamp)
+      return "invalid-date"
+    }
+    // Format as MM-DD-YYYY
+    const month = String(date.getMonth() + 1).padStart(2, "0")
+    const day = String(date.getDate()).padStart(2, "0")
+    const year = date.getFullYear()
+    return `${month}-${day}-${year}`
+  } catch (error) {
+    console.error("Error formatting date slug:", error, timestamp)
+    return "invalid-date"
+  }
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const page = Number.parseInt(searchParams.get("page") || "1", 10)
@@ -45,23 +63,6 @@ export async function GET(request: NextRequest) {
     const messages: DiscordMessage[] = await res.json()
     console.log(`Fetched ${messages.length} messages from Discord`)
 
-    // Debug: Log first few timestamps
-    console.log("=== TIMESTAMP DEBUG ===")
-    messages.slice(0, 3).forEach((m, i) => {
-      console.log(`Message ${i}:`)
-      console.log(`  - ID: ${m.id}`)
-      console.log(`  - Raw timestamp: "${m.timestamp}"`)
-      console.log(`  - Timestamp type: ${typeof m.timestamp}`)
-      console.log(`  - Parsed date: ${new Date(m.timestamp).toISOString()}`)
-      console.log(
-        `  - Formatted: ${new Date(m.timestamp).toLocaleDateString("en-US", {
-          month: "long",
-          day: "numeric",
-          year: "numeric",
-        })}`,
-      )
-    })
-
     // Process messages
     const posts = messages.map((m, index) => {
       const raw = m.content.trim()
@@ -77,29 +78,19 @@ export async function GET(request: NextRequest) {
       const title = titleLine.replace(/^#\s*/, "") || "Untitled"
       const summary = lines.slice(lines.indexOf(titleLine) + 1).find((l: string) => !!l && !l.startsWith("```")) || ""
 
-      // Create URL-friendly slug from title
-      let slug = title
-        .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, "")
-        .replace(/\s+/g, "-")
-        .replace(/-+/g, "-")
-
-      // Remove leading/trailing dashes
-      slug = slug.replace(/^-+|-+$/g, "")
-
-      // If slug is empty, use message ID
-      if (!slug) {
-        slug = m.id
-      }
+      // Create date-based slug
+      const dateSlug = formatDateSlug(m.timestamp)
 
       const fallback = FALLBACKS[index % FALLBACKS.length]
       const imageUrl = m.attachments[0]?.url ?? `/jpg/${fallback}`
 
+      console.log(`Message ${index}: timestamp="${m.timestamp}", dateSlug="${dateSlug}", title="${title}"`)
+
       return {
         id: m.id,
-        slug,
+        slug: dateSlug,
         author: m.author?.username ?? "",
-        date: m.timestamp, // Keep the original Discord timestamp
+        date: m.timestamp,
         title,
         summary,
         bodyMd,
@@ -115,11 +106,7 @@ export async function GET(request: NextRequest) {
 
     console.log(`Returning ${paginatedPosts.length} posts for page ${page}`)
     if (paginatedPosts.length > 0) {
-      console.log(`=== FINAL RESULT DEBUG ===`)
-      console.log(`First post:`)
-      console.log(`  - Title: "${paginatedPosts[0].title}"`)
-      console.log(`  - Date: "${paginatedPosts[0].date}"`)
-      console.log(`  - Date type: ${typeof paginatedPosts[0].date}`)
+      console.log(`First post: dateSlug="${paginatedPosts[0].slug}", date="${paginatedPosts[0].date}"`)
     }
 
     return NextResponse.json({
