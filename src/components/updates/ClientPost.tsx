@@ -1,11 +1,10 @@
-'use client'
+"use client"
 
-import React, { ReactNode } from 'react'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import Link from 'next/link'
-import Image from 'next/image'
-import ShareButtons from './ShareButtons'
+import type { ReactNode } from "react"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
+import Link from "next/link"
+import ShareButtons from "./ShareButtons"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,21 +12,62 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
+} from "@/components/ui/breadcrumb"
+
+// Function to detect and convert YouTube URLs to embed URLs
+function getYouTubeEmbedUrl(url: string): string | null {
+  const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+  const match = url.match(youtubeRegex)
+  if (match) {
+    return `https://www.youtube.com/embed/${match[1]}`
+  }
+  return null
+}
+
+// Function to check if URL is an image
+function isImageUrl(url: string): boolean {
+  return /\.(jpg|jpeg|png|gif|webp|svg)(\?.*)?$/i.test(url)
+}
+
+// Function to clean markdown content - remove frontmatter
+function cleanMarkdownContent(content: string): string {
+  // Remove YAML frontmatter (everything between --- lines at the start)
+  const frontmatterRegex = /^---\s*\n[\s\S]*?\n---\s*\n/
+  const cleaned = content.replace(frontmatterRegex, "")
+
+  // Also remove any title/date/summary lines that might be at the top
+  const lines = cleaned.split("\n")
+  const filteredLines = lines.filter((line) => {
+    const trimmed = line.trim()
+    return !(
+      trimmed.startsWith("title:") ||
+      trimmed.startsWith("date:") ||
+      trimmed.startsWith("summary:") ||
+      trimmed === "---"
+    )
+  })
+
+  return filteredLines.join("\n").trim()
+}
 
 export function ClientPost({
   code,
   title,
   date,
+  summary,
   showHeader = true,
 }: {
   code: string
   title?: string
   date?: string
+  summary?: string
   showHeader?: boolean
 }) {
+  // Clean the markdown content
+  const cleanedCode = cleanMarkdownContent(code)
+
   return (
-    <article className="relative max-w-3xl mx-auto px-4 py-8 prose lg:prose-lg dark:prose-invert">
+    <article className="relative max-w-4xl mx-auto px-4 py-8">
       {/* Breadcrumb & Share */}
       <div className="flex justify-between items-center mb-6">
         <Breadcrumb>
@@ -42,50 +82,158 @@ export function ClientPost({
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbPage>
-                {title?.split(' ').slice(0, 6).join(' ')}...
+                {date &&
+                  new Date(date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
               </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <ShareButtons title={title || ''} />
+        <ShareButtons title={title || ""} />
       </div>
 
-      {showHeader && (
-        <header className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">{title}</h1>
-          <time
-            dateTime={date}
-            className="block text-sm uppercase text-gray-500 dark:text-gray-400"
-          >
-            {date &&
-              new Date(date).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-          </time>
-        </header>
+      {/* Summary as subheader */}
+      {summary && (
+        <div className="mb-8">
+          <p className="text-xl text-gray-300 leading-relaxed">{summary}</p>
+        </div>
       )}
 
-      <div className="prose dark:prose-invert">
+      <div className="prose prose-lg max-w-none text-white">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
-            a: ({ href, children }: { href?: string; children?: ReactNode }) => (
-              <Link href={href ?? '#'}>{children}</Link>
+            // Custom heading components with better sizing
+            h1: ({ children }: { children: ReactNode }) => (
+              <h1 className="text-3xl font-bold mb-6 mt-8 text-white">{children}</h1>
             ),
-            img: ({ src, alt }: { src?: string; alt?: string }) => (
-              <Image
-                src={src!}
-                alt={alt!}
-                width={800}
-                height={400}
-                className="my-4"
-              />
+            h2: ({ children }: { children: ReactNode }) => (
+              <h2 className="text-2xl font-bold mb-4 mt-6 text-white">{children}</h2>
             ),
+            h3: ({ children }: { children: ReactNode }) => (
+              <h3 className="text-xl font-bold mb-3 mt-5 text-white">{children}</h3>
+            ),
+            h4: ({ children }: { children: ReactNode }) => (
+              <h4 className="text-lg font-bold mb-2 mt-4 text-white">{children}</h4>
+            ),
+            // Custom paragraph with better spacing
+            p: ({ children }: { children: ReactNode }) => <p className="mb-4 leading-relaxed text-white">{children}</p>,
+            // Enhanced link component
+            a: ({ href, children }: { href?: string; children: ReactNode }) => {
+              if (!href) return <span className="text-white">{children}</span>
+
+              // Check if it's a YouTube link
+              const youtubeEmbedUrl = getYouTubeEmbedUrl(href)
+              if (youtubeEmbedUrl) {
+                return (
+                  <div className="my-6">
+                    <div className="relative w-full aspect-video rounded-lg overflow-hidden">
+                      <iframe
+                        src={youtubeEmbedUrl}
+                        title="YouTube video"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="absolute inset-0 w-full h-full"
+                      />
+                    </div>
+                  </div>
+                )
+              }
+
+              // Check if it's an image link
+              if (isImageUrl(href)) {
+                return (
+                  <div className="my-6">
+                    <img
+                      src={href || "/placeholder.svg"}
+                      alt="Content image"
+                      className="rounded-lg w-full h-auto max-w-full"
+                    />
+                  </div>
+                )
+              }
+
+              // Regular link - no underline by default
+              return (
+                <Link
+                  href={href}
+                  className="text-[#fbcea0] hover:text-white hover:underline transition-colors no-underline"
+                  target={href.startsWith("http") ? "_blank" : undefined}
+                  rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                >
+                  {children}
+                </Link>
+              )
+            },
+            // Enhanced image component
+            img: ({ src, alt }: { src?: string; alt?: string }) => {
+              if (!src) return null
+              return (
+                <div className="my-6">
+                  <img
+                    src={src || "/placeholder.svg"}
+                    alt={alt || "Content image"}
+                    className="rounded-lg w-full h-auto max-w-full"
+                  />
+                </div>
+              )
+            },
+            // Enhanced list styling
+            ul: ({ children }: { children: ReactNode }) => (
+              <ul className="mb-4 space-y-2 text-white list-disc list-inside">{children}</ul>
+            ),
+            ol: ({ children }: { children: ReactNode }) => (
+              <ol className="mb-4 space-y-2 text-white list-decimal list-inside">{children}</ol>
+            ),
+            li: ({ children }: { children: ReactNode }) => <li className="text-white">{children}</li>,
+            // Enhanced blockquote
+            blockquote: ({ children }: { children: ReactNode }) => (
+              <blockquote className="border-l-4 border-[#B4906D] pl-4 my-6 italic text-gray-300 bg-black/20 py-2 rounded-r">
+                {children}
+              </blockquote>
+            ),
+            // Enhanced code blocks
+            code: ({ children, className }: { children: ReactNode; className?: string }) => {
+              const isInline = !className
+              if (isInline) {
+                return (
+                  <code className="bg-black/30 text-[#fbcea0] px-2 py-1 rounded text-sm font-mono">{children}</code>
+                )
+              }
+              return (
+                <code className="block bg-black/50 text-[#fbcea0] p-4 rounded border border-[#B4906D] overflow-x-auto font-mono text-sm">
+                  {children}
+                </code>
+              )
+            },
+            pre: ({ children }: { children: ReactNode }) => (
+              <pre className="bg-black/50 border border-[#B4906D] rounded p-4 overflow-x-auto my-4">{children}</pre>
+            ),
+            // Enhanced table styling
+            table: ({ children }: { children: ReactNode }) => (
+              <div className="overflow-x-auto my-6">
+                <table className="w-full border-collapse border border-[#B4906D] rounded-lg">{children}</table>
+              </div>
+            ),
+            th: ({ children }: { children: ReactNode }) => (
+              <th className="border border-[#B4906D] bg-black/30 px-4 py-2 text-left text-[#fbcea0] font-bold">
+                {children}
+              </th>
+            ),
+            td: ({ children }: { children: ReactNode }) => (
+              <td className="border border-[#B4906D] px-4 py-2 text-white">{children}</td>
+            ),
+            // Text elements
+            strong: ({ children }: { children: ReactNode }) => (
+              <strong className="text-[#fbcea0] font-bold">{children}</strong>
+            ),
+            em: ({ children }: { children: ReactNode }) => <em className="text-[#fbcea0] italic">{children}</em>,
           }}
         >
-          {code}
+          {cleanedCode}
         </ReactMarkdown>
       </div>
     </article>

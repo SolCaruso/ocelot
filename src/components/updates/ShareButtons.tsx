@@ -30,7 +30,7 @@ export default function ShareButtons({ title }: { title: string }) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="flex items-center">
+        <Button variant="outline" className="flex items-center mb-1">
           <Share2 className="w-5 h-5" />
           <span>Share</span>
         </Button>
