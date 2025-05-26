@@ -18,26 +18,37 @@ function parseDateSlug(slug: string): Date | null {
   try {
     // Parse MM-DD-YYYY format
     const parts = slug.split("-")
-    if (parts.length !== 3) return null
+    if (parts.length !== 3) {
+      console.log(`Invalid slug format: ${slug} (doesn't have 3 parts)`)
+      return null
+    }
 
     const month = Number.parseInt(parts[0], 10)
     const day = Number.parseInt(parts[1], 10)
     const year = Number.parseInt(parts[2], 10)
 
-    if (isNaN(month) || isNaN(day) || isNaN(year)) return null
+    if (isNaN(month) || isNaN(day) || isNaN(year)) {
+      console.log(`Invalid slug format: ${slug} (contains non-numeric parts)`)
+      return null
+    }
 
     const date = new Date(year, month - 1, day)
-    if (isNaN(date.getTime())) return null
+    if (isNaN(date.getTime())) {
+      console.log(`Invalid date created from slug: ${slug}`)
+      return null
+    }
 
+    console.log(`Successfully parsed slug ${slug} to date: ${date.toISOString()}`)
     return date
-  } catch {
+  } catch (error) {
+    console.error(`Error parsing date slug ${slug}:`, error)
     return null
   }
 }
 
 function extractFrontmatterDate(content: string): string | null {
-  const match = content.match(/date:\s*["']?(\d{4}-\d{2}-\d{2})["']?/);
-  return match ? match[1] : null;
+  const match = content.match(/date:\s*["']?(\d{4}-\d{2}-\d{2})["']?/)
+  return match ? match[1] : null
 }
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
@@ -75,18 +86,28 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     const messages: DiscordMessage[] = await res.json()
+    console.log(`Fetched ${messages.length} messages from Discord`)
 
     // Find the message with matching frontmatter date
     let targetMessage: DiscordMessage | null = null
     let messageIndex = -1
     let frontmatterDateStr: string | null = null
 
+    console.log(`Target date: ${targetDate.getFullYear()}-${targetDate.getMonth() + 1}-${targetDate.getDate()}`)
+
     for (let i = 0; i < messages.length; i++) {
       const m = messages[i]
       const fmDateStr = extractFrontmatterDate(m.content)
+
       if (fmDateStr) {
+        console.log(`Message ${i} has frontmatter date: ${fmDateStr}`)
         const [year, month, day] = fmDateStr.split("-").map(Number)
         const fmDate = new Date(year, month - 1, day)
+
+        console.log(
+          `Comparing: ${fmDate.getFullYear()}-${fmDate.getMonth() + 1}-${fmDate.getDate()} vs ${targetDate.getFullYear()}-${targetDate.getMonth() + 1}-${targetDate.getDate()}`,
+        )
+
         if (
           fmDate.getDate() === targetDate.getDate() &&
           fmDate.getMonth() === targetDate.getMonth() &&
@@ -98,6 +119,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
           console.log(`Found matching message at index ${i}, frontmatter date: ${fmDateStr}`)
           break
         }
+      } else {
+        console.log(`Message ${i} has no frontmatter date`)
       }
     }
 
@@ -118,7 +141,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const lines = bodyMd.split("\n").map((l: string) => l.trim())
     const titleLine = lines.find((l: string) => l.startsWith("# ")) || ""
     const title = titleLine.replace(/^#\s*/, "") || "Untitled"
-    const summary = lines.slice(lines.indexOf(titleLine) + 1).find((l: string) => !!l && !l.startsWith("```") ) || ""
+    const summary = lines.slice(lines.indexOf(titleLine) + 1).find((l: string) => !!l && !l.startsWith("```")) || ""
 
     const fallback = FALLBACKS[messageIndex % FALLBACKS.length]
     const imageUrl = targetMessage.attachments[0]?.url ?? `/jpg/${fallback}`
@@ -138,10 +161,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     console.log(`Date: ${result.date}`)
 
     return NextResponse.json(result)
-  } catch (error) {
-    console.error("=== SLUG ROUTE ERROR ===")
-    console.error("Error:", error)
-    console.error("Slug:", slug)
+  } catch (err) {
+    console.error(`Error processing slug ${slug}:`, err)
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }

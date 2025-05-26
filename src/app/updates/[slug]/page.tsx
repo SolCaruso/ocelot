@@ -1,19 +1,10 @@
 import { notFound } from "next/navigation"
 import PostHero from "@/components/updates/PostHero"
 import { ClientPost } from "@/components/updates/ClientPost"
+import { getPostBySlug } from "@/lib/discord"
 
 // Revalidate every 5 minutes
 export const revalidate = 300
-
-type Post = {
-  id: string
-  author: string
-  date: string
-  title: string
-  summary: string
-  bodyMd: string
-  imageUrl: string
-}
 
 export default async function Page({
   params,
@@ -23,19 +14,11 @@ export default async function Page({
   const { slug } = await params
 
   try {
-    // Use relative URL which works in both development and production
-    const res = await fetch(`/api/discord-sync/posts/${slug}`, {
-      cache: "no-store", // Ensure fresh data
-    })
+    const post = await getPostBySlug(slug)
 
-    console.log(`API response status: ${res.status}`)
-
-    if (!res.ok) {
-      console.error(`API error: ${res.status}`)
+    if (!post) {
       return notFound()
     }
-
-    const post: Post = await res.json()
 
     return (
       <section className="relative mx-auto px-4 pb-64 bg-[url('/jpg/smoke.jpg')] bg-fixed bg-center bg-cover overflow-x-hidden">
@@ -54,7 +37,7 @@ export default async function Page({
       </section>
     )
   } catch (err) {
-    console.error(`Fetch error for slug ${slug}:`, err)
+    console.error(`Error fetching post for slug ${slug}:`, err)
     return notFound()
   }
 }
