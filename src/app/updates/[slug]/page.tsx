@@ -3,8 +3,8 @@ import { notFound } from 'next/navigation'
 import PostHero from '@/components/updates/PostHero'
 import { ClientPost } from '@/components/updates/ClientPost'
 
-// Force dynamic rendering
-export const dynamic = 'force-dynamic'
+// Revalidate every 5 minutes
+export const revalidate = 300
 
 type Post = {
   id: string
@@ -16,8 +16,15 @@ type Post = {
   imageUrl: string
 }
 
-// Remove generateStaticParams since we're going dynamic
-// export async function generateStaticParams() { ... }
+function getBaseUrl() {
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`
+  }
+  if (process.env.NODE_ENV === 'production') {
+    return 'https://ocelot-pearl.vercel.app' // Your actual domain
+  }
+  return 'http://localhost:3000'
+}
 
 export default async function Page({
   params,
@@ -27,15 +34,22 @@ export default async function Page({
   const { slug } = await params
 
   try {
-    // Use your API route - remove cache: 'no-store' since we're already dynamic
-    const baseUrl = process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}` 
-      : 'http://localhost:3000'
+    const baseUrl = getBaseUrl()
+    const apiUrl = `${baseUrl}/api/discord-sync/posts/${slug}`
     
-    const res = await fetch(`${baseUrl}/api/discord-sync/posts/${slug}`)
+    console.log(`Fetching from: ${apiUrl}`)
+    
+    const res = await fetch(apiUrl, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    console.log(`API response status: ${res.status}`)
 
     if (!res.ok) {
-      console.error(`[slug:${slug}] API fetch failed, status:`, res.status)
+      const errorText = await res.text()
+      console.error(`API error: ${res.status} - ${errorText}`)
       return notFound()
     }
 
@@ -63,7 +77,7 @@ export default async function Page({
       </section>
     )
   } catch (err) {
-    console.error(`[slug:${slug}] fetch threw:`, err)
+    console.error(`Fetch error for slug ${slug}:`, err)
     return notFound()
   }
 }
