@@ -97,6 +97,7 @@ export default function BlogPage() {
         const data = (await res.json()) as { total: number; posts: DiscordPost[] }
         console.log("Posts loaded:", data.posts.length)
         console.log("First post date:", data.posts[0]?.date)
+        console.log("First post ID:", data.posts[0]?.id)
 
         if (data.posts.length > 0) {
           setPosts(data.posts)
@@ -241,7 +242,7 @@ export default function BlogPage() {
           </p>
           <div className="flex justify-between items-center w-full pt-4 max-w-3xl">
             <Link
-              href={`/updates/${heroPost.slug ?? ""}`}
+              href={`/updates/${heroPost.id ?? ""}`}
               className="py-3 px-6 text-[0.75rem] leading-[1rem] font-bold tracking-[0.2px] rounded-[5px] bg-[#E6E6E6] hover:bg-[#FFF] shadow-md text-black uppercase transition-colors"
             >
               Read more
@@ -257,7 +258,7 @@ export default function BlogPage() {
       <div className="max-w-7xl mx-auto relative z-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 2xs:pt-72 xs:pt-62 lg:pt-12 pb-12">
           {gridPosts.map((post) => (
-            <Link key={post.id} href={`/updates/${post.slug}`}>
+            <Link key={post.id} href={`/updates/${post.id}`}>
               <article
                 className="group cursor-pointer relative overflow-hidden w-full aspect-[450/530] gradient-border-top transition-shadow duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]"
                 style={{
@@ -369,7 +370,7 @@ export default function BlogPage() {
       </div>
 
       <div
-        className="absolute bottom inset-0 bg-[url('/webp/golem.webp')] bg-fixed bg-center bg-cover max-w-7xl min-w-7xl mx-auto"
+        className="absolute bottom inset-0 bg-[url('/webp/golem-bg.webp')] bg-fixed bg-center bg-cover max-w-7xl min-w-7xl mx-auto"
         style={{
           maskImage: "url('/webp/smoke-mask.webp')",
           maskSize: "contain",
