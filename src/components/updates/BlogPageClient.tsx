@@ -67,8 +67,36 @@ export default function BlogPageClient({ heroPost }: { heroPost: DiscordPost }) 
       setLoading(true)
       setAnimateIn(false)
       try {
+        if (currentPage === 1) {
+          // Try to load from /latestPosts.json first
+          try {
+            const res = await fetch('/latestPosts.json', { cache: 'no-store' })
+            if (!res.ok) throw new Error('No latestPosts.json')
+            const postsJson = await res.json()
+            // Use posts 1-9 for the cards grid (skip the hero post)
+            setPosts(postsJson.slice(1, 10))
+            // Fetch total count from API for correct pagination
+            try {
+              const totalRes = await fetch('/api/discord-sync/posts?limit=1')
+              if (totalRes.ok) {
+                const totalData = await totalRes.json()
+                setTotalPosts(totalData.total)
+              } else {
+                setTotalPosts(postsJson.length)
+              }
+            } catch {
+              setTotalPosts(postsJson.length)
+            }
+            setLoading(false)
+            setTimeout(() => setAnimateIn(true), 10)
+            return
+          } catch (err) {
+            // Fallback to API fetch if /latestPosts.json fails
+          }
+        }
+        // For all other pages, or fallback
         const skip = 1 + (currentPage - 1) * 9
-        const limit = currentPage === 1 ? 9 : 9
+        const limit = 9
         const res = await fetch(`/api/discord-sync/posts?skip=${skip}&limit=${limit}`)
         const data = await res.json()
         setPosts(data.posts)
