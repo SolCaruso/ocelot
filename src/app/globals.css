@@ -71,6 +71,9 @@
   --breakpoint-2xs: 350px;
   --breakpoint-xs: 450px;
 
+  /* Custom blur (< blur-xs) */
+  --blur-2xs: 1px;
+
   /* Reviews */
   --animate-fade-in: fade-in 0.5s linear forwards;
   --animate-spin-slow: spin 4s linear infinite;

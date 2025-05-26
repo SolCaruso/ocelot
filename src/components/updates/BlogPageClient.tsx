@@ -1,9 +1,8 @@
-"use client";
+"use client"
 
-
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import BlogImage from "@/components/updates/BlogImage";
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import BlogImage from "@/components/updates/BlogImage"
 import {
   Pagination,
   PaginationContent,
@@ -11,98 +10,97 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
-import { Skeleton } from "@/components/ui/skeleton";
+} from "@/components/ui/pagination"
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface DiscordPost {
-  id: string;
-  slug: string;
-  author: string;
-  date: string;
-  title: string;
-  summary: string;
-  bodyMd: string;
-  imageUrl: string | null;
+  id: string
+  slug: string
+  author: string
+  date: string
+  title: string
+  summary: string
+  bodyMd: string
+  imageUrl: string | null
 }
 
 function formatDiscordDate(timestamp: string): string {
   try {
-    const date = new Date(timestamp);
+    const date = new Date(timestamp)
     if (isNaN(date.getTime())) {
-      console.error("Invalid date:", timestamp);
-      return "Invalid Date";
+      console.error("Invalid date:", timestamp)
+      return "Invalid Date"
     }
     return date.toLocaleDateString("en-US", {
       month: "long",
       day: "numeric",
       year: "numeric",
-    });
+    })
   } catch (error) {
-    console.error("Error formatting date:", error, timestamp);
-    return "Invalid Date";
+    console.error("Error formatting date:", error, timestamp)
+    return "Invalid Date"
   }
 }
 
 export function SkeletonCard() {
   return (
-    <div className="group cursor-pointer relative overflow-hidden w-full aspect-[450/530] gradient-border-top transition-opacity duration-200 ease-[var(--ease-in-out-quad)] opacity-40 bg-accent rounded-xl backdrop-blur-lg">
-      <div className="relative w-full h-2/3 bg-black overflow-hidden">
-        <Skeleton className="absolute inset-0 w-full h-full rounded-none" />
-      </div>
-      <div className="absolute inset-x-0 bottom-0 p-8 space-y-2">
-        <Skeleton className="h-4 w-1/3 mb-2" />
-        <Skeleton className="h-8 w-2/3 mb-2" />
-        <Skeleton className="h-4 w-3/4 mb-2" />
-        <Skeleton className="h-4 w-1/2" />
+    <div className="flex flex-col space-y-3 w-full aspect-[450/530]">
+      <Skeleton className="h-[80%] w-full rounded-xl" />
+      <div className="space-y-3 px-2">
+        <Skeleton className="h-6 w-full" />
+        <Skeleton className="h-6 w-[80%]" />
       </div>
     </div>
-  );
+  )
 }
 
 export default function BlogPageClient({ heroPost }: { heroPost: DiscordPost }) {
-  const [posts, setPosts] = useState<DiscordPost[]>([]);
-  const [showFullSummary, setShowFullSummary] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [totalPosts, setTotalPosts] = useState<number>(0);
+  const [posts, setPosts] = useState<DiscordPost[]>([])
+  const [showFullSummary, setShowFullSummary] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [loading, setLoading] = useState(true)
+  const [totalPosts, setTotalPosts] = useState<number>(0)
+  const [animateIn, setAnimateIn] = useState(false)
 
   useEffect(() => {
     async function loadPosts() {
-      setLoading(true);
+      setLoading(true)
+      setAnimateIn(false)
       try {
-        const skip = 1 + (currentPage - 1) * 9;
-        const limit = currentPage === 1 ? 9 : 9;
-        const res = await fetch(`/api/discord-sync/posts?skip=${skip}&limit=${limit}`);
-        const data = await res.json();
-        setPosts(data.posts);
-        setTotalPosts(data.total);
-      } catch {} finally {
-        setLoading(false);
+        const skip = 1 + (currentPage - 1) * 9
+        const limit = currentPage === 1 ? 9 : 9
+        const res = await fetch(`/api/discord-sync/posts?skip=${skip}&limit=${limit}`)
+        const data = await res.json()
+        setPosts(data.posts)
+        setTotalPosts(data.total)
+      } catch {
+      } finally {
+        setLoading(false)
+        setTimeout(() => setAnimateIn(true), 10)
       }
     }
-    loadPosts();
-  }, [currentPage]);
+    loadPosts()
+  }, [currentPage])
 
-  const postsPerPage = 9;
-  const totalPages = totalPosts > 0 ? Math.ceil((totalPosts - 1) / postsPerPage) + 1 : 1;
-  const availablePages = Array.from({ length: totalPages }, (_, i) => i + 1)
-    .filter(pageNum => {
-      if (pageNum === 1) return true;
-      const start = 1 + (pageNum - 1) * postsPerPage;
-      return start < totalPosts;
-    });
-  const hasNextPage = currentPage < availablePages.length && availablePages.length > 1;
-  const hasPrevPage = currentPage > 1;
+  const postsPerPage = 9
+  const totalPages = totalPosts > 0 ? Math.ceil((totalPosts - 1) / postsPerPage) + 1 : 1
+  const availablePages = Array.from({ length: totalPages }, (_, i) => i + 1).filter((pageNum) => {
+    if (pageNum === 1) return true
+    const start = 1 + (pageNum - 1) * postsPerPage
+    return start < totalPosts
+  })
+  const hasNextPage = currentPage < availablePages.length && availablePages.length > 1
+  const hasPrevPage = currentPage > 1
 
   // Parse hero post content
-  const lines = (heroPost.bodyMd || "").split("\n").map((l: string) => l.trim());
-  const titleLine = lines.find((l: string) => l.startsWith("# ")) || "";
-  const heroTitle = titleLine.replace(/^#\s*/, "") || "";
-  const heroSummary = lines.slice(lines.indexOf(titleLine) + 1).find((l: string) => !!l && !l.startsWith("```") ) || "";
+  const lines = (heroPost.bodyMd || "").split("\n").map((l: string) => l.trim())
+  const titleLine = lines.find((l: string) => l.startsWith("# ")) || ""
+  const heroTitle = titleLine.replace(/^#\s*/, "") || ""
+  const heroSummary = lines.slice(lines.indexOf(titleLine) + 1).find((l: string) => !!l && !l.startsWith("```")) || ""
 
-  const MAX_TITLE_LENGTH = 26;
-  const MAX_SUMMARY_LENGTH = 71;
-  const HERO_TITLE_MAX_LENGTH = 33;
+  const MAX_TITLE_LENGTH = 26
+  const MAX_SUMMARY_LENGTH = 71
+  const HERO_TITLE_MAX_LENGTH = 33
 
   return (
     <section className="relative mx-auto px-4 pb-64 min-h-[1100px] bg-[url('/jpg/smoke.jpg')] bg-fixed bg-center bg-cover overflow-x-hidden">
@@ -174,7 +172,7 @@ export default function BlogPageClient({ heroPost }: { heroPost: DiscordPost }) 
       <div className="max-w-7xl mx-auto relative z-5">
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 2xs:pt-72 xs:pt-62 lg:pt-12 pb-12">
-            {Array.from({ length: 6 }).map((_, i) => (
+            {Array.from({ length: 9 }).map((_, i) => (
               <SkeletonCard key={i} />
             ))}
           </div>
@@ -183,7 +181,11 @@ export default function BlogPageClient({ heroPost }: { heroPost: DiscordPost }) 
             {posts.map((post) => (
               <Link key={post.id} href={`/updates/${post.slug}`}>
                 <article
-                  className="group cursor-pointer relative overflow-hidden w-full aspect-[450/530] gradient-border-top transition-shadow duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]"
+                  className={`
+                    group cursor-pointer relative overflow-hidden w-full aspect-[450/530] gradient-border-top transition-shadow duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]
+                    ${animateIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}
+                    transition-all duration-500 ease-[var(--ease-in-out-quad)]
+                  `}
                   style={{
                     borderStyle: "solid",
                     borderWidth: "0 1px 1px 1px",
@@ -256,8 +258,8 @@ export default function BlogPageClient({ heroPost }: { heroPost: DiscordPost }) 
                 <PaginationPrevious
                   href="#"
                   onClick={(e) => {
-                    e.preventDefault();
-                    if (hasPrevPage) setCurrentPage(currentPage - 1);
+                    e.preventDefault()
+                    if (hasPrevPage) setCurrentPage(currentPage - 1)
                   }}
                   className={!hasPrevPage ? "pointer-events-none opacity-50" : ""}
                 />
@@ -269,8 +271,8 @@ export default function BlogPageClient({ heroPost }: { heroPost: DiscordPost }) 
                     href="#"
                     isActive={pageNum === currentPage}
                     onClick={(e) => {
-                      e.preventDefault();
-                      setCurrentPage(pageNum);
+                      e.preventDefault()
+                      setCurrentPage(pageNum)
                     }}
                   >
                     {pageNum}
@@ -282,8 +284,8 @@ export default function BlogPageClient({ heroPost }: { heroPost: DiscordPost }) 
                 <PaginationNext
                   href="#"
                   onClick={(e) => {
-                    e.preventDefault();
-                    if (hasNextPage) setCurrentPage(currentPage + 1);
+                    e.preventDefault()
+                    if (hasNextPage) setCurrentPage(currentPage + 1)
                   }}
                   className={!hasNextPage ? "pointer-events-none opacity-50" : ""}
                 />
@@ -305,5 +307,5 @@ export default function BlogPageClient({ heroPost }: { heroPost: DiscordPost }) 
         }}
       />
     </section>
-  );
-} 
+  )
+}
