@@ -1,6 +1,6 @@
 "use client"
 
-import type React from "react"
+import React from "react"
 import type { ReactNode } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
@@ -33,22 +33,8 @@ function isImageUrl(url: string): boolean {
 // Function to clean markdown content - remove frontmatter
 function cleanMarkdownContent(content: string): string {
   // Remove YAML frontmatter (everything between --- lines at the start)
-  const frontmatterRegex = /^---\s*\n[\s\S]*?\n---\s*\n/
-  const cleaned = content.replace(frontmatterRegex, "")
-
-  // Also remove any title/date/summary lines that might be at the top
-  const lines = cleaned.split("\n")
-  const filteredLines = lines.filter((line) => {
-    const trimmed = line.trim()
-    return !(
-      trimmed.startsWith("title:") ||
-      trimmed.startsWith("date:") ||
-      trimmed.startsWith("summary:") ||
-      trimmed === "---"
-    )
-  })
-
-  return filteredLines.join("\n").trim()
+  const frontmatterRegex = /^---\s*\n[\s\S]*?\n---\s*\n/;
+  return content.replace(frontmatterRegex, "").trim();
 }
 
 // Type guard to check if children is a React element with href prop
@@ -94,6 +80,9 @@ export function ClientPost({
   // Clean the markdown content
   const cleanedCode = cleanMarkdownContent(code)
 
+  // Debug: log the markdown being rendered
+  console.log("Markdown being rendered:", cleanedCode);
+
   return (
     <article className="relative max-w-4xl mx-auto px-4 py-8">
       {/* Breadcrumb & Share */}
@@ -135,11 +124,16 @@ export function ClientPost({
             ),
             // Custom paragraph with better spacing
             p: ({ children }: { children: ReactNode }) => {
-              // Check if children contains only a link that should be rendered as media
-              if (hasHrefProp(children)) {
-                const href = children.props.href
-                const youtubeEmbedUrl = getYouTubeEmbedUrl(href)
-
+              // If the paragraph contains only a link
+              const childArray = children as React.ReactNode[];
+              if (
+                Array.isArray(childArray) &&
+                childArray.length === 1 &&
+                React.isValidElement(childArray[0]) &&
+                (childArray[0] as React.ReactElement<any, any>).type === 'a'
+              ) {
+                const href = (childArray[0] as React.ReactElement<any, any>).props.href;
+                const youtubeEmbedUrl = getYouTubeEmbedUrl(href);
                 if (youtubeEmbedUrl) {
                   return (
                     <div className="my-6">
@@ -153,23 +147,35 @@ export function ClientPost({
                         />
                       </div>
                     </div>
-                  )
-                }
-
-                if (isImageUrl(href)) {
-                  return (
-                    <div className="my-6">
-                      <img
-                        src={href || "/placeholder.svg"}
-                        alt="Content image"
-                        className="rounded-lg w-full h-auto max-w-full"
-                      />
-                    </div>
-                  )
+                  );
                 }
               }
-
-              return <p className="mb-4 leading-relaxed text-white">{children}</p>
+              // If the paragraph contains only a text node that is a YouTube URL
+              if (
+                Array.isArray(childArray) &&
+                childArray.length === 1 &&
+                typeof childArray[0] === 'string'
+              ) {
+                const text = (childArray[0] as string).trim();
+                const youtubeEmbedUrl = getYouTubeEmbedUrl(text);
+                if (youtubeEmbedUrl) {
+                  return (
+                    <div className="my-6">
+                      <div className="relative w-full aspect-video rounded-lg overflow-hidden">
+                        <iframe
+                          src={youtubeEmbedUrl}
+                          title="YouTube video"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          className="absolute inset-0 w-full h-full"
+                        />
+                      </div>
+                    </div>
+                  );
+                }
+              }
+              // Default: render as normal paragraph
+              return <p className="mb-4 leading-relaxed text-white">{children}</p>;
             },
             // Enhanced link component - simplified to avoid nesting issues
             a: ({ href, children }: { href?: string; children: ReactNode }) => {
@@ -188,18 +194,13 @@ export function ClientPost({
               )
             },
             // Enhanced image component
-            img: ({ src, alt }: { src?: string; alt?: string }) => {
-              if (!src) return null
-              return (
-                <span className="block my-6">
-                  <img
-                    src={src || "/placeholder.svg"}
-                    alt={alt || "Content image"}
-                    className="rounded-lg w-full h-auto max-w-full"
-                  />
-                </span>
-              )
-            },
+            img: ({ src, alt }: { src?: string; alt?: string }) => (
+              <img
+                src={src}
+                alt={alt || ""}
+                style={{ maxWidth: "100%", height: "auto", margin: "1.5rem 0" }}
+              />
+            ),
             // Enhanced list styling
             ul: ({ children }: { children: ReactNode }) => (
               <ul className="mb-4 space-y-2 text-white list-disc list-inside">{children}</ul>
