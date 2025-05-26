@@ -4,22 +4,47 @@ import { NextRequest } from 'next/server';
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN!;
 const CHANNEL_ID = process.env.CHANNEL_ID!;
 
-// In Next.js 15, params is now a Promise that needs to be awaited
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
 
+  // Add validation
+  if (!DISCORD_TOKEN || !CHANNEL_ID) {
+    console.error('Missing environment variables');
+    return NextResponse.json(
+      { error: 'Server configuration error' },
+      { status: 500 }
+    );
+  }
+
   try {
+    console.log(`Fetching Discord message: ${slug}`);
+    
     const res = await fetch(
       `https://discord.com/api/v10/channels/${CHANNEL_ID}/messages/${slug}`,
       {
-        headers: { Authorization: `Bot ${DISCORD_TOKEN}` },
+        headers: { 
+          Authorization: `Bot ${DISCORD_TOKEN}`,
+          'User-Agent': 'DiscordBot (https://your-domain.com, 1.0.0)'
+        },
       }
     );
 
+    console.log(`Discord API response status: ${res.status}`);
+
     if (!res.ok) {
+      const errorText = await res.text();
+      console.error(`Discord API error: ${res.status} - ${errorText}`);
+      
+      if (res.status === 404) {
+        return NextResponse.json(
+          { error: 'Post not found' },
+          { status: 404 }
+        );
+      }
+      
       return NextResponse.json(
         { error: `Discord API error: ${res.status}` },
         { status: 502 }
