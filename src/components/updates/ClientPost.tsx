@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import type { ReactNode } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
@@ -50,6 +52,18 @@ function cleanMarkdownContent(content: string): string {
   return filteredLines.join("\n").trim()
 }
 
+// Type guard to check if children is a React element with href prop
+function hasHrefProp(children: ReactNode): children is React.ReactElement<{ href: string }> {
+  return (
+    typeof children === "object" &&
+    children !== null &&
+    "props" in children &&
+    typeof (children as any).props === "object" &&
+    (children as any).props !== null &&
+    typeof (children as any).props.href === "string"
+  )
+}
+
 export function ClientPost({
   code,
   title,
@@ -93,13 +107,6 @@ export function ClientPost({
         <ShareButtons title={title || ""} />
       </div>
 
-      {/* Summary as subheader */}
-      {summary && (
-        <div className="mb-8">
-          <p className="text-xl text-gray-300 leading-relaxed">{summary}</p>
-        </div>
-      )}
-
       <div className="prose prose-lg max-w-none text-white">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
@@ -118,43 +125,48 @@ export function ClientPost({
               <h4 className="text-lg font-bold mb-2 mt-4 text-white">{children}</h4>
             ),
             // Custom paragraph with better spacing
-            p: ({ children }: { children: ReactNode }) => <p className="mb-4 leading-relaxed text-white">{children}</p>,
-            // Enhanced link component
+            p: ({ children }: { children: ReactNode }) => {
+              // Check if children contains only a link that should be rendered as media
+              if (hasHrefProp(children)) {
+                const href = children.props.href
+                const youtubeEmbedUrl = getYouTubeEmbedUrl(href)
+
+                if (youtubeEmbedUrl) {
+                  return (
+                    <div className="my-6">
+                      <div className="relative w-full aspect-video rounded-lg overflow-hidden">
+                        <iframe
+                          src={youtubeEmbedUrl}
+                          title="YouTube video"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          className="absolute inset-0 w-full h-full"
+                        />
+                      </div>
+                    </div>
+                  )
+                }
+
+                if (isImageUrl(href)) {
+                  return (
+                    <div className="my-6">
+                      <img
+                        src={href || "/placeholder.svg"}
+                        alt="Content image"
+                        className="rounded-lg w-full h-auto max-w-full"
+                      />
+                    </div>
+                  )
+                }
+              }
+
+              return <p className="mb-4 leading-relaxed text-white">{children}</p>
+            },
+            // Enhanced link component - simplified to avoid nesting issues
             a: ({ href, children }: { href?: string; children: ReactNode }) => {
               if (!href) return <span className="text-white">{children}</span>
 
-              // Check if it's a YouTube link
-              const youtubeEmbedUrl = getYouTubeEmbedUrl(href)
-              if (youtubeEmbedUrl) {
-                return (
-                  <div className="my-6">
-                    <div className="relative w-full aspect-video rounded-lg overflow-hidden">
-                      <iframe
-                        src={youtubeEmbedUrl}
-                        title="YouTube video"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                        className="absolute inset-0 w-full h-full"
-                      />
-                    </div>
-                  </div>
-                )
-              }
-
-              // Check if it's an image link
-              if (isImageUrl(href)) {
-                return (
-                  <div className="my-6">
-                    <img
-                      src={href || "/placeholder.svg"}
-                      alt="Content image"
-                      className="rounded-lg w-full h-auto max-w-full"
-                    />
-                  </div>
-                )
-              }
-
-              // Regular link - no underline by default
+              // Regular link - no special handling here to avoid nesting issues
               return (
                 <Link
                   href={href}
@@ -170,13 +182,13 @@ export function ClientPost({
             img: ({ src, alt }: { src?: string; alt?: string }) => {
               if (!src) return null
               return (
-                <div className="my-6">
+                <span className="block my-6">
                   <img
                     src={src || "/placeholder.svg"}
                     alt={alt || "Content image"}
                     className="rounded-lg w-full h-auto max-w-full"
                   />
-                </div>
+                </span>
               )
             },
             // Enhanced list styling
