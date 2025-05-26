@@ -1,7 +1,8 @@
-'use client'
+"use client"
 
-import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import BlogImage from "@/components/updates/BlogImage"
 import {
   Pagination,
   PaginationContent,
@@ -9,8 +10,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from '@/components/ui/pagination'
-import BlogImage from '@/components/updates/BlogImage'
+} from "@/components/ui/pagination"
 
 interface DiscordPost {
   id: string
@@ -23,8 +23,27 @@ interface DiscordPost {
   imageUrl: string | null
 }
 
+// Helper function to format Discord timestamp
+function formatDiscordDate(timestamp: string): string {
+  try {
+    const date = new Date(timestamp)
+    if (isNaN(date.getTime())) {
+      console.error("Invalid date:", timestamp)
+      return "Invalid Date"
+    }
+    return date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    })
+  } catch (error) {
+    console.error("Error formatting date:", error, timestamp)
+    return "Invalid Date"
+  }
+}
+
 export default function BlogPage() {
-  const [posts, setPosts] = useState<DiscordPost[]>([])  
+  const [posts, setPosts] = useState<DiscordPost[]>([])
   const [showFullSummary, setShowFullSummary] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [loading, setLoading] = useState(true)
@@ -37,29 +56,16 @@ export default function BlogPage() {
     async function checkNextPage() {
       if (currentPage === 1 && !checkedForNextPage && posts.length === 10) {
         try {
+          console.log("Checking if page 2 exists...")
           const res = await fetch(`/api/discord-sync/posts?page=2`)
           if (res.ok) {
-            const data = await res.json() as { total: number; posts: DiscordPost[] }
+            const data = (await res.json()) as { total: number; posts: DiscordPost[] }
             if (data.posts.length > 0) {
-              setPagesWithContent(prev => new Set([...prev, 2]))
+              setPagesWithContent((prev) => new Set([...prev, 2]))
               // Check if page 2 is the last page
               const expectedPosts = 9
               if (data.posts.length < expectedPosts) {
                 setLastPageFound(2)
-              } else {
-                // Check if page 3 exists
-                const res3 = await fetch(`/api/discord-sync/posts?page=3`)
-                if (res3.ok) {
-                  const data3 = await res3.json() as { total: number; posts: DiscordPost[] }
-                  if (data3.posts.length > 0) {
-                    setPagesWithContent(prev => new Set([...prev, 3]))
-                    setLastPageFound(3)
-                  } else {
-                    setLastPageFound(2)
-                  }
-                } else {
-                  setLastPageFound(2)
-                }
               }
             } else {
               setLastPageFound(1)
@@ -67,12 +73,12 @@ export default function BlogPage() {
           }
           setCheckedForNextPage(true)
         } catch (err) {
-          console.error('Error checking next page:', err)
+          console.error("Error checking next page:", err)
           setCheckedForNextPage(true)
         }
       }
     }
-    
+
     if (posts.length > 0) {
       checkNextPage()
     }
@@ -83,18 +89,21 @@ export default function BlogPage() {
     async function loadPosts() {
       setLoading(true)
       try {
+        console.log(`Fetching posts for page ${currentPage}`)
         const res = await fetch(`/api/discord-sync/posts?page=${currentPage}`)
         if (!res.ok) {
           throw new Error(`Discord API returned HTTP ${res.status}`)
         }
-        const data = await res.json() as { total: number; posts: DiscordPost[] }
-        
+        const data = (await res.json()) as { total: number; posts: DiscordPost[] }
+        console.log("Posts loaded:", data.posts.length)
+        console.log("First post date:", data.posts[0]?.date)
+
         if (data.posts.length > 0) {
           setPosts(data.posts)
-          
+
           // Mark this page as having content
-          setPagesWithContent(prev => new Set([...prev, currentPage]))
-          
+          setPagesWithContent((prev) => new Set([...prev, currentPage]))
+
           // Check if this is the last page
           const expectedPosts = currentPage === 1 ? 10 : 9
           if (data.posts.length < expectedPosts) {
@@ -108,9 +117,8 @@ export default function BlogPage() {
             setCurrentPage(currentPage - 1)
           }
         }
-        
       } catch (err) {
-        console.error('Error loading posts:', err)
+        console.error("Error loading posts:", err)
       } finally {
         setLoading(false)
       }
@@ -127,27 +135,47 @@ export default function BlogPage() {
 
   // Generate available page numbers
   const availablePages = Array.from(pagesWithContent).sort((a, b) => a - b)
-  
-  // Determine if next page is available
-  const hasNextPage = lastPageFound !== null && currentPage < lastPageFound
 
-  // Handle next page click with additional check
-  const handleNextClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    
-    if (hasNextPage) {
-      setCurrentPage(currentPage + 1)
+  // Determine if next page is available - IMPROVED LOGIC
+  const hasNextPage = (() => {
+    // If we know the last page and we're on it, no next page
+    if (lastPageFound !== null && currentPage >= lastPageFound) {
+      return false
     }
-  }
+
+    // If we're on page 1 and have 10 posts, there might be a next page
+    if (currentPage === 1 && posts.length === 10) {
+      // If we've checked and found page 2 has content, show next
+      if (pagesWithContent.has(2)) {
+        return true
+      }
+      // If we haven't checked yet, assume there might be more
+      if (!checkedForNextPage) {
+        return true
+      }
+      // If we checked and page 2 is empty, no next page
+      return false
+    }
+
+    // For other pages, if we have content for the next page, show next
+    if (pagesWithContent.has(currentPage + 1)) {
+      return true
+    }
+
+    // If we don't know the last page yet and current page has full content, might have next
+    if (lastPageFound === null && posts.length >= 9) {
+      return true
+    }
+
+    return false
+  })()
+  const hasPrevPage = currentPage > 1
 
   // Parse hero post content
-  const lines = (heroPost.bodyMd || '').split('\n').map((l) => l.trim())
-  const titleLine = lines.find((l) => l.startsWith('# ')) || ''
-  const heroTitle = titleLine.replace(/^#\s*/, '') || ''
-  const heroSummary =
-    lines
-      .slice(lines.indexOf(titleLine) + 1)
-      .find((l) => !!l && !l.startsWith('```')) || ''
+  const lines = (heroPost.bodyMd || "").split("\n").map((l) => l.trim())
+  const titleLine = lines.find((l) => l.startsWith("# ")) || ""
+  const heroTitle = titleLine.replace(/^#\s*/, "") || ""
+  const heroSummary = lines.slice(lines.indexOf(titleLine) + 1).find((l) => !!l && !l.startsWith("```")) || ""
 
   if (loading) {
     return (
@@ -168,13 +196,13 @@ export default function BlogPage() {
             className="relative z-0 w-full h-full"
             style={{
               maskImage: "url('/webp/smoke-mask-2.webp')",
-              maskSize: 'cover',
-              maskPosition: 'bottom center',
-              maskRepeat: 'no-repeat',
+              maskSize: "cover",
+              maskPosition: "bottom center",
+              maskRepeat: "no-repeat",
               WebkitMaskImage: "url('/webp/smoke-mask-2.webp')",
-              WebkitMaskSize: 'cover',
-              WebkitMaskPosition: 'bottom center',
-              WebkitMaskRepeat: 'no-repeat',
+              WebkitMaskSize: "cover",
+              WebkitMaskPosition: "bottom center",
+              WebkitMaskRepeat: "no-repeat",
             }}
           >
             <div className="w-full h-full transition-opacity duration-200 ease-[var(--ease-in-out-quad)] opacity-100">
@@ -194,41 +222,32 @@ export default function BlogPage() {
           <h1
             className="bg-clip-text text-transparent text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-2 uppercase"
             style={{
-              backgroundImage: 'linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)',
+              backgroundImage: "linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)",
             }}
           >
-            {heroTitle.length > HERO_TITLE_MAX_LENGTH
-              ? `${heroTitle.slice(0, HERO_TITLE_MAX_LENGTH)}...`
-              : heroTitle}
+            {heroTitle.length > HERO_TITLE_MAX_LENGTH ? `${heroTitle.slice(0, HERO_TITLE_MAX_LENGTH)}...` : heroTitle}
           </h1>
           <div className="w-full h-px bg-[#B4906D] my-4 max-w-3xl" />
           <p className="text-base mb-4 max-w-3xl">
-            {showFullSummary || heroSummary.length <= 123
-              ? heroSummary
-              : heroSummary.slice(0, 123)}
+            {showFullSummary || heroSummary.length <= 123 ? heroSummary : heroSummary.slice(0, 123)}
             {heroSummary.length > 123 && (
               <button
                 onClick={() => setShowFullSummary((f) => !f)}
                 className="text-[#fbcea0] hover:underline ml-1 inline"
               >
-                {showFullSummary ? '...less' : '...more'}
+                {showFullSummary ? "...less" : "...more"}
               </button>
             )}
           </p>
           <div className="flex justify-between items-center w-full pt-4 max-w-3xl">
             <Link
-              href={`/updates/${heroPost.id ?? ''}`}
+              href={`/updates/${heroPost.slug ?? ""}`}
               className="py-3 px-6 text-[0.75rem] leading-[1rem] font-bold tracking-[0.2px] rounded-[5px] bg-[#E6E6E6] hover:bg-[#FFF] shadow-md text-black uppercase transition-colors"
             >
               Read more
             </Link>
             <time className="text-[#fbcea0] font-quattrocento hidden md:block">
-              {heroPost.date &&
-                new Date(heroPost.date).toLocaleDateString('en-US', {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
+              {heroPost.date && formatDiscordDate(heroPost.date)}
             </time>
           </div>
         </div>
@@ -238,13 +257,13 @@ export default function BlogPage() {
       <div className="max-w-7xl mx-auto relative z-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 2xs:pt-72 xs:pt-62 lg:pt-12 pb-12">
           {gridPosts.map((post) => (
-            <Link key={post.id} href={`/updates/${post.id}`}>
+            <Link key={post.id} href={`/updates/${post.slug}`}>
               <article
                 className="group cursor-pointer relative overflow-hidden w-full aspect-[450/530] gradient-border-top transition-shadow duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]"
                 style={{
-                  borderStyle: 'solid',
-                  borderWidth: '0 1px 1px 1px',
-                  borderImage: 'linear-gradient(to top, #534C3F, #B4906C) 1',
+                  borderStyle: "solid",
+                  borderWidth: "0 1px 1px 1px",
+                  borderImage: "linear-gradient(to top, #534C3F, #B4906C) 1",
                 }}
               >
                 <div
@@ -252,18 +271,18 @@ export default function BlogPage() {
                   style={{
                     maskImage: "url('/webp/smoke-mask-2.webp')",
                     WebkitMaskImage: "url('/webp/smoke-mask-2.webp')",
-                    maskPosition: 'center top',
-                    WebkitMaskPosition: 'center top',
-                    maskSize: 'cover',
-                    WebkitMaskSize: 'cover',
-                    maskRepeat: 'no-repeat',
-                    WebkitMaskRepeat: 'no-repeat',
+                    maskPosition: "center top",
+                    WebkitMaskPosition: "center top",
+                    maskSize: "cover",
+                    WebkitMaskSize: "cover",
+                    maskRepeat: "no-repeat",
+                    WebkitMaskRepeat: "no-repeat",
                   }}
                 >
                   <div className="w-full h-full group-hover:scale-105 transition-all duration-200 ease-[var(--ease-in-out-quad)]">
                     <BlogImage
                       src={post.imageUrl ?? null}
-                      alt={post.title ?? ''}
+                      alt={post.title ?? ""}
                       fill
                       className="object-cover w-full h-full select-none scale-[1.75]"
                       draggable={false}
@@ -273,18 +292,12 @@ export default function BlogPage() {
                 </div>
                 <div className="absolute inset-x-0 bottom-0 p-8 text-white space-y-2">
                   <time className="text-[#fbcea0] font-quattrocento block font-semibold">
-                    {post.date &&
-                      new Date(post.date).toLocaleDateString('en-US', {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric',
-                      })}
+                    {post.date && formatDiscordDate(post.date)}
                   </time>
                   <h3
                     className="bg-clip-text text-transparent text-3xl md:text-4xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-2 uppercase"
                     style={{
-                      backgroundImage:
-                        'linear-gradient(135deg, #fff, #fbcea0 39%, #fbcfa0)',
+                      backgroundImage: "linear-gradient(135deg, #fff, #fbcea0 39%, #fbcfa0)",
                     }}
                   >
                     {post.title &&
@@ -312,19 +325,19 @@ export default function BlogPage() {
 
         {/* PAGINATION */}
         {availablePages.length > 0 && (
-          <Pagination key={`${currentPage}-${lastPageFound}`} className="pt-8">
+          <Pagination className="pt-8">
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious
                   href="#"
                   onClick={(e) => {
                     e.preventDefault()
-                    if (currentPage > 1) setCurrentPage(currentPage - 1)
+                    if (hasPrevPage) setCurrentPage(currentPage - 1)
                   }}
-                  className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
+                  className={!hasPrevPage ? "pointer-events-none opacity-50" : ""}
                 />
               </PaginationItem>
-              
+
               {availablePages.map((pageNum) => (
                 <PaginationItem key={pageNum}>
                   <PaginationLink
@@ -339,12 +352,15 @@ export default function BlogPage() {
                   </PaginationLink>
                 </PaginationItem>
               ))}
-              
+
               <PaginationItem>
                 <PaginationNext
                   href="#"
-                  onClick={handleNextClick}
-                  className={!hasNextPage ? 'pointer-events-none opacity-50' : ''}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    if (hasNextPage) setCurrentPage(currentPage + 1)
+                  }}
+                  className={!hasNextPage ? "pointer-events-none opacity-50" : ""}
                 />
               </PaginationItem>
             </PaginationContent>
@@ -361,8 +377,6 @@ export default function BlogPage() {
           maskRepeat: "no-repeat",
           WebkitMaskImage: "url('/webp/smoke-mask.webp')",
           WebkitMaskSize: "contain",
-          WebkitMaskPosition: "bottom center",
-          WebkitMaskRepeat: "no-repeat",
         }}
       />
     </section>

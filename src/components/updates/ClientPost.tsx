@@ -63,6 +63,25 @@ function hasHrefProp(children: ReactNode): children is React.ReactElement<{ href
   )
 }
 
+// Helper function to format Discord timestamp
+function formatDiscordDate(timestamp: string): string {
+  try {
+    const date = new Date(timestamp)
+    if (isNaN(date.getTime())) {
+      console.error("Invalid date:", timestamp)
+      return "Invalid Date"
+    }
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  } catch (error) {
+    console.error("Error formatting date:", error, timestamp)
+    return "Invalid Date"
+  }
+}
+
 export function ClientPost({
   code,
   title,
@@ -90,14 +109,7 @@ export function ClientPost({
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>
-                {date &&
-                  new Date(date).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-              </BreadcrumbPage>
+              <BreadcrumbPage>{date && formatDiscordDate(date)}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
