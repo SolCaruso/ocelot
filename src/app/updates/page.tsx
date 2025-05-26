@@ -110,6 +110,22 @@ export default function BlogPage() {
           if (data.posts.length < expectedPosts) {
             // This is the last page
             setLastPageFound(currentPage)
+          } else if (currentPage === 2) {
+            // If we're on page 2, check if page 3 exists
+            try {
+              const nextPageRes = await fetch(`/api/discord-sync/posts?page=3`)
+              if (nextPageRes.ok) {
+                const nextPageData = (await nextPageRes.json()) as { total: number; posts: DiscordPost[] }
+                if (nextPageData.posts.length > 0) {
+                  setPagesWithContent((prev) => new Set([...prev, 3]))
+                } else {
+                  // Page 3 is empty, so page 2 is the last page
+                  setLastPageFound(2)
+                }
+              }
+            } catch (err) {
+              console.error("Error checking page 3:", err)
+            }
           }
         } else {
           // No posts returned, previous page was the last
@@ -158,14 +174,21 @@ export default function BlogPage() {
       return false
     }
 
-    // For other pages, if we have content for the next page, show next
-    if (pagesWithContent.has(currentPage + 1)) {
-      return true
-    }
-
-    // If we don't know the last page yet and current page has full content, might have next
-    if (lastPageFound === null && posts.length >= 9) {
-      return true
+    // For other pages, we need to check if the next page exists and has content
+    if (currentPage > 1) {
+      // If we have content for the next page, show next
+      if (pagesWithContent.has(currentPage + 1)) {
+        return true
+      }
+      // If current page has less than expected posts, it's the last page
+      if (posts.length < 9) {
+        return false
+      }
+      // If we haven't found the last page yet and current page has full content, might have next
+      if (lastPageFound === null && posts.length >= 9) {
+        // Only show next if we haven't determined this is the last page
+        return !lastPageFound
+      }
     }
 
     return false
