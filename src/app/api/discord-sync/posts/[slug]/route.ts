@@ -7,6 +7,14 @@ const CHANNEL_ID = process.env.CHANNEL_ID!
 // Same fallback array as your posts route
 const FALLBACKS = ["post.jpg", "post1.jpg", "post2.jpg", "post3.jpg"]
 
+interface DiscordMessage {
+  id: string
+  author: { username: string }
+  content: string
+  attachments: Array<{ url: string }>
+  timestamp: string
+}
+
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
 
@@ -32,10 +40,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: `Discord API error: ${allMessagesRes.status}` }, { status: 502 })
     }
 
-    const allMessages = await allMessagesRes.json()
+    const allMessages: DiscordMessage[] = await allMessagesRes.json()
 
     // Find the index of our specific message
-    const messageIndex = allMessages.findIndex((msg: any) => msg.id === slug)
+    const messageIndex = allMessages.findIndex((msg: DiscordMessage) => msg.id === slug)
 
     if (messageIndex === -1) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 })
@@ -62,7 +70,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: `Discord API error: ${res.status}` }, { status: 502 })
     }
 
-    const m = await res.json()
+    const m: DiscordMessage = await res.json()
 
     // Parse message as in your page
     const raw = m.content.trim()
