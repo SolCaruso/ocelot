@@ -55,13 +55,11 @@ export function ClientPost({
   title,
   date,
   summary,
-  showHeader = true,
 }: {
   code: string
   title?: string
   date?: string
   summary?: string
-  showHeader?: boolean
 }) {
   // Clean the markdown content
   const cleanedCode = cleanMarkdownContent(code)
