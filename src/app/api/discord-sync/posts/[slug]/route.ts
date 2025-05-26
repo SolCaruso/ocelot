@@ -4,12 +4,12 @@ import { NextRequest } from 'next/server';
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN!;
 const CHANNEL_ID = process.env.CHANNEL_ID!;
 
-// Fix the params type to match Next.js expectations
+// In Next.js 15, params is now a Promise that needs to be awaited
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-  const { slug } = params;
+  const { slug } = await params;
 
   try {
     const res = await fetch(
