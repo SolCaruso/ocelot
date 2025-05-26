@@ -1,5 +1,6 @@
 "use client";
 
+
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import BlogImage from "@/components/updates/BlogImage";
@@ -69,7 +70,7 @@ export default function BlogPageClient({ heroPost }: { heroPost: DiscordPost }) 
             }
           }
           setCheckedForNextPage(true);
-        } catch (err) {
+        } catch {
           setCheckedForNextPage(true);
         }
       }
@@ -104,9 +105,9 @@ export default function BlogPageClient({ heroPost }: { heroPost: DiscordPost }) 
                 setLastPageFound(2);
               }
             }
-          } catch (err) {}
+          } catch {}
         }
-      } catch (err) {} finally {
+      } catch {} finally {
         setLoading(false);
       }
     }
