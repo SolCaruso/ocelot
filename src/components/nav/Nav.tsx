@@ -77,7 +77,7 @@ export default function Nav() {
   };
 
   return (
-    <div className="flex items-center justify-between px-4 py-2 max-w-9xl mx-auto absolute top-3 left-0 right-0 z-30">
+    <div className="flex items-center justify-between px-4 py-2 max-w-9xl mx-auto absolute top-2 left-0 right-0 z-30">
       {/* Left: Logo */}
       <div>
         <Link href="/" className="inline-block mt-1 ml-2 md:ml-0">

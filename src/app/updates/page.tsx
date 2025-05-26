@@ -37,7 +37,6 @@ export default function BlogPage() {
     async function checkNextPage() {
       if (currentPage === 1 && !checkedForNextPage && posts.length === 10) {
         try {
-          console.log('Checking if page 2 exists...')
           const res = await fetch(`/api/discord-sync/posts?page=2`)
           if (res.ok) {
             const data = await res.json() as { total: number; posts: DiscordPost[] }
@@ -84,13 +83,11 @@ export default function BlogPage() {
     async function loadPosts() {
       setLoading(true)
       try {
-        console.log(`Fetching posts for page ${currentPage}`)
         const res = await fetch(`/api/discord-sync/posts?page=${currentPage}`)
         if (!res.ok) {
           throw new Error(`Discord API returned HTTP ${res.status}`)
         }
         const data = await res.json() as { total: number; posts: DiscordPost[] }
-        console.log('Posts loaded:', data.posts.length)
         
         if (data.posts.length > 0) {
           setPosts(data.posts)
@@ -137,7 +134,6 @@ export default function BlogPage() {
   // Handle next page click with additional check
   const handleNextClick = (e: React.MouseEvent) => {
     e.preventDefault()
-    console.log('Next clicked:', { currentPage, lastPageFound, hasNextPage })
     
     if (hasNextPage) {
       setCurrentPage(currentPage + 1)
@@ -357,7 +353,7 @@ export default function BlogPage() {
       </div>
 
       <div
-        className="absolute bottom inset-0 bg-[url('/webp/golem-bg.webp')] bg-fixed bg-center bg-cover max-w-7xl min-w-7xl mx-auto"
+        className="absolute bottom inset-0 bg-[url('/webp/golem.webp')] bg-fixed bg-center bg-cover max-w-7xl min-w-7xl mx-auto"
         style={{
           maskImage: "url('/webp/smoke-mask.webp')",
           maskSize: "contain",
