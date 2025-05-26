@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useRef } from "react"
 import type { ReactNode } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
@@ -15,21 +15,10 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 
-// Function to detect and convert YouTube URLs to embed URLs
-function getYouTubeEmbedUrl(url: string): string | null {
-  const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-  const match = url.match(youtubeRegex)
-  if (match) {
-    return `https://www.youtube-nocookie.com/embed/${match[1]}?rel=0&modestbranding=1`
-  }
-  return null
-}
-
 // Function to clean markdown content - remove frontmatter
 function cleanMarkdownContent(content: string): string {
-  // Remove YAML frontmatter (everything between --- lines at the start)
-  const frontmatterRegex = /^---\s*\n[\s\S]*?\n---\s*\n/;
-  return content.replace(frontmatterRegex, "").trim();
+  const frontmatterRegex = /^---\s*\n[\s\S]*?\n---\s*\n/
+  return content.replace(frontmatterRegex, "").trim()
 }
 
 // Helper function to format Discord timestamp
@@ -60,11 +49,72 @@ export function ClientPost({
   title?: string
   date?: string
 }) {
+  const contentRef = useRef<HTMLDivElement>(null)
+  
   // Clean the markdown content
   const cleanedCode = cleanMarkdownContent(code)
 
-  // Debug: log the markdown being rendered
-  console.log("Markdown being rendered:", cleanedCode);
+  // Process YouTube URLs after the component mounts
+  useEffect(() => {
+    if (!contentRef.current) return
+
+    const container = contentRef.current
+    const textNodes: Text[] = []
+    
+    // Find all text nodes that might contain YouTube URLs
+    const walker = document.createTreeWalker(
+      container,
+      NodeFilter.SHOW_TEXT,
+      null
+    )
+    
+    let node
+    while (node = walker.nextNode()) {
+      textNodes.push(node as Text)
+    }
+    
+    // Process each text node for YouTube URLs
+    textNodes.forEach(textNode => {
+      const text = textNode.textContent || ""
+      const youtubeRegex = /https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/g
+      
+      if (youtubeRegex.test(text)) {
+
+       // Replace the text node with iframe
+        const newText = text.replace(youtubeRegex, (match, videoId) => {
+         
+          // Create iframe element
+          const iframe = document.createElement('iframe')
+          iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`
+          iframe.title = "YouTube video"
+          iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          iframe.allowFullscreen = true
+          iframe.style.cssText = "position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+          iframe.loading = "lazy"
+          
+          // Create container div
+          const container = document.createElement('div')
+          container.style.cssText = "margin: 1.5rem 0;"
+          
+          const aspectContainer = document.createElement('div')
+          aspectContainer.style.cssText = "position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 0.5rem; overflow: hidden; background-color: black;"
+          
+          aspectContainer.appendChild(iframe)
+          container.appendChild(aspectContainer)
+          
+          // Insert the container before the text node
+          textNode.parentNode?.insertBefore(container, textNode)
+          
+          return "" // Remove the URL from the text
+        })
+        
+        // Update the text node content (removing the URL)
+        if (newText !== text) {
+          textNode.textContent = newText
+        }
+      }
+    })
+  }, [cleanedCode])
 
   return (
     <article className="relative max-w-4xl mx-auto px-4 py-8">
@@ -88,11 +138,11 @@ export function ClientPost({
         <ShareButtons title={title || ""} />
       </div>
 
-      <div className="prose prose-lg max-w-none text-white">
+      <div ref={contentRef} className="prose prose-lg max-w-none text-white">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
-            // Custom heading components with better sizing
+            // Custom heading components
             h1: ({ children }: { children: ReactNode }) => (
               <h1 className="text-3xl font-bold mb-6 mt-8 text-white">{children}</h1>
             ),
@@ -105,68 +155,14 @@ export function ClientPost({
             h4: ({ children }: { children: ReactNode }) => (
               <h4 className="text-lg font-bold mb-2 mt-4 text-white">{children}</h4>
             ),
-            // Custom paragraph with better spacing
-            p: ({ children }: { children: ReactNode }) => {
-              // If the paragraph contains only a link
-              const childArray = children as React.ReactNode[];
-              if (
-                Array.isArray(childArray) &&
-                childArray.length === 1 &&
-                React.isValidElement(childArray[0])
-              ) {
-                const el = childArray[0];
-                if (el.type === 'a') {
-                  const href = (el as React.ReactElement<{ href: string }> ).props.href;
-                  const youtubeEmbedUrl = getYouTubeEmbedUrl(href);
-                  if (youtubeEmbedUrl) {
-                    return (
-                      <div className="my-6">
-                        <div className="relative w-full aspect-video rounded-lg overflow-hidden">
-                          <iframe
-                            src={youtubeEmbedUrl}
-                            title="YouTube video"
-                            allow="autoplay; encrypted-media"
-                            allowFullScreen
-                            className="absolute inset-0 w-full h-full"
-                          />
-                        </div>
-                      </div>
-                    );
-                  }
-                }
-              }
-              // If the paragraph contains only a text node that is a YouTube URL
-              if (
-                Array.isArray(childArray) &&
-                childArray.length === 1 &&
-                typeof childArray[0] === 'string'
-              ) {
-                const text = (childArray[0] as string).trim();
-                const youtubeEmbedUrl = getYouTubeEmbedUrl(text);
-                if (youtubeEmbedUrl) {
-                  return (
-                    <div className="my-6">
-                      <div className="relative w-full aspect-video rounded-lg overflow-hidden">
-                        <iframe
-                          src={youtubeEmbedUrl}
-                          title="YouTube video"
-                          allow="autoplay; encrypted-media"
-                          allowFullScreen
-                          className="absolute inset-0 w-full h-full"
-                        />
-                      </div>
-                    </div>
-                  );
-                }
-              }
-              // Default: render as normal paragraph
-              return <p className="mb-4 leading-relaxed text-white">{children}</p>;
-            },
-            // Enhanced link component - simplified to avoid nesting issues
+            // Simple paragraph component
+            p: ({ children }: { children: ReactNode }) => (
+              <p className="mb-4 leading-relaxed text-white">{children}</p>
+            ),
+            // Enhanced link component
             a: ({ href, children }: { href?: string; children: ReactNode }) => {
               if (!href) return <span className="text-white">{children}</span>
 
-              // Regular link - no special handling here to avoid nesting issues
               return (
                 <Link
                   href={href}
@@ -181,7 +177,7 @@ export function ClientPost({
             // Enhanced image component
             img: ({ src, alt }: { src?: string; alt?: string }) => (
               <img
-                src={src}
+                src={src || "/placeholder.svg"}
                 alt={alt || ""}
                 style={{ maxWidth: "100%", height: "auto", margin: "1.5rem 0" }}
               />
