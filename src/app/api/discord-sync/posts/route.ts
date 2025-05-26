@@ -54,6 +54,8 @@ function formatDateSlug(timestamp: string): string {
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const page = Number.parseInt(searchParams.get("page") || "1", 10)
+  const limit = searchParams.get("limit") ? Number.parseInt(searchParams.get("limit")!, 10) : undefined;
+  const skip = searchParams.get("skip") ? Number.parseInt(searchParams.get("skip")!, 10) : undefined;
 
   // Add validation
   if (!DISCORD_TOKEN || !CHANNEL_ID) {
@@ -127,10 +129,19 @@ export async function GET(request: NextRequest) {
     })
 
     // Pagination logic
-    const postsPerPage = page === 1 ? 10 : 9
-    const startIndex = page === 1 ? 0 : 10 + (page - 2) * 9
-    const endIndex = startIndex + postsPerPage
-    const paginatedPosts = posts.slice(startIndex, endIndex)
+    let paginatedPosts;
+    if (typeof limit === 'number' || typeof skip === 'number') {
+      // Custom skip/limit logic
+      const start = skip ?? 0;
+      const end = typeof limit === 'number' ? start + limit : undefined;
+      paginatedPosts = posts.slice(start, end);
+    } else {
+      // Default pagination
+      const postsPerPage = page === 1 ? 10 : 9
+      const startIndex = page === 1 ? 0 : 10 + (page - 2) * 9
+      const endIndex = startIndex + postsPerPage
+      paginatedPosts = posts.slice(startIndex, endIndex)
+    }
 
     console.log(`Returning ${paginatedPosts.length} posts for page ${page}`)
     if (paginatedPosts.length > 0) {
