@@ -16,15 +16,8 @@ type Post = {
   imageUrl: string
 }
 
-function getBaseUrl() {
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`
-  }
-  if (process.env.NODE_ENV === 'production') {
-    return 'https://ocelot-pearl.vercel.app' // Your actual domain
-  }
-  return 'http://localhost:3000'
-}
+const DISCORD_TOKEN = process.env.DISCORD_TOKEN!
+const CHANNEL_ID = process.env.CHANNEL_ID!
 
 export default async function Page({
   params,
@@ -34,26 +27,51 @@ export default async function Page({
   const { slug } = await params
 
   try {
-    const baseUrl = getBaseUrl()
-    const apiUrl = `${baseUrl}/api/discord-sync/posts/${slug}`
-    
-    console.log(`Fetching from: ${apiUrl}`)
-    
-    const res = await fetch(apiUrl, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    // Fetch directly from Discord API instead of internal API
+    const res = await fetch(
+      `https://discord.com/api/v10/channels/${CHANNEL_ID}/messages/${slug}`,
+      {
+        headers: { 
+          Authorization: `Bot ${DISCORD_TOKEN}`,
+          'User-Agent': 'DiscordBot (https://ocelot-pearl.vercel.app, 1.0.0)'
+        },
+      }
+    )
 
-    console.log(`API response status: ${res.status}`)
+    console.log(`Discord API response status: ${res.status}`)
 
     if (!res.ok) {
-      const errorText = await res.text()
-      console.error(`API error: ${res.status} - ${errorText}`)
+      console.error(`Discord API error: ${res.status}`)
       return notFound()
     }
 
-    const post: Post = await res.json()
+    const m = await res.json()
+
+    // Parse message content
+    const raw = m.content.trim()
+    const bodyMd = raw.startsWith('```md')
+      ? raw.replace(/^```md/, '').replace(/```$/, '').trim()
+      : raw
+
+    const lines = bodyMd.split('\n').map((l: string) => l.trim())
+    const titleLine = lines.find((l: string) => l.startsWith('# ')) || ''
+    const title = titleLine.replace(/^#\s*/, '') || 'Untitled'
+    const summary =
+      lines
+        .slice(lines.indexOf(titleLine) + 1)
+        .find((l: string) => !!l && !l.startsWith('```')) || ''
+
+    const imageUrl = m.attachments[0]?.url ?? '/jpg/post.jpg'
+
+    const post: Post = {
+      id: m.id,
+      author: m.author?.username ?? '',
+      date: m.timestamp,
+      title,
+      summary,
+      bodyMd,
+      imageUrl,
+    }
 
     return (
       <section className="relative mx-auto px-4 pb-64 bg-[url('/jpg/smoke.jpg')] bg-fixed bg-center bg-cover overflow-x-hidden">
