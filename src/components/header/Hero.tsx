@@ -90,7 +90,7 @@ const Hero: React.FC<HeroProps> = ({ className, height }) => {
         </a>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 md:mb-8 flex items-center justify-center">
+      <div className="absolute inset-x-0 bottom-0 md:mb-8 flex items-center justify-center opacity-50">
         {/* Partner logos */}
         <div>
           <Steam className="h-18 w-auto hidden lg:block" />
