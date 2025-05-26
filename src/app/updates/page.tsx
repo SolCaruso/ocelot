@@ -1,4 +1,3 @@
-// src/app/updates/page.tsx
 'use client'
 
 import React, { useState, useEffect } from 'react'
@@ -14,7 +13,6 @@ import {
 } from '@/components/ui/pagination'
 import BlogImage from '@/components/updates/BlogImage'
 
-/** Exactly the shape your API returns for each post */
 interface DiscordPost {
   id: string
   slug: string
@@ -24,52 +22,105 @@ interface DiscordPost {
   summary: string
   bodyMd: string
   imageUrl: string | null
-  // you can add `title?`, `summary?`, `slug?` if you normalize them client-side
 }
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<DiscordPost[]>([])  
   const [showFullSummary, setShowFullSummary] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
-  const [postsPerPage, setPostsPerPage] = useState(9)
+  const [loading, setLoading] = useState(true)
+  const [pagesWithContent, setPagesWithContent] = useState<Set<number>>(new Set([]))
+  const [lastPageFound, setLastPageFound] = useState<number | null>(null)
+  const [checkedForNextPage, setCheckedForNextPage] = useState(false)
 
-  // Fetch posts whenever the page changes
+  // Check if next page exists when on page 1
   useEffect(() => {
-    async function load() {
-      console.log(`🔄 Fetching posts for page ${currentPage}`)
+    async function checkNextPage() {
+      if (currentPage === 1 && !checkedForNextPage && posts.length === 10) {
+        try {
+          console.log('Checking if page 2 exists...')
+          const res = await fetch(`/api/discord-sync/posts?page=2`)
+          if (res.ok) {
+            const data = await res.json() as { total: number; posts: DiscordPost[] }
+            if (data.posts.length > 0) {
+              setPagesWithContent(prev => new Set([...prev, 2]))
+              // Check if page 2 is the last page
+              const expectedPosts = 9
+              if (data.posts.length < expectedPosts) {
+                setLastPageFound(2)
+              } else {
+                // Check if page 3 exists
+                const res3 = await fetch(`/api/discord-sync/posts?page=3`)
+                if (res3.ok) {
+                  const data3 = await res3.json() as { total: number; posts: DiscordPost[] }
+                  if (data3.posts.length > 0) {
+                    setPagesWithContent(prev => new Set([...prev, 3]))
+                    setLastPageFound(3)
+                  } else {
+                    setLastPageFound(2)
+                  }
+                } else {
+                  setLastPageFound(2)
+                }
+              }
+            } else {
+              setLastPageFound(1)
+            }
+          }
+          setCheckedForNextPage(true)
+        } catch (err) {
+          console.error('Error checking next page:', err)
+          setCheckedForNextPage(true)
+        }
+      }
+    }
+    
+    if (posts.length > 0) {
+      checkNextPage()
+    }
+  }, [posts, currentPage, checkedForNextPage])
+
+  // Fetch posts for current page
+  useEffect(() => {
+    async function loadPosts() {
+      setLoading(true)
       try {
+        console.log(`Fetching posts for page ${currentPage}`)
         const res = await fetch(`/api/discord-sync/posts?page=${currentPage}`)
-        console.log(`⬅️  Response status: ${res.status}`)
         if (!res.ok) {
           throw new Error(`Discord API returned HTTP ${res.status}`)
         }
         const data = await res.json() as { total: number; posts: DiscordPost[] }
-        console.log('✅ Received posts:', data.posts)
-        setPosts(data.posts)
+        console.log('Posts loaded:', data.posts.length)
+        
+        if (data.posts.length > 0) {
+          setPosts(data.posts)
+          
+          // Mark this page as having content
+          setPagesWithContent(prev => new Set([...prev, currentPage]))
+          
+          // Check if this is the last page
+          const expectedPosts = currentPage === 1 ? 10 : 9
+          if (data.posts.length < expectedPosts) {
+            // This is the last page
+            setLastPageFound(currentPage)
+          }
+        } else {
+          // No posts returned, previous page was the last
+          setLastPageFound(currentPage - 1)
+          if (currentPage > 1) {
+            setCurrentPage(currentPage - 1)
+          }
+        }
+        
       } catch (err) {
-        console.error('🚨 Error loading posts:', err)
+        console.error('Error loading posts:', err)
+      } finally {
+        setLoading(false)
       }
     }
-    load()
+    loadPosts()
   }, [currentPage])
-
-  // Adjust posts per page on resize
-  useEffect(() => {
-    const sm = window.matchMedia('(min-width:640px)')
-    const lg = window.matchMedia('(min-width:1024px)')
-    const update = () => {
-      if (lg.matches) setPostsPerPage(9)
-      else if (sm.matches) setPostsPerPage(8)
-      else setPostsPerPage(5)
-    }
-    update()
-    sm.addEventListener('change', update)
-    lg.addEventListener('change', update)
-    return () => {
-      sm.removeEventListener('change', update)
-      lg.removeEventListener('change', update)
-    }
-  }, [])
 
   const heroPost = posts[0] ?? ({} as DiscordPost)
   const gridPosts = posts.slice(1)
@@ -78,23 +129,23 @@ export default function BlogPage() {
   const MAX_SUMMARY_LENGTH = 71
   const HERO_TITLE_MAX_LENGTH = 33
 
-  const totalPages = Math.ceil(gridPosts.length / postsPerPage)
-  const paginatedPosts = gridPosts.slice(
-    (currentPage - 1) * postsPerPage,
-    currentPage * postsPerPage,
-  )
+  // Generate available page numbers
+  const availablePages = Array.from(pagesWithContent).sort((a, b) => a - b)
+  
+  // Determine if next page is available
+  const hasNextPage = lastPageFound !== null && currentPage < lastPageFound
 
-  // Pagination calculations
-  const maxPageButtons = 3
-  let startPage = Math.max(1, currentPage - 1)
-  const endPage = Math.min(totalPages, startPage + maxPageButtons - 1)
-  if (endPage - startPage + 1 < maxPageButtons) {
-    startPage = Math.max(1, endPage - maxPageButtons + 1)
+  // Handle next page click with additional check
+  const handleNextClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    console.log('Next clicked:', { currentPage, lastPageFound, hasNextPage })
+    
+    if (hasNextPage) {
+      setCurrentPage(currentPage + 1)
+    }
   }
-  const visiblePages = []
-  for (let i = startPage; i <= endPage; i++) visiblePages.push(i)
 
-  // Pull title & summary out of markdown
+  // Parse hero post content
   const lines = (heroPost.bodyMd || '').split('\n').map((l) => l.trim())
   const titleLine = lines.find((l) => l.startsWith('# ')) || ''
   const heroTitle = titleLine.replace(/^#\s*/, '') || ''
@@ -102,6 +153,16 @@ export default function BlogPage() {
     lines
       .slice(lines.indexOf(titleLine) + 1)
       .find((l) => !!l && !l.startsWith('```')) || ''
+
+  if (loading) {
+    return (
+      <section className="relative mx-auto px-4 pb-64 min-h-[1100px] bg-[url('/jpg/smoke.jpg')] bg-fixed bg-center bg-cover overflow-x-hidden">
+        <div className="flex items-center justify-center min-h-[500px]">
+          <div className="text-white text-xl">Loading posts...</div>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="relative mx-auto px-4 pb-64 min-h-[1100px] bg-[url('/jpg/smoke.jpg')] bg-fixed bg-center bg-cover overflow-x-hidden">
@@ -181,7 +242,7 @@ export default function BlogPage() {
       {/* GRID */}
       <div className="max-w-7xl mx-auto relative z-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 2xs:pt-72 xs:pt-62 lg:pt-12 pb-12">
-          {paginatedPosts.map((post) => (
+          {gridPosts.map((post) => (
             <Link key={post.id} href={`/updates/${post.id}`}>
               <article
                 className="group cursor-pointer relative overflow-hidden w-full aspect-[450/530] gradient-border-top transition-shadow duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]"
@@ -254,86 +315,46 @@ export default function BlogPage() {
           ))}
         </div>
 
-        <Pagination className="pt-8">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault()
-                  setCurrentPage((p) => Math.max(p - 1, 1))
-                }}
-              />
-            </PaginationItem>
-            {startPage > 1 && (
-              <>
-                <PaginationItem>
-                  <PaginationLink
-                    href="#"
-                    isActive={currentPage === 1}
-                    onClick={(e) => {
-                      e.preventDefault()
-                      setCurrentPage(1)
-                    }}
-                  >
-                    1
-                  </PaginationLink>
-                </PaginationItem>
-                {startPage > 2 && (
-                  <PaginationItem>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                )}
-              </>
-            )}
-            {visiblePages.map((p) => (
-              <PaginationItem key={p}>
-                <PaginationLink
+        {/* PAGINATION */}
+        {availablePages.length > 0 && (
+          <Pagination key={`${currentPage}-${lastPageFound}`} className="pt-8">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
                   href="#"
-                  isActive={p === currentPage}
                   onClick={(e) => {
                     e.preventDefault()
-                    setCurrentPage(p)
+                    if (currentPage > 1) setCurrentPage(currentPage - 1)
                   }}
-                >
-                  {p}
-                </PaginationLink>
+                  className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
+                />
               </PaginationItem>
-            ))}
-            {endPage < totalPages && (
-              <>
-                {endPage < totalPages - 1 && (
-                  <PaginationItem>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                )}
-                <PaginationItem>
+              
+              {availablePages.map((pageNum) => (
+                <PaginationItem key={pageNum}>
                   <PaginationLink
                     href="#"
-                    isActive={currentPage === totalPages}
+                    isActive={pageNum === currentPage}
                     onClick={(e) => {
                       e.preventDefault()
-                      setCurrentPage(totalPages)
+                      setCurrentPage(pageNum)
                     }}
                   >
-                    {totalPages}
+                    {pageNum}
                   </PaginationLink>
                 </PaginationItem>
-              </>
-            )}
-            <PaginationItem>
-              <PaginationNext
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault()
-                  setCurrentPage((p) =>
-                    Math.min(p + 1, totalPages),
-                  )
-                }}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+              ))}
+              
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={handleNextClick}
+                  className={!hasNextPage ? 'pointer-events-none opacity-50' : ''}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
       </div>
 
       <div
