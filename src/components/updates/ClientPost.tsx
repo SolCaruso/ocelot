@@ -20,14 +20,9 @@ function getYouTubeEmbedUrl(url: string): string | null {
   const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/
   const match = url.match(youtubeRegex)
   if (match) {
-    return `https://www.youtube.com/embed/${match[1]}`
+    return `https://www.youtube-nocookie.com/embed/${match[1]}?rel=0&modestbranding=1`
   }
   return null
-}
-
-// Function to check if URL is an image
-function isImageUrl(url: string): boolean {
-  return /\.(jpg|jpeg|png|gif|webp|svg)(\?.*)?$/i.test(url)
 }
 
 // Function to clean markdown content - remove frontmatter
@@ -35,18 +30,6 @@ function cleanMarkdownContent(content: string): string {
   // Remove YAML frontmatter (everything between --- lines at the start)
   const frontmatterRegex = /^---\s*\n[\s\S]*?\n---\s*\n/;
   return content.replace(frontmatterRegex, "").trim();
-}
-
-// Type guard to check if children is a React element with href prop
-function hasHrefProp(children: ReactNode): children is React.ReactElement<{ href: string }> {
-  return (
-    typeof children === "object" &&
-    children !== null &&
-    "props" in children &&
-    typeof (children as React.ReactElement).props === "object" &&
-    (children as React.ReactElement).props !== null &&
-    typeof (children as React.ReactElement<{ href: string }>).props.href === "string"
-  )
 }
 
 // Helper function to format Discord timestamp
@@ -129,25 +112,27 @@ export function ClientPost({
               if (
                 Array.isArray(childArray) &&
                 childArray.length === 1 &&
-                React.isValidElement(childArray[0]) &&
-                (childArray[0] as React.ReactElement<any, any>).type === 'a'
+                React.isValidElement(childArray[0])
               ) {
-                const href = (childArray[0] as React.ReactElement<any, any>).props.href;
-                const youtubeEmbedUrl = getYouTubeEmbedUrl(href);
-                if (youtubeEmbedUrl) {
-                  return (
-                    <div className="my-6">
-                      <div className="relative w-full aspect-video rounded-lg overflow-hidden">
-                        <iframe
-                          src={youtubeEmbedUrl}
-                          title="YouTube video"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                          className="absolute inset-0 w-full h-full"
-                        />
+                const el = childArray[0];
+                if (el.type === 'a') {
+                  const href = (el as React.ReactElement<{ href: string }> ).props.href;
+                  const youtubeEmbedUrl = getYouTubeEmbedUrl(href);
+                  if (youtubeEmbedUrl) {
+                    return (
+                      <div className="my-6">
+                        <div className="relative w-full aspect-video rounded-lg overflow-hidden">
+                          <iframe
+                            src={youtubeEmbedUrl}
+                            title="YouTube video"
+                            allow="autoplay; encrypted-media"
+                            allowFullScreen
+                            className="absolute inset-0 w-full h-full"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  );
+                    );
+                  }
                 }
               }
               // If the paragraph contains only a text node that is a YouTube URL
@@ -165,7 +150,7 @@ export function ClientPost({
                         <iframe
                           src={youtubeEmbedUrl}
                           title="YouTube video"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allow="autoplay; encrypted-media"
                           allowFullScreen
                           className="absolute inset-0 w-full h-full"
                         />
