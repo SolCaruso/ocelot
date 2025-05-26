@@ -64,40 +64,8 @@ export default function BlogPageClient({ heroPost }: { heroPost: DiscordPost }) 
   const [showFullSummary, setShowFullSummary] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [pagesWithContent, setPagesWithContent] = useState<Set<number>>(new Set([]));
-  const [lastPageFound, setLastPageFound] = useState<number | null>(null);
-  const [checkedForNextPage, setCheckedForNextPage] = useState(false);
+  const [totalPosts, setTotalPosts] = useState<number>(0);
 
-  // Check if next page exists when on page 1
-  useEffect(() => {
-    async function checkNextPage() {
-      if (currentPage === 1 && !checkedForNextPage && posts.length === 10) {
-        try {
-          const res = await fetch(`/api/discord-sync/posts?page=2`);
-          if (res.ok) {
-            const data = (await res.json()) as { total: number; posts: DiscordPost[] };
-            if (data.posts.length > 0) {
-              setPagesWithContent((prev) => new Set([...prev, 2]));
-              const expectedPosts = 9;
-              if (data.posts.length < expectedPosts) {
-                setLastPageFound(2);
-              }
-            } else {
-              setLastPageFound(1);
-            }
-          }
-          setCheckedForNextPage(true);
-        } catch {
-          setCheckedForNextPage(true);
-        }
-      }
-    }
-    if (posts.length > 0) {
-      checkNextPage();
-    }
-  }, [posts, currentPage, checkedForNextPage]);
-
-  // Fetch posts for current page, skipping the hero post
   useEffect(() => {
     async function loadPosts() {
       setLoading(true);
@@ -107,29 +75,24 @@ export default function BlogPageClient({ heroPost }: { heroPost: DiscordPost }) 
         const res = await fetch(`/api/discord-sync/posts?skip=${skip}&limit=${limit}`);
         const data = await res.json();
         setPosts(data.posts);
-        setPagesWithContent((prev) => new Set([...prev, currentPage]));
-        const expectedPosts = currentPage === 1 ? 10 : 9;
-        if (data.posts.length < expectedPosts) {
-          setLastPageFound(currentPage);
-        } else if (currentPage === 2) {
-          try {
-            const nextPageRes = await fetch(`/api/discord-sync/posts?page=3`);
-            if (nextPageRes.ok) {
-              const nextPageData = (await nextPageRes.json()) as { total: number; posts: DiscordPost[] };
-              if (nextPageData.posts.length > 0) {
-                setPagesWithContent((prev) => new Set([...prev, 3]));
-              } else {
-                setLastPageFound(2);
-              }
-            }
-          } catch {}
-        }
+        setTotalPosts(data.total);
       } catch {} finally {
         setLoading(false);
       }
     }
     loadPosts();
   }, [currentPage]);
+
+  const postsPerPage = 9;
+  const totalPages = totalPosts > 0 ? Math.ceil((totalPosts - 1) / postsPerPage) + 1 : 1;
+  const availablePages = Array.from({ length: totalPages }, (_, i) => i + 1)
+    .filter(pageNum => {
+      if (pageNum === 1) return true;
+      const start = 1 + (pageNum - 1) * postsPerPage;
+      return start < totalPosts;
+    });
+  const hasNextPage = currentPage < availablePages.length && availablePages.length > 1;
+  const hasPrevPage = currentPage > 1;
 
   // Parse hero post content
   const lines = (heroPost.bodyMd || "").split("\n").map((l: string) => l.trim());
@@ -140,34 +103,6 @@ export default function BlogPageClient({ heroPost }: { heroPost: DiscordPost }) 
   const MAX_TITLE_LENGTH = 26;
   const MAX_SUMMARY_LENGTH = 71;
   const HERO_TITLE_MAX_LENGTH = 33;
-  const availablePages = Array.from(pagesWithContent).sort((a, b) => a - b);
-  const hasNextPage = (() => {
-    if (lastPageFound !== null && currentPage >= lastPageFound) {
-      return false;
-    }
-    if (currentPage === 1 && posts.length === 10) {
-      if (pagesWithContent.has(2)) {
-        return true;
-      }
-      if (!checkedForNextPage) {
-        return true;
-      }
-      return false;
-    }
-    if (currentPage > 1) {
-      if (pagesWithContent.has(currentPage + 1)) {
-        return true;
-      }
-      if (posts.length < 9) {
-        return false;
-      }
-      if (lastPageFound === null && posts.length >= 9) {
-        return !lastPageFound;
-      }
-    }
-    return false;
-  })();
-  const hasPrevPage = currentPage > 1;
 
   return (
     <section className="relative mx-auto px-4 pb-64 min-h-[1100px] bg-[url('/jpg/smoke.jpg')] bg-fixed bg-center bg-cover overflow-x-hidden">
