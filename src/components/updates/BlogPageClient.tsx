@@ -137,11 +137,9 @@ export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: D
   const hasNextPage = currentPage < availablePages.length && availablePages.length > 1
   const hasPrevPage = currentPage > 1
 
-  // Parse hero post content
-  const lines = (heroPost.bodyMd || "").split("\n").map((l: string) => l.trim())
-  const titleLine = lines.find((l: string) => l.startsWith("# ")) || ""
-  const heroTitle = titleLine.replace(/^#\s*/, "") || ""
-  const heroSummary = lines.slice(lines.indexOf(titleLine) + 1).find((l: string) => !!l && !l.startsWith("```")) || ""
+  // Use heroPost.title and heroPost.summary directly for the hero
+  const heroTitle = heroPost.title || ""
+  const heroSummary = heroPost.summary || ""
 
   const MAX_TITLE_LENGTH = 26
   const MAX_SUMMARY_LENGTH = 71

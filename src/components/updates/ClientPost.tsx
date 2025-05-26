@@ -18,8 +18,14 @@ import {
 
 // Function to clean markdown content - remove frontmatter
 function cleanMarkdownContent(content: string): string {
-  const frontmatterRegex = /^---\s*\n[\s\S]*?\n---\s*\n/
-  return content.replace(frontmatterRegex, "").trim()
+  // Remove YAML frontmatter (everything between --- lines at the start)
+  const frontmatterRegex = /^---\s*\n[\s\S]*?\n---\s*\n/;
+  let cleaned = content.replace(frontmatterRegex, "").trim();
+
+  // Remove the first # Heading (h1) if present
+  cleaned = cleaned.replace(/^# .*(\n|$)/, "");
+
+  return cleaned.trim();
 }
 
 // Helper function to format Discord timestamp
@@ -79,6 +85,11 @@ export function ClientPost({
         </Breadcrumb>
         <ShareButtons title={title || ""} />
       </div>
+
+      {/* Main Post Title */}
+      {title && (
+        <h1 className="text-3xl font-bold mb-6 mt-8 text-white">{title}</h1>
+      )}
 
       <div ref={contentRef} className="prose prose-lg max-w-none text-white">
         <ReactMarkdown
