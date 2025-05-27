@@ -20,8 +20,9 @@ export default function BlogImage({
   width = 800,
   height = 600,
   fill = false,
+  sizes = "(max-width: 1024px) 100vw, 33vw",
   ...rest
-}: BlogImageProps) {
+}: BlogImageProps & { sizes?: string }) {
   // If there's no src, render nothing
   if (!src) {
     return null
@@ -38,6 +39,7 @@ export default function BlogImage({
       src={_src}
       alt={alt}
       fill
+      sizes={sizes}
       className={className}
       {...rest}
     />
