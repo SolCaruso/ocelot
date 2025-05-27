@@ -55,63 +55,35 @@ export function SkeletonCard() {
 }
 
 export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: DiscordPost, initialPosts?: DiscordPost[] }) {
-  const [posts, setPosts] = useState<DiscordPost[]>([])
+  const [posts, setPosts] = useState<DiscordPost[]>(initialPosts ?? [])
   const [showFullSummary, setShowFullSummary] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!(initialPosts && initialPosts.length > 0))
   const [totalPosts, setTotalPosts] = useState<number>(0)
   const [animateIn, setAnimateIn] = useState(false)
 
   useEffect(() => {
     async function loadPosts() {
+      if (currentPage === 1 && initialPosts && initialPosts.length > 0) {
+        setPosts(initialPosts)
+        setLoading(false)
+        setTimeout(() => setAnimateIn(true), 10)
+        try {
+          const totalRes = await fetch('/api/discord-sync/posts?limit=1')
+          if (totalRes.ok) {
+            const totalData = await totalRes.json()
+            setTotalPosts(totalData.total)
+          } else {
+            setTotalPosts(initialPosts.length + 1) // +1 for hero
+          }
+        } catch {
+          setTotalPosts(initialPosts.length + 1)
+        }
+        return
+      }
       setLoading(true)
       setAnimateIn(false)
       try {
-        if (currentPage === 1 && initialPosts && initialPosts.length > 0) {
-          setPosts(initialPosts)
-          // Fetch total count from API for correct pagination
-          try {
-            const totalRes = await fetch('/api/discord-sync/posts?limit=1')
-            if (totalRes.ok) {
-              const totalData = await totalRes.json()
-              setTotalPosts(totalData.total)
-            } else {
-              setTotalPosts(initialPosts.length + 1) // +1 for hero
-            }
-          } catch {
-            setTotalPosts(initialPosts.length + 1)
-          }
-          setLoading(false)
-          setTimeout(() => setAnimateIn(true), 10)
-          return
-        }
-        if (currentPage === 1) {
-          // Try to load from /latestPosts.json first (fallback)
-          try {
-            const res = await fetch('/latestPosts.json', { cache: 'no-store' })
-            if (!res.ok) throw new Error('No latestPosts.json')
-            const postsJson = await res.json()
-            setPosts(postsJson.slice(1, 10))
-            // Fetch total count from API for correct pagination
-            try {
-              const totalRes = await fetch('/api/discord-sync/posts?limit=1')
-              if (totalRes.ok) {
-                const totalData = await totalRes.json()
-                setTotalPosts(totalData.total)
-              } else {
-                setTotalPosts(postsJson.length)
-              }
-            } catch {
-              setTotalPosts(postsJson.length)
-            }
-            setLoading(false)
-            setTimeout(() => setAnimateIn(true), 10)
-            return
-          } catch {
-            // Fallback to API fetch if /latestPosts.json fails
-          }
-        }
-        // For all other pages, or fallback
         const skip = 1 + (currentPage - 1) * 9
         const limit = 9
         const res = await fetch(`/api/discord-sync/posts?skip=${skip}&limit=${limit}`)
