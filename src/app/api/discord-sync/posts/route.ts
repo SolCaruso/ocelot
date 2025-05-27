@@ -51,6 +51,38 @@ function formatDateSlug(timestamp: string): string {
   }
 }
 
+// Add the frontmatter parsing function
+function parsePostContent(content: string) {
+  // Remove frontmatter and extract it
+  const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n?/;
+  const frontmatterMatch = content.match(frontmatterRegex);
+  let frontmatter: Record<string, string> = {};
+  let body = content;
+
+  if (frontmatterMatch) {
+    const fm = frontmatterMatch[1];
+    body = content.replace(frontmatterRegex, "").trim();
+    
+    // Parse frontmatter lines
+    fm.split("\n").forEach(line => {
+      const colonIndex = line.indexOf(':');
+      if (colonIndex > -1) {
+        const key = line.substring(0, colonIndex).trim();
+        const value = line.substring(colonIndex + 1).trim();
+        // Remove quotes from the value
+        frontmatter[key] = value.replace(/^["']|["']$/g, "");
+      }
+    });
+  }
+
+  return {
+    title: frontmatter.title || "Untitled",
+    summary: frontmatter.summary || "",
+    bodyMd: body,
+    frontmatter
+  };
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const page = Number.parseInt(searchParams.get("page") || "1", 10)
@@ -84,20 +116,18 @@ export async function GET(request: NextRequest) {
     const messages: DiscordMessage[] = await res.json()
     console.log(`Fetched ${messages.length} messages from Discord`)
 
-    // Process messages
+    // Process messages with proper frontmatter parsing
     const posts = messages.map((m, index) => {
       const raw = m.content.trim()
-      const bodyMd = raw.startsWith("```md")
+      const cleanContent = raw.startsWith("```md")
         ? raw
             .replace(/^```md/, "")
             .replace(/```$/, "")
             .trim()
         : raw
 
-      const lines = bodyMd.split("\n").map((l: string) => l.trim())
-      const titleLine = lines.find((l: string) => l.startsWith("# ")) || ""
-      const title = titleLine.replace(/^#\s*/, "") || "Untitled"
-      const summary = lines.slice(lines.indexOf(titleLine) + 1).find((l: string) => !!l && !l.startsWith("```") ) || ""
+      // Use the new parsing function instead of the old logic
+      const parsed = parsePostContent(cleanContent)
 
       // Extract frontmatter date
       const frontmatterDate = extractFrontmatterDate(m.content)
@@ -114,16 +144,16 @@ export async function GET(request: NextRequest) {
       const fallback = FALLBACKS[index % FALLBACKS.length]
       const imageUrl = m.attachments[0]?.url ?? `/jpg/${fallback}`
 
-      console.log(`Message ${index}: timestamp="${m.timestamp}", dateSlug="${dateSlug}", title="${title}", frontmatterDate="${frontmatterDate}"`)
+      console.log(`Message ${index}: timestamp="${m.timestamp}", dateSlug="${dateSlug}", title="${parsed.title}", summary="${parsed.summary}", frontmatterDate="${frontmatterDate}"`)
 
       return {
         id: m.id,
         slug: dateSlug,
         author: m.author?.username ?? "",
         date: postDate,
-        title,
-        summary,
-        bodyMd,
+        title: parsed.title,
+        summary: parsed.summary,
+        bodyMd: parsed.bodyMd,
         imageUrl,
       }
     })
@@ -145,7 +175,7 @@ export async function GET(request: NextRequest) {
 
     console.log(`Returning ${paginatedPosts.length} posts for page ${page}`)
     if (paginatedPosts.length > 0) {
-      console.log(`First post: dateSlug="${paginatedPosts[0].slug}", date="${paginatedPosts[0].date}"`)
+      console.log(`First post: dateSlug="${paginatedPosts[0].slug}", date="${paginatedPosts[0].date}", title="${paginatedPosts[0].title}", summary="${paginatedPosts[0].summary}"`)
     }
 
     return NextResponse.json({
