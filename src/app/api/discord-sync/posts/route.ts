@@ -56,7 +56,7 @@ function parsePostContent(content: string) {
   // Remove frontmatter and extract it
   const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n?/;
   const frontmatterMatch = content.match(frontmatterRegex);
-  let frontmatter: Record<string, string> = {};
+  const frontmatter: Record<string, string> = {};
   let body = content;
 
   if (frontmatterMatch) {
