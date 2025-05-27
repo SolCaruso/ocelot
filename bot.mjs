@@ -20,15 +20,53 @@ client.once('ready', () => {
   console.log(`Bot is online as ${client.user.tag}`);
 });
 
+// Fixed helper to parse post content
+function parsePostContent(post) {
+  const content = post.content || post.bodyMd || '';
+  
+  // Remove frontmatter and extract it
+  const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n?/;
+  const frontmatterMatch = content.match(frontmatterRegex);
+  let frontmatter = {};
+  let body = content;
+
+  if (frontmatterMatch) {
+    const fm = frontmatterMatch[1];
+    body = content.replace(frontmatterRegex, "").trim();
+    
+    // Parse frontmatter lines
+    fm.split("\n").forEach(line => {
+      const colonIndex = line.indexOf(':');
+      if (colonIndex > -1) {
+        const key = line.substring(0, colonIndex).trim();
+        const value = line.substring(colonIndex + 1).trim();
+        // Remove quotes from the value
+        frontmatter[key] = value.replace(/^["']|["']$/g, "");
+      }
+    });
+  }
+
+  return {
+    ...post, // Keep existing properties like id, slug, author, imageUrl
+    title: frontmatter.title || post.title || "Untitled",
+    date: frontmatter.date || post.date || "",
+    summary: frontmatter.summary || post.summary || "",
+    bodyMd: body, // This should be the content without frontmatter
+  };
+}
+
 client.on('messageCreate', async (message) => {
   if (message.channel.id === CHANNEL_ID && !message.author.bot) {
     try {
       // Fetch latest 10 posts from your API endpoint
       const res = await fetch(API_ENDPOINT);
       const data = await res.json();
+      
       // Save to public/latestPosts.json
       const filePath = path.join(process.cwd(), 'public', 'latestPosts.json');
-      fs.writeFileSync(filePath, JSON.stringify(data.posts, null, 2));
+      const parsedPosts = data.posts.map(parsePostContent);
+      
+      fs.writeFileSync(filePath, JSON.stringify(parsedPosts, null, 2));
       console.log('Updated latestPosts.json with newest posts!');
     } catch (err) {
       console.error('Failed to update latestPosts.json:', err);
@@ -36,4 +74,4 @@ client.on('messageCreate', async (message) => {
   }
 });
 
-client.login(DISCORD_TOKEN); 
+client.login(DISCORD_TOKEN);

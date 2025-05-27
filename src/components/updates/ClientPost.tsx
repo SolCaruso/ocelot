@@ -86,11 +86,6 @@ export function ClientPost({
         <ShareButtons title={title || ""} />
       </div>
 
-      {/* Main Post Title */}
-      {title && (
-        <h1 className="text-3xl font-bold mb-6 mt-8 text-white">{title}</h1>
-      )}
-
       <div ref={contentRef} className="prose prose-lg max-w-none text-white">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
