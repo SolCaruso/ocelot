@@ -129,7 +129,7 @@ const Trailer: React.FC = () => {
                     RPGs of old, offering both depth and strategy.
                 </p>
                 <p className="mt-4 md:text-xl text-stone-50 font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)]">
-                    As you recruit and assemble a diverse party, each member's unique abilities become crucial
+                    As you recruit and assemble a diverse party, each member&apos;s unique abilities become crucial
                     to your success on the battlefield.
                 </p>
             </div>
