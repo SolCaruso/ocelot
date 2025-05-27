@@ -42,7 +42,7 @@ export default function PostHero({ post }: PostHeroProps) {
           }`}
         >
           <Image
-            src={post.image}             // ← no prefixing here
+            src={post.image}
             alt={post.title}
             fill
             sizes="100vw"

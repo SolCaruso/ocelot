@@ -51,6 +51,37 @@ function extractFrontmatterDate(content: string): string | null {
   return match ? match[1] : null
 }
 
+function parsePostContent(content: string) {
+  // Remove frontmatter and extract it
+  const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n?/;
+  const frontmatterMatch = content.match(frontmatterRegex);
+  const frontmatter: Record<string, string> = {};
+  let body = content;
+
+  if (frontmatterMatch) {
+    const fm = frontmatterMatch[1];
+    body = content.replace(frontmatterRegex, "").trim();
+    
+    // Parse frontmatter lines
+    fm.split("\n").forEach(line => {
+      const colonIndex = line.indexOf(':');
+      if (colonIndex > -1) {
+        const key = line.substring(0, colonIndex).trim();
+        const value = line.substring(colonIndex + 1).trim();
+        // Remove quotes from the value
+        frontmatter[key] = value.replace(/^["']|["']$/g, "");
+      }
+    });
+  }
+
+  return {
+    title: frontmatter.title || "Untitled",
+    summary: frontmatter.summary || "",
+    bodyMd: body,
+    frontmatter
+  };
+}
+
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
 
@@ -131,17 +162,15 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     // Parse message content
     const raw = targetMessage.content.trim()
-    const bodyMd = raw.startsWith("```md")
+    const cleanContent = raw.startsWith("```md")
       ? raw
           .replace(/^```md/, "")
           .replace(/```$/, "")
           .trim()
       : raw
 
-    const lines = bodyMd.split("\n").map((l: string) => l.trim())
-    const titleLine = lines.find((l: string) => l.startsWith("# ")) || ""
-    const title = titleLine.replace(/^#\s*/, "") || "Untitled"
-    const summary = lines.slice(lines.indexOf(titleLine) + 1).find((l: string) => !!l && !l.startsWith("```")) || ""
+    // Use the parsePostContent function to extract title and other metadata
+    const parsed = parsePostContent(cleanContent)
 
     const fallback = FALLBACKS[messageIndex % FALLBACKS.length]
     const imageUrl = targetMessage.attachments[0]?.url ?? `/jpg/${fallback}`
@@ -150,9 +179,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       id: targetMessage.id,
       author: targetMessage.author?.username ?? "",
       date: frontmatterDateStr ?? targetMessage.timestamp,
-      title,
-      summary,
-      bodyMd,
+      title: parsed.title,
+      summary: parsed.summary,
+      bodyMd: parsed.bodyMd,
       imageUrl,
     }
 

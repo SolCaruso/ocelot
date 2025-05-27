@@ -35,6 +35,33 @@ function extractFrontmatterDate(content: string): string | null {
   return match ? match[1] : null
 }
 
+function parsePostContent(content: string) {
+  const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n?/;
+  const frontmatterMatch = content.match(frontmatterRegex);
+  const frontmatter: Record<string, string> = {};
+  let body = content;
+
+  if (frontmatterMatch) {
+    const fm = frontmatterMatch[1];
+    body = content.replace(frontmatterRegex, "").trim();
+    fm.split("\n").forEach(line => {
+      const colonIndex = line.indexOf(':');
+      if (colonIndex > -1) {
+        const key = line.substring(0, colonIndex).trim();
+        const value = line.substring(colonIndex + 1).trim();
+        frontmatter[key] = value.replace(/^["']|["']$/g, "");
+      }
+    });
+  }
+
+  return {
+    title: frontmatter.title || "Untitled",
+    summary: frontmatter.summary || "",
+    bodyMd: body,
+    frontmatter
+  };
+}
+
 export async function getPostBySlug(slug: string) {
   if (!DISCORD_TOKEN || !CHANNEL_ID) {
     throw new Error("Missing environment variables")
@@ -93,10 +120,8 @@ export async function getPostBySlug(slug: string) {
         .trim()
     : raw
 
-  const lines = bodyMd.split("\n").map((l: string) => l.trim())
-  const titleLine = lines.find((l: string) => l.startsWith("# ")) || ""
-  const title = titleLine.replace(/^#\s*/, "") || "Untitled"
-  const summary = lines.slice(lines.indexOf(titleLine) + 1).find((l: string) => !!l && !l.startsWith("```")) || ""
+  // Use parsePostContent to extract title, summary, and bodyMd
+  const parsed = parsePostContent(bodyMd)
 
   const fallback = FALLBACKS[messageIndex % FALLBACKS.length]
   const imageUrl = targetMessage.attachments[0]?.url ?? `/jpg/${fallback}`
@@ -110,9 +135,9 @@ export async function getPostBySlug(slug: string) {
     id: targetMessage.id,
     author: targetMessage.author?.username ?? "",
     date: frontmatterDateStr ?? targetMessage.timestamp,
-    title,
-    summary,
-    bodyMd,
+    title: parsed.title,
+    summary: parsed.summary,
+    bodyMd: parsed.bodyMd,
     imageUrl,
     slug: dateSlug,
   }
