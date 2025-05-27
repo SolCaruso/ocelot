@@ -81,6 +81,8 @@
   --animate-spin-reverse: spin-reverse 1s linear infinite;
   --animate-spin-reverse-slow: spin-reverse 4s linear infinite;
   --animate-spin-reverse-slower: spin-reverse 6s linear infinite;
+  --animate-slide-in: slide-in 0.5s var(--ease-in-out-quad) forwards;
+  --animate-slide-up-gentle: slide-up-gentle 0.5s var(--ease-in-out-quad) forwards;
 
   @keyframes fade-in {
     from {
@@ -93,6 +95,26 @@
   @keyframes spin-reverse {
     to {
       transform: rotate(-360deg);
+    }
+  }
+  @keyframes slide-in {
+    from {
+      transform: translateX(50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  @keyframes slide-up-gentle {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
     }
   }
 }

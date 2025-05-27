@@ -129,7 +129,7 @@ const Trailer: React.FC = () => {
                     RPGs of old, offering both depth and strategy.
                 </p>
                 <p className="mt-4 md:text-xl text-stone-50 font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)]">
-                    As you recruit and assemble a diverse party, each member’s unique abilities become crucial
+                    As you recruit and assemble a diverse party, each member's unique abilities become crucial
                     to your success on the battlefield.
                 </p>
             </div>
@@ -142,7 +142,7 @@ const Trailer: React.FC = () => {
         alt="Undine Illustration"
         width={1506}
         height={2000}
-        className="object-contain w-[500px] 4xl:w-[700px] absolute -right-12 bottom-0 z-20 xl:block hidden opacity-30 3xl:opacity-100 select-none"  
+        className="object-contain w-[500px] 4xl:w-[700px] absolute -right-12 bottom-0 z-20 xl:block hidden opacity-30 3xl:opacity-100 select-none animate-slide-in"  
         draggable={false}
       />
 

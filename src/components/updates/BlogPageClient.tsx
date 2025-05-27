@@ -274,7 +274,10 @@ export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: D
                   href="#"
                   onClick={(e) => {
                     e.preventDefault()
-                    if (hasPrevPage) setCurrentPage(currentPage - 1)
+                    if (hasPrevPage) {
+                      setCurrentPage(currentPage - 1)
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }
                   }}
                   className={!hasPrevPage ? "pointer-events-none opacity-50" : ""}
                 />
@@ -300,7 +303,10 @@ export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: D
                   href="#"
                   onClick={(e) => {
                     e.preventDefault()
-                    if (hasNextPage) setCurrentPage(currentPage + 1)
+                    if (hasNextPage) {
+                      setCurrentPage(currentPage + 1)
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }
                   }}
                   className={!hasNextPage ? "pointer-events-none opacity-50" : ""}
                 />
