@@ -1,5 +1,8 @@
-import BlogPageClient from "../../components/updates/BlogPageClient"
+"use server"
+
 import { supabase } from "@/lib/supabase"
+
+const FALLBACKS = ["/jpg/post.jpg", "/jpg/post1.jpg", "/jpg/post2.jpg", "/jpg/post3.jpg"]
 
 interface BlogPost {
   id: number
@@ -11,19 +14,33 @@ interface BlogPost {
   image?: string | null
 }
 
-const FALLBACKS = ["/jpg/post.jpg", "/jpg/post1.jpg", "/jpg/post2.jpg", "/jpg/post3.jpg"]
-
-async function fetchInitialPosts(): Promise<BlogPost[]> {
+export async function getPaginatedPosts(currentPage: number) {
   try {
+    // Get total count first
+    const { count } = await supabase.from("blog_posts").select("*", { count: "exact", head: true })
+
+    const totalPosts = count || 0
+
+    // Calculate pagination
+    let skip = 0
+    let limit = 10
+    if (currentPage === 1) {
+      skip = 0
+      limit = 10
+    } else {
+      skip = 10 + (currentPage - 2) * 9
+      limit = 9
+    }
+
     const { data: posts, error } = await supabase
       .from("blog_posts")
       .select("id, date, title, summary, subtitle, body, image")
       .order("date", { ascending: false })
-      .limit(10)
+      .range(skip, skip + limit - 1)
 
     if (error) {
       console.error("Supabase error:", error)
-      return []
+      return { posts: [], total: 0, error: "Failed to fetch posts" }
     }
 
     // Assign fallback images if image is missing/null/empty
@@ -37,17 +54,13 @@ async function fetchInitialPosts(): Promise<BlogPost[]> {
       image: post.image && post.image.trim() !== "" ? post.image : FALLBACKS[idx % FALLBACKS.length],
     }))
 
-    return transformedPosts
+    return {
+      posts: transformedPosts,
+      total: totalPosts,
+      error: null,
+    }
   } catch (error) {
     console.error("Error fetching posts:", error)
-    return []
+    return { posts: [], total: 0, error: "Failed to fetch posts" }
   }
-}
-
-export default async function UpdatesPage() {
-  const posts = await fetchInitialPosts()
-  const heroPost = posts[0]
-  const initialPosts = posts.slice(1, 10)
-
-  return <BlogPageClient heroPost={heroPost} initialPosts={initialPosts} />
 }

@@ -20,6 +20,8 @@ export default function PostHero({ post }: PostHeroProps) {
     setLoaded(true)
   }, [])
 
+  const heroImage = post.image && post.image.trim() !== '' ? post.image : '/jpg/post.jpg';
+
   return (
     <article className="mb-12 w-screen relative h-auto lg:h-[500px] lg:overflow-hidden max-w-7xl mx-auto">
       {/* Masked Image */}
@@ -42,7 +44,7 @@ export default function PostHero({ post }: PostHeroProps) {
           }`}
         >
           <Image
-            src={post.image}
+            src={heroImage}
             alt={post.title}
             fill
             sizes="100vw"

@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useTransition } from "react"
 import Link from "next/link"
 import BlogImage from "@/components/updates/BlogImage"
+import { getPaginatedPosts } from "@/lib/actions"
 import {
   Pagination,
   PaginationContent,
@@ -13,32 +14,27 @@ import {
 } from "@/components/ui/pagination"
 import { Skeleton } from "@/components/ui/skeleton"
 
-interface DiscordPost {
-  id: string
-  slug: string
-  author: string
+interface BlogPost {
+  id: number
   date: string
   title: string
   summary: string
-  bodyMd: string
-  imageUrl: string | null
+  subtitle: string
+  body: string
+  image?: string | null
 }
 
-function formatDiscordDate(timestamp: string): string {
+function formatDateUTC(dateString: string): string {
   try {
-    const date = new Date(timestamp)
-    if (isNaN(date.getTime())) {
-      console.error("Invalid date:", timestamp)
-      return "Invalid Date"
-    }
+    const date = new Date(dateString + "T00:00:00Z")
     return date.toLocaleDateString("en-US", {
+      year: "numeric",
       month: "long",
       day: "numeric",
-      year: "numeric",
+      timeZone: "UTC",
     })
-  } catch (error) {
-    console.error("Error formatting date:", error, timestamp)
-    return "Invalid Date"
+  } catch {
+    return dateString
   }
 }
 
@@ -54,50 +50,49 @@ export function SkeletonCard() {
   )
 }
 
-export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: DiscordPost, initialPosts?: DiscordPost[] }) {
-  const [posts, setPosts] = useState<DiscordPost[]>(initialPosts ?? [])
+export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: BlogPost; initialPosts?: BlogPost[] }) {
+  const [posts, setPosts] = useState<BlogPost[]>(initialPosts ?? [])
   const [showFullSummary, setShowFullSummary] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [loading, setLoading] = useState(!(initialPosts && initialPosts.length > 0))
   const [totalPosts, setTotalPosts] = useState<number>(0)
   const [animateIn, setAnimateIn] = useState(false)
+  const [hero, setHero] = useState<BlogPost>(heroPost)
+  const [isPending, startTransition] = useTransition()
 
   useEffect(() => {
     async function loadPosts() {
-      if (currentPage === 1 && initialPosts && initialPosts.length > 0) {
-        setPosts(initialPosts)
-        setLoading(false)
-        setTimeout(() => setAnimateIn(true), 10)
-        try {
-          const totalRes = await fetch('/api/discord-sync/posts?limit=1')
-          if (totalRes.ok) {
-            const totalData = await totalRes.json()
-            setTotalPosts(totalData.total)
-          } else {
-            setTotalPosts(initialPosts.length + 1) // +1 for hero
-          }
-        } catch {
-          setTotalPosts(initialPosts.length + 1)
-        }
-        return
-      }
       setLoading(true)
       setAnimateIn(false)
-      try {
-        const skip = 1 + (currentPage - 1) * 9
-        const limit = 9
-        const res = await fetch(`/api/discord-sync/posts?skip=${skip}&limit=${limit}`)
-        const data = await res.json()
-        setPosts(data.posts)
-        setTotalPosts(data.total)
-      } catch {
-      } finally {
-        setLoading(false)
-        setTimeout(() => setAnimateIn(true), 10)
-      }
+
+      startTransition(async () => {
+        try {
+          const { posts: fetchedPosts, total, error } = await getPaginatedPosts(currentPage)
+
+          if (error) {
+            console.error("Error loading posts:", error)
+            return
+          }
+
+          if (currentPage === 1) {
+            setPosts(fetchedPosts.slice(1))
+            setHero(fetchedPosts[0])
+          } else {
+            setPosts(fetchedPosts)
+          }
+
+          setTotalPosts(total)
+        } catch (error) {
+          console.error("Error loading posts:", error)
+        } finally {
+          setLoading(false)
+          setTimeout(() => setAnimateIn(true), 10)
+        }
+      })
     }
+
     loadPosts()
-  }, [currentPage, initialPosts])
+  }, [currentPage])
 
   const postsPerPage = 9
   const totalPages = totalPosts > 0 ? Math.ceil((totalPosts - 1) / postsPerPage) + 1 : 1
@@ -109,9 +104,9 @@ export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: D
   const hasNextPage = currentPage < availablePages.length && availablePages.length > 1
   const hasPrevPage = currentPage > 1
 
-  // Use heroPost.title and heroPost.summary directly for the hero
-  const heroTitle = heroPost.title || ""
-  const heroSummary = heroPost.summary || ""
+  // Use hero.title and hero.summary directly for the hero
+  const heroTitle = hero.title || ""
+  const heroSummary = hero.summary || ""
 
   const MAX_TITLE_LENGTH = 26
   const MAX_SUMMARY_LENGTH = 71
@@ -137,7 +132,7 @@ export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: D
           >
             <div className="w-full h-full transition-opacity duration-200 ease-[var(--ease-in-out-quad)] opacity-100">
               <BlogImage
-                src={heroPost.imageUrl ?? null}
+                src={hero.image ?? null}
                 alt={heroTitle}
                 fill
                 className="object-cover w-full h-full select-none"
@@ -171,13 +166,13 @@ export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: D
           </p>
           <div className="flex justify-between items-center w-full pt-4 max-w-3xl">
             <Link
-              href={`/updates/${heroPost.slug ?? ""}`}
+              href={`/updates/${hero.date ?? ""}`}
               className="py-3 px-6 text-[0.75rem] leading-[1rem] font-bold tracking-[0.2px] rounded-[5px] bg-[#E6E6E6] hover:bg-[#FFF] shadow-md text-black uppercase transition-colors"
             >
               Read more
             </Link>
             <time className="text-[#fbcea0] font-quattrocento hidden md:block">
-              {heroPost.date && formatDiscordDate(heroPost.date)}
+              {hero.date && formatDateUTC(hero.date)}
             </time>
           </div>
         </div>
@@ -185,7 +180,7 @@ export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: D
 
       {/* CARDS GRID: show loading only for this part */}
       <div className="max-w-7xl mx-auto relative z-5">
-        {loading ? (
+        {loading || isPending ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 2xs:pt-72 xs:pt-62 lg:pt-12 pb-12">
             {Array.from({ length: 9 }).map((_, i) => (
               <SkeletonCard key={i} />
@@ -193,75 +188,78 @@ export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: D
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 2xs:pt-72 xs:pt-62 lg:pt-12 pb-12">
-            {posts.map((post) => (
-              <Link key={post.id} href={`/updates/${post.slug}`}>
-                <article
-                  className={`
-                    group cursor-pointer relative overflow-hidden w-full aspect-[450/530] gradient-border-top transition-shadow duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]
-                    ${animateIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}
-                    transition-all duration-500 ease-[var(--ease-in-out-quad)]
-                  `}
-                  style={{
-                    borderStyle: "solid",
-                    borderWidth: "0 1px 1px 1px",
-                    borderImage: "linear-gradient(to top, #534C3F, #B4906C) 1",
-                  }}
-                >
-                  <div
-                    className="relative w-full h-2/3 bg-black overflow-hidden"
+            {posts.map((post) => {
+              const image = post.image && post.image.trim() !== "" ? post.image : "/jpg/post.jpg"
+              return (
+                <Link key={post.date} href={`/updates/${post.date}`}>
+                  <article
+                    className={`
+                      group cursor-pointer relative overflow-hidden w-full aspect-[450/530] gradient-border-top transition-all duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]
+                      ${animateIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}
+                    `}
                     style={{
-                      maskImage: "url('/webp/smoke-mask-2.webp')",
-                      WebkitMaskImage: "url('/webp/smoke-mask-2.webp')",
-                      maskPosition: "center top",
-                      WebkitMaskPosition: "center top",
-                      maskSize: "cover",
-                      WebkitMaskSize: "cover",
-                      maskRepeat: "no-repeat",
-                      WebkitMaskRepeat: "no-repeat",
+                      borderStyle: "solid",
+                      borderWidth: "0 1px 1px 1px",
+                      borderImage: "linear-gradient(to top, #534C3F, #B4906C) 1",
+                      transitionDelay: `${Math.floor(Math.random() * 200)}ms`,
                     }}
                   >
-                    <div className="w-full h-full group-hover:scale-105 transition-all duration-200 ease-[var(--ease-in-out-quad)]">
-                      <BlogImage
-                        src={post.imageUrl ?? null}
-                        alt={post.title ?? ""}
-                        fill
-                        className="object-cover w-full h-full select-none scale-[1.75]"
-                        draggable={false}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/10 group-hover:from-black/30 group-hover:to-black/0 transition-colors duration-200 ease-[var(--ease-in-out-quad)]" />
-                    </div>
-                  </div>
-                  <div className="absolute inset-x-0 bottom-0 p-8 text-white space-y-2">
-                    <time className="text-[#fbcea0] font-quattrocento block font-semibold">
-                      {post.date && formatDiscordDate(post.date)}
-                    </time>
-                    <h3
-                      className="bg-clip-text text-transparent text-3xl md:text-4xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-2 uppercase"
+                    <div
+                      className="relative w-full h-2/3 bg-black overflow-hidden"
                       style={{
-                        backgroundImage: "linear-gradient(135deg, #fff, #fbcea0 39%, #fbcfa0)",
+                        maskImage: "url('/webp/smoke-mask-2.webp')",
+                        WebkitMaskImage: "url('/webp/smoke-mask-2.webp')",
+                        maskPosition: "center top",
+                        WebkitMaskPosition: "center top",
+                        maskSize: "cover",
+                        WebkitMaskSize: "cover",
+                        maskRepeat: "no-repeat",
+                        WebkitMaskRepeat: "no-repeat",
                       }}
                     >
-                      {post.title &&
-                        (post.title.length > MAX_TITLE_LENGTH
-                          ? `${post.title.slice(0, MAX_TITLE_LENGTH)}...`
-                          : post.title)}
-                    </h3>
-                    <p className="text-base">
-                      {post.summary &&
-                        (post.summary.length > MAX_SUMMARY_LENGTH
-                          ? `${post.summary.slice(0, MAX_SUMMARY_LENGTH)}...`
-                          : post.summary)}
-                    </p>
-                    <p className="uppercase font-quattrocento text-base tracking-wide font-semibold mt-6 text-[#fbcea0] group-hover:text-white flex items-center transition-colors duration-200 ease-[var(--ease-in-out-quad)]">
-                      Read More
-                      <span className="ml-2 opacity-0 translate-x-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200 ease-[var(--ease-in-out-quad)]">
-                        →
-                      </span>
-                    </p>
-                  </div>
-                </article>
-              </Link>
-            ))}
+                      <div className="w-full h-full group-hover:scale-105 transition-all duration-200 ease-[var(--ease-in-out-quad)]">
+                        <BlogImage
+                          src={image}
+                          alt={post.title ?? ""}
+                          fill
+                          className="object-cover w-full h-full select-none scale-[1.75]"
+                          draggable={false}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/10 group-hover:from-black/30 group-hover:to-black/0 transition-colors duration-200 ease-[var(--ease-in-out-quad)]" />
+                      </div>
+                    </div>
+                    <div className="absolute inset-x-0 bottom-0 p-8 text-white space-y-2">
+                      <time className="text-[#fbcea0] font-quattrocento block font-semibold">
+                        {post.date && formatDateUTC(post.date)}
+                      </time>
+                      <h3
+                        className="bg-clip-text text-transparent text-3xl md:text-4xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-2 uppercase"
+                        style={{
+                          backgroundImage: "linear-gradient(135deg, #fff, #fbcea0 39%, #fbcfa0)",
+                        }}
+                      >
+                        {post.title &&
+                          (post.title.length > MAX_TITLE_LENGTH
+                            ? `${post.title.slice(0, MAX_TITLE_LENGTH)}...`
+                            : post.title)}
+                      </h3>
+                      <p className="text-base">
+                        {post.summary &&
+                          (post.summary.length > MAX_SUMMARY_LENGTH
+                            ? `${post.summary.slice(0, MAX_SUMMARY_LENGTH)}...`
+                            : post.summary)}
+                      </p>
+                      <p className="uppercase font-quattrocento text-base tracking-wide font-semibold mt-6 text-[#fbcea0] group-hover:text-white flex items-center transition-colors duration-200 ease-[var(--ease-in-out-quad)]">
+                        Read More
+                        <span className="ml-2 opacity-0 translate-x-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200 ease-[var(--ease-in-out-quad)]">
+                          →
+                        </span>
+                      </p>
+                    </div>
+                  </article>
+                </Link>
+              )
+            })}
           </div>
         )}
 
@@ -274,12 +272,12 @@ export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: D
                   href="#"
                   onClick={(e) => {
                     e.preventDefault()
-                    if (hasPrevPage) {
+                    if (hasPrevPage && !isPending) {
                       setCurrentPage(currentPage - 1)
-                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                      window.scrollTo({ top: 0, behavior: "smooth" })
                     }
                   }}
-                  className={!hasPrevPage ? "pointer-events-none opacity-50" : ""}
+                  className={!hasPrevPage || isPending ? "pointer-events-none opacity-50" : ""}
                 />
               </PaginationItem>
 
@@ -290,8 +288,11 @@ export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: D
                     isActive={pageNum === currentPage}
                     onClick={(e) => {
                       e.preventDefault()
-                      setCurrentPage(pageNum)
+                      if (!isPending) {
+                        setCurrentPage(pageNum)
+                      }
                     }}
+                    className={isPending ? "pointer-events-none opacity-50" : ""}
                   >
                     {pageNum}
                   </PaginationLink>
@@ -303,12 +304,12 @@ export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: D
                   href="#"
                   onClick={(e) => {
                     e.preventDefault()
-                    if (hasNextPage) {
+                    if (hasNextPage && !isPending) {
                       setCurrentPage(currentPage + 1)
-                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                      window.scrollTo({ top: 0, behavior: "smooth" })
                     }
                   }}
-                  className={!hasNextPage ? "pointer-events-none opacity-50" : ""}
+                  className={!hasNextPage || isPending ? "pointer-events-none opacity-50" : ""}
                 />
               </PaginationItem>
             </PaginationContent>

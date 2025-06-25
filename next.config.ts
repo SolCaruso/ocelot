@@ -5,9 +5,7 @@ import path from 'path'
 const nextConfig = {
   images: {
     domains: [
-      'cdn.discordapp.com',
-      'media.discordapp.net',
-      'docs.guildsaga.com'
+      'ejktdpjnbhbgmavwltvb.supabase.co',
     ],
   },
   webpack(config: any, options: any) {

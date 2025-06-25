@@ -28,22 +28,18 @@ function cleanMarkdownContent(content: string): string {
   return cleaned.trim();
 }
 
-// Helper function to format Discord timestamp
-function formatDiscordDate(timestamp: string): string {
+// Helper function to format date as UTC
+function formatDateUTC(dateString: string): string {
   try {
-    const date = new Date(timestamp)
-    if (isNaN(date.getTime())) {
-      console.error("Invalid date:", timestamp)
-      return "Invalid Date"
-    }
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    })
-  } catch (error) {
-    console.error("Error formatting date:", error, timestamp)
-    return "Invalid Date"
+    const date = new Date(dateString + 'T00:00:00Z');
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      timeZone: 'UTC',
+    });
+  } catch {
+    return dateString;
   }
 }
 
@@ -79,7 +75,7 @@ export function ClientPost({
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>{date && formatDiscordDate(date)}</BreadcrumbPage>
+              <BreadcrumbPage>{date && formatDateUTC(date)}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
