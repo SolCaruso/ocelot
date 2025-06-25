@@ -4,16 +4,6 @@ import { supabase } from "@/lib/supabase"
 
 const FALLBACKS = ["/jpg/post.jpg", "/jpg/post1.jpg", "/jpg/post2.jpg", "/jpg/post3.jpg"]
 
-interface BlogPost {
-  id: number
-  date: string
-  title: string
-  summary: string
-  subtitle: string
-  body: string
-  image?: string | null
-}
-
 export async function getPaginatedPosts(currentPage: number) {
   try {
     // Get total count first
