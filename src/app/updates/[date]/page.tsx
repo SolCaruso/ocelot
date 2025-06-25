@@ -12,7 +12,7 @@ export default async function Page({ params }: { params: Promise<{ date: string 
     // First, get the post data
     const { data: post, error } = await supabase
       .from("blog_posts")
-      .select("id, date, title, summary, subtitle, body, image")
+      .select("id, date, title, summary, body, image")
       .eq("date", date)
       .single()
 

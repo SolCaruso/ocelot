@@ -283,3 +283,11 @@
   }
 
 }
+
+.custom-bullet-list li {
+  color: white;
+  position: relative;
+}
+.custom-bullet-list li::marker {
+  color: #fbcea0;
+}

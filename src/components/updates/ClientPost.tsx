@@ -61,7 +61,7 @@ export function ClientPost({
   useYouTubeEmbeds(contentRef, cleanedCode)
 
   return (
-    <article className="relative max-w-4xl mx-auto px-4 py-8">
+    <article className="relative max-w-4xl mx-auto py-8">
       {/* Breadcrumb & Share */}
       <div className="flex justify-between items-center mb-6">
         <Breadcrumb>
@@ -81,23 +81,22 @@ export function ClientPost({
         </Breadcrumb>
         <ShareButtons title={title || ""} />
       </div>
-
       <div ref={contentRef} className="prose prose-lg max-w-none text-white">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
             // Custom heading components
             h1: ({ children }: { children: ReactNode }) => (
-              <h1 className="text-3xl font-bold mb-6 mt-8 text-white">{children}</h1>
+              <h1 className="text-3xl font-medium mb-6 mt-8 text-[#fbcea0] font-quattrocento">{children}</h1>
             ),
             h2: ({ children }: { children: ReactNode }) => (
-              <h2 className="text-2xl font-bold mb-4 mt-6 text-white">{children}</h2>
+              <h2 className="text-2xl font-medium mb-4 mt-6 text-[#fbcea0] font-quattrocento">{children}</h2>
             ),
             h3: ({ children }: { children: ReactNode }) => (
-              <h3 className="text-xl font-bold mb-3 mt-5 text-white">{children}</h3>
+              <h3 className="text-xl font-medium mb-3 mt-5 text-[#fbcea0] font-quattrocento">{children}</h3>
             ),
             h4: ({ children }: { children: ReactNode }) => (
-              <h4 className="text-lg font-bold mb-2 mt-4 text-white">{children}</h4>
+              <h4 className="text-lg font-medium mb-2 mt-4 text-[#fbcea0] font-quattrocento">{children}</h4>
             ),
             // Simple paragraph component
             p: ({ children }: { children: ReactNode }) => (
@@ -110,7 +109,7 @@ export function ClientPost({
               return (
                 <Link
                   href={href}
-                  className="text-[#fbcea0] hover:text-white hover:underline transition-colors no-underline"
+                  className="text-[#fbcea0] hover:text-white underline transition-colors"
                   target={href.startsWith("http") ? "_blank" : undefined}
                   rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
                 >
@@ -128,15 +127,15 @@ export function ClientPost({
             ),
             // Enhanced list styling
             ul: ({ children }: { children: ReactNode }) => (
-              <ul className="mb-4 space-y-2 text-white list-disc list-inside">{children}</ul>
+              <ul className="mb-4 space-y-2 list-disc list-inside custom-bullet-list">{children}</ul>
             ),
             ol: ({ children }: { children: ReactNode }) => (
-              <ol className="mb-4 space-y-2 text-white list-decimal list-inside">{children}</ol>
+              <ol className="mb-4 space-y-2 list-decimal list-inside pl-4 custom-bullet-list">{children}</ol>
             ),
-            li: ({ children }: { children: ReactNode }) => <li className="text-white">{children}</li>,
+            li: ({ children }: { children: ReactNode }) => <li>{children}</li>,
             // Enhanced blockquote
             blockquote: ({ children }: { children: ReactNode }) => (
-              <blockquote className="border-l-4 border-[#B4906D] pl-4 my-6 italic text-gray-300 bg-black/20 py-2 rounded-r">
+              <blockquote className="border-l-4 border-[#B4906D] pl-4 my-6 italic text-gray-300 bg-black/20 py-2 rounded-r font-quattrocento">
                 {children}
               </blockquote>
             ),
@@ -173,7 +172,7 @@ export function ClientPost({
             ),
             // Text elements
             strong: ({ children }: { children: ReactNode }) => (
-              <strong className="text-[#fbcea0] font-bold">{children}</strong>
+              <strong className="text-[#fbcea0] font-semibold">{children}</strong>
             ),
             em: ({ children }: { children: ReactNode }) => <em className="text-[#fbcea0] italic">{children}</em>,
           }}

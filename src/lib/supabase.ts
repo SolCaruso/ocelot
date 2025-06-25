@@ -11,7 +11,6 @@ export interface BlogPost {
   date: string
   title: string
   summary: string
-  subtitle: string
   body: string
   image?: string | null
 }

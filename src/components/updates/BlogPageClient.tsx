@@ -19,7 +19,6 @@ interface BlogPost {
   date: string
   title: string
   summary: string
-  subtitle: string
   body: string
   image?: string | null
 }
@@ -143,7 +142,7 @@ export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: B
             </div>
           </div>
         </div>
-        <div className="absolute top-32 -left-6 inset-x-4 xl:inset-x-auto xl:right-0 w-[80%] lg:w-1/2 flex-col justify-center items-start p-8 text-white z-20 hidden 2xs:flex">
+        <div className="absolute top-32 -left-6 inset-x-4 xl:inset-x-auto xl:right-0 sm:w-[80%] lg:w-1/2 flex-col justify-center items-start p-8 text-white z-20 flex">
           <h1
             className="bg-clip-text text-transparent text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-2 uppercase"
             style={{
@@ -181,13 +180,13 @@ export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: B
       {/* CARDS GRID: show loading only for this part */}
       <div className="max-w-7xl mx-auto relative z-5">
         {loading || isPending ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 2xs:pt-72 xs:pt-62 lg:pt-12 pb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-62 lg:pt-12 pb-12">
             {Array.from({ length: 9 }).map((_, i) => (
               <SkeletonCard key={i} />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 2xs:pt-72 xs:pt-62 lg:pt-12 pb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-62 lg:pt-12 pb-12">
             {posts.map((post) => {
               const image = post.image && post.image.trim() !== "" ? post.image : "/jpg/post.jpg"
               return (

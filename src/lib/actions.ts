@@ -24,7 +24,7 @@ export async function getPaginatedPosts(currentPage: number) {
 
     const { data: posts, error } = await supabase
       .from("blog_posts")
-      .select("id, date, title, summary, subtitle, body, image")
+      .select("id, date, title, summary, body, image")
       .order("date", { ascending: false })
       .range(skip, skip + limit - 1)
 
@@ -39,7 +39,6 @@ export async function getPaginatedPosts(currentPage: number) {
       date: post.date,
       title: post.title,
       summary: post.summary,
-      subtitle: post.subtitle,
       body: post.body,
       image: post.image && post.image.trim() !== "" ? post.image : FALLBACKS[idx % FALLBACKS.length],
     }))

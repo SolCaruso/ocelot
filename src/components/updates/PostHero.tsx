@@ -23,7 +23,7 @@ export default function PostHero({ post }: PostHeroProps) {
   const heroImage = post.image && post.image.trim() !== '' ? post.image : '/jpg/post.jpg';
 
   return (
-    <article className="mb-12 w-screen relative h-auto lg:h-[500px] lg:overflow-hidden max-w-7xl mx-auto">
+    <article className="mb-12 w-screen relative h-[350px] md:h-[500px] overflow-hidden max-w-7xl mx-auto">
       {/* Masked Image */}
       <div
         className="relative w-full h-full"
@@ -39,7 +39,7 @@ export default function PostHero({ post }: PostHeroProps) {
         }}
       >
         <div
-          className={`relative w-full h-64 lg:h-full overflow-hidden transition-opacity duration-200 ease-[var(--ease-in-out-quad)] ${
+          className={`relative w-full h-full overflow-hidden transition-opacity duration-200 ease-[var(--ease-in-out-quad)] ${
             loaded ? 'opacity-100' : 'opacity-0'
           }`}
         >
@@ -56,7 +56,7 @@ export default function PostHero({ post }: PostHeroProps) {
       </div>
 
       {/* Text Content */}
-      <div className="absolute bottom-0 inset-x-4 xl:inset-x-auto xl:left-24 xl:w-1/2 flex flex-col justify-center items-start p-8 text-white z-10">
+      <div className="absolute bottom-0 inset-x-auto md:w-1/2 flex flex-col justify-center items-start px-4 sm:p-8 text-white z-10">
         <h1
           className="bg-clip-text text-transparent text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-2 uppercase"
           style={{

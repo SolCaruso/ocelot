@@ -6,7 +6,6 @@ interface BlogPost {
   date: string
   title: string
   summary: string
-  subtitle: string
   body: string
   image?: string | null
 }
@@ -17,7 +16,7 @@ async function fetchInitialPosts(): Promise<BlogPost[]> {
   try {
     const { data: posts, error } = await supabase
       .from("blog_posts")
-      .select("id, date, title, summary, subtitle, body, image")
+      .select("id, date, title, summary, body, image")
       .order("date", { ascending: false })
       .limit(10)
 
@@ -32,7 +31,6 @@ async function fetchInitialPosts(): Promise<BlogPost[]> {
       date: post.date,
       title: post.title,
       summary: post.summary,
-      subtitle: post.subtitle,
       body: post.body,
       image: post.image && post.image.trim() !== "" ? post.image : FALLBACKS[idx % FALLBACKS.length],
     }))
