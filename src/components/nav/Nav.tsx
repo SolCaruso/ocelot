@@ -92,7 +92,7 @@ export default function Nav() {
             <NavigationMenuTrigger>GUILD SAGA</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                <li className="row-span-3">
+                <li className="row-span-3 hidden lg:block">
                   <NavigationMenuLink asChild>
                     <Link
                       className="relative flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
@@ -155,7 +155,7 @@ export default function Nav() {
                 <ListItem
                   href="/vw"
                   title={
-                    <div className="flex items-center">
+                    <div className="flex items-center font-semibold opacity-80 group-hover:opacity-100 group-focus:opacity-100 group-active:opacity-100 transition-opacity">
                       <span>Vanished Worlds</span>
                       <Steam className="ml-1 h-4 w-auto" />
                     </div>
@@ -168,7 +168,7 @@ export default function Nav() {
                 <ListItem
                   href="/"
                   title={
-                    <div className="flex items-center">
+                    <div className="flex items-center font-semibold opacity-80 group-hover:opacity-100 group-focus:opacity-100 group-active:opacity-100 transition-opacity">
                       <span>Labyrinths</span>
                       <Solana className="ml-1 h-4 w-auto" />
                     </div>
@@ -181,7 +181,7 @@ export default function Nav() {
                 <ListItem
                   href="https://world.guildsaga.com/" target="_blank" rel="noopener noreferrer"
                   title={
-                    <div className="flex items-center">
+                    <div className="flex items-center font-semibold opacity-80 group-hover:opacity-100 group-focus:opacity-100 group-active:opacity-100 transition-opacity">
                       <span>World Mode</span>
                       <Solana className="ml-1 h-4 w-auto" />
                     </div>
@@ -247,16 +247,12 @@ export default function Nav() {
       </NavigationMenu>
 
       {/* Right: Button */}
-      <div>
-        <a
-          href="https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className=" items-center justify-center py-3 px-4 text-[0.75rem] leading-[1rem] font-bold tracking-[0.2px] cursor-pointer border-none rounded-[5px] transition-colors duration-200 ease-in-out bg-[#E6E6E6] hover:bg-[#FFF] shadow-md opacity-90 hover:opacity-100 text-black uppercase md:block hidden"
-        >
-          BUY NOW
-        </a>
-      </div>
+      <Link
+        href='https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/'
+        className="py-3 px-6 text-[0.75rem] leading-[1rem] font-bold tracking-[0.2px] rounded-[5px] bg-[#E6E6E6] hover:bg-[#FFF] shadow-md text-black uppercase transition-colors md:block hidden"
+      >
+        BUY NOW
+      </Link>
 
       {/* Mobile: Hamburger */}
       <div className="md:hidden flex items-center ml-auto">
@@ -299,13 +295,15 @@ const ListItem = React.forwardRef<
         <a
           ref={ref}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            "group block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
             className
           )}
           {...props}
         >
-          <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+          <div className="flex items-center font-semibold opacity-80 group-hover:opacity-100 group-focus:opacity-100 group-active:opacity-100 transition-opacity">
+            {title}
+          </div>
+          <p className="line-clamp-2 text-sm leading-snug opacity-50 group-hover:opacity-80 ">
             {children}
           </p>
         </a>

@@ -66,7 +66,7 @@ const reviews: Array<Review> = [
   },
   {
     title: 'A Promising Early Access RPG.',
-    body: "An RPG that shows immense promise, even in its Early Access stage. I’ve been thoroughly enjoying my time with it so far and it deserves a solid 5 stars.",
+    body: "An RPG that shows immense promise, even in its Early Access stage. I've been thoroughly enjoying my time with it so far and it deserves a solid 5 stars.",
     author: 'DontThatsMyBum',
     rating: 5,
   },
@@ -149,7 +149,7 @@ function Review({
   return (
     <figure
       className={clsx(
-        'animate-fade-in rounded-lg bg-[#101010] p-6 opacity-0 border border-[#222222]',
+        'animate-fade-in rounded-lg bg-black/20 backdrop-blur-md p-6 opacity-0 border border-[#222222]',
         className,
       )}
       style={{ animationDelay }}
@@ -157,7 +157,7 @@ function Review({
     >
       <blockquote className="text-stone-50">
         <StarRating rating={rating} />
-        <p className="mt-4 text-lg/6 font-semibold before:content-['“'] after:content-['”']">
+        <p className="mt-4 text-lg/6 font-semibold before:content-['\201C'] after:content-['\201D']">
           {title}
         </p>
         <p className="mt-3 text-base/7">{body}</p>
