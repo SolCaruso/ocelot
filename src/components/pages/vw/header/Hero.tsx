@@ -3,11 +3,9 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import Steam from '@/components/logos/partners/Steam';
 import Unity from '@/components/logos/partners/Unity';
-import Solana from '@/components/logos/partners/Solana';
 import Ocelot from '@/components/logos/partners/Ocelot';
 import SteamMobile from '@/components/logos/partners-mobile/Steam';
 import UnityMobile from '@/components/logos/partners-mobile/Unity';
-import SolanaMobile from '@/components/logos/partners-mobile/Solana';
 import OcelotMobile from '@/components/logos/partners-mobile/Ocelot';
 
 interface HeroProps {
