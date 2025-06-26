@@ -5,7 +5,7 @@ import React from "react"
 import Image from "next/image"
 import { Container } from "../ui/container"
 import SvgComponent from "../ui/corner"
-import { Droplet, Anchor, Mountain, Leaf, Shield, Crown, TypeIcon as type, type LucideIcon } from 'lucide-react'
+import { Droplet, Anchor, Mountain, Leaf, Shield, Crown, type LucideIcon } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 interface Character {
