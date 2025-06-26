@@ -5,8 +5,8 @@ import { supabase } from "@/lib/supabase"
 
 const FALLBACKS = ["/jpg/post.jpg", "/jpg/post1.jpg", "/jpg/post2.jpg", "/jpg/post3.jpg"]
 
-export default async function Page({ params }: { params: Promise<{ date: string }> }) {
-  const { date } = await params
+export default async function Page({ params }: { params: { date: string } }) {
+  const { date } = params
 
   try {
     // First, get the post data
