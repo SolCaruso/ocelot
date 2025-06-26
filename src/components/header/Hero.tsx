@@ -57,7 +57,7 @@ const Hero: React.FC<HeroProps> = ({ className, height }) => {
           height={1080}
           draggable={false}
         />
-
+ 
         {/* Text */}
         <div className="space-y-4 md:space-y-6 mb-8 md:mb-12 text-center">
           <div className="relative inline-block animate-slide-up-gentle opacity-0" style={{ animationDelay: '0.2s' }}>

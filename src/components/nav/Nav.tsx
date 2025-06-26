@@ -221,7 +221,7 @@ export default function Nav() {
             </NavigationMenuLink>
           </NavigationMenuItem>
           {/* test */}
-
+{/* 
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
               <a
@@ -233,7 +233,7 @@ export default function Nav() {
                 DOCS
               </a>
             </NavigationMenuLink>
-          </NavigationMenuItem>
+          </NavigationMenuItem> */}
 
           <NavigationMenuItem>
             <NavigationMenuLink asChild>

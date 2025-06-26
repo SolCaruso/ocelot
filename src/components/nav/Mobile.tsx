@@ -70,7 +70,7 @@ export function NavDrawer({ open, onOpenChange }: NavDrawerProps) {
                 {menu === "main" && (
                   <motion.ul
                     key="main"
-                    className="space-y-4"
+                    className="space-y-4 pt-6"
                     initial={{ x: 0, opacity: 1 }}
                     exit={{ x: -50, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
@@ -86,11 +86,11 @@ export function NavDrawer({ open, onOpenChange }: NavDrawerProps) {
                         <DrawerTitle>Updates</DrawerTitle>
                       </Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link href="https://docs.guildsaga.com/" target="_blank" rel="noopener noreferrer" onClick={() => onOpenChange(false)}>
                         <DrawerTitle>Docs</DrawerTitle>
                       </Link>
-                    </li>
+                    </li> */}
                     <li>
                       <button type="button" onClick={handleSocialsClick}>
                         <DrawerTitle>Socials</DrawerTitle>
@@ -101,7 +101,7 @@ export function NavDrawer({ open, onOpenChange }: NavDrawerProps) {
                 {menu === "guild" && (
                   <motion.ul
                     key="guild"
-                    className="space-y-4"
+                    className="space-y-4 pt-4"
                     initial={{ x: 50, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     exit={{ x: 50, opacity: 0 }}

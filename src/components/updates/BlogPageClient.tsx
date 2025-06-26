@@ -13,6 +13,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"
 import { Skeleton } from "@/components/ui/skeleton"
+import SvgComponent from "@/components/ui/corner"
 
 interface BlogPost {
   id: number
@@ -203,6 +204,14 @@ export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: B
                       transitionDelay: `${Math.floor(Math.random() * 200)}ms`,
                     }}
                   >
+                    {/* Top Left Corner */}
+                    <div className="absolute top-0 left-0 z-10 scale-x-[-1]">
+                      <SvgComponent className="w-20 h-20" />
+                    </div>
+                    {/* Top Right Corner */}
+                    <div className="absolute top-0 right-0 z-10">
+                      <SvgComponent className="w-20 h-20" />
+                    </div>
                     <div
                       className="relative w-full h-2/3 bg-black overflow-hidden"
                       style={{

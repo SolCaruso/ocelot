@@ -12,7 +12,7 @@ import Image from 'next/image';
 import Divider from '@/components/ui/divider';
 import Play from '@/components/ui/icons/Play';
 
-const Trailer: React.FC = () => {
+const Trailer: React.FC<{ src: string }> = ({ src }) => {
   const [playing, setPlaying] = useState(false);
   const playerRef = useRef<YT.Player | null>(null);
 
@@ -90,7 +90,7 @@ const Trailer: React.FC = () => {
                 {!playing ? (
                     <>
                     <Image
-                        src="/webp/thumb.webp"
+                        src='/webp/thumb.webp'
                         alt="Video thumbnail"
                         className="w-full h-full object-cover"
                         width={640}
@@ -138,7 +138,7 @@ const Trailer: React.FC = () => {
 
       {/* Undine illustration */}
       <Image
-        src="/webp/undine.webp"
+        src={src}
         alt="Undine Illustration"
         width={1506}
         height={2000}

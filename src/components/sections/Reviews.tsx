@@ -6,6 +6,7 @@ import { useInView } from 'framer-motion'
 import DividerTop from '@/components/ui/divider-top';
 import DividerBottom from '@/components/ui/divider-bottom';
 import { Container } from '@/components/ui/container'
+import Characters from '@/components/sections/Characters'
 
 interface Review {
   title: string
@@ -288,6 +289,8 @@ export function Reviews() {
       className="pt-24 pb-32 sm:pt-32 sm:pb-50 relative bg-[url('/jpg/smoke.jpg')] bg-cover bg-center bg-no-repeat"
     >
       <Container>
+        <Characters />
+
         <h2
           id="reviews-title"
           className="text-3xl font-medium tracking-tight  text-center font-oldFenris uppercase text-pretty mt-8 text-transparent bg-clip-text"
