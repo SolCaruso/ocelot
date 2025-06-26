@@ -111,7 +111,7 @@ export function NavDrawer({ open, onOpenChange }: NavDrawerProps) {
                       <Back onClick={() => setMenu("main")} className='absolute top-10 left-12' />
                     </li>
                     <li className="flex items-start space-x-2">
-                      <Link href="/" onClick={() => onOpenChange(false)}>
+                      <Link href="/vw" onClick={() => onOpenChange(false)}>
                         <DrawerTitle>Vanished Worlds</DrawerTitle>
                       </Link>
                       <Steam className="h-5 w-auto mt-0.5 flex-shrink-0" />
