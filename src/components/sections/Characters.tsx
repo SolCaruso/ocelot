@@ -1,11 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import React from "react"
 import Image from "next/image"
 import { Container } from "../ui/container"
 import SvgComponent from "../ui/corner"
-import { Droplet, Anchor, Mountain, Leaf, Shield, Crown, LucideIcon } from "lucide-react"
+import { Droplet, Anchor, Mountain, Leaf, Shield, Crown, TypeIcon as type, type LucideIcon } from 'lucide-react'
+import { AnimatePresence, motion } from 'framer-motion'
 
 interface Character {
   id: number
@@ -80,14 +81,82 @@ const characters: Character[] = [
 
 export default function Characters() {
   const [selectedCharacter, setSelectedCharacter] = useState(0)
+  const [previousCharacter, setPreviousCharacter] = useState(0)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const handleCharacterChange = (newIndex: number) => {
+    if (newIndex === selectedCharacter) return
+    setPreviousCharacter(selectedCharacter)
+    setSelectedCharacter(newIndex)
+  }
+
+  const animationDirection = selectedCharacter > previousCharacter ? 'forward' : 'backward'
+
+  const getAnimationVariants = () => {
+    if (!mounted) {
+      // SSR fallback: no animation
+      return {
+        initial: { opacity: 1, x: 0, y: 0 },
+        animate: { opacity: 1, x: 0, y: 0 },
+        exit: { opacity: 1, x: 0, y: 0 }
+      }
+    }
+    const isLargeScreen = window.innerWidth >= 1024
+    if (isLargeScreen) {
+      let initial, exit
+      if (selectedCharacter === 0) {
+        initial = { opacity: 0, y: -30 }
+      } else if (selectedCharacter === 2) {
+        initial = { opacity: 0, y: 30 }
+      } else {
+        if (previousCharacter === 0) {
+          initial = { opacity: 0, y: 30 }
+        } else {
+          initial = { opacity: 0, y: -30 }
+        }
+      }
+      if (previousCharacter === 0) {
+        exit = { opacity: 0, y: -30 }
+      } else if (previousCharacter === 2) {
+        exit = { opacity: 0, y: 30 }
+      } else {
+        if (selectedCharacter === 0) {
+          exit = { opacity: 0, y: 30 }
+        } else {
+          exit = { opacity: 0, y: -30 }
+        }
+      }
+      return {
+        initial,
+        animate: { opacity: 1, y: 0 },
+        exit
+      }
+    } else {
+      return {
+        initial: animationDirection === 'forward'
+          ? { opacity: 0, x: 30 }
+          : { opacity: 0, x: -30 },
+        animate: { opacity: 1, x: 0 },
+        exit: animationDirection === 'forward'
+          ? { opacity: 0, x: 30 }
+          : { opacity: 0, x: -30 }
+      }
+    }
+  }
+
+  const variants = getAnimationVariants()
 
   return (
-    <div className="relative w-full overflow-hidden pt-14 pb-40">
+    <div className="relative w-full overflow-hidden lg:pt-14 pb-40">
       {/* Background Accent Image (behind character) */}
       <Container className="relative flex flex-col items-center justify-center min-h-[700px]">
         <div className="relative w-full flex flex-col lg:flex-row items-start justify-between gap-8 lg:gap-0">
           {/* Left: Character Info */}
-          <div className="flex-1 max-w-lg pt-8 lg:pt-24 flex flex-col justify-between h-auto lg:h-[650px] relative z-20 w-full">
+          <div className="flex-1 max-w-lg pt-8 lg:pt-24 flex flex-col justify-between h-[650px] lg:h-[650px] relative z-20 w-full">
             <div>
               <p className="text-[#fbcea0] text-xs md:text-sm font-medium tracking-widest mb-4 font-oldFenris drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] uppercase">
                 {characters[selectedCharacter].title}
@@ -96,9 +165,11 @@ export default function Characters() {
                 {characters[selectedCharacter].name}
               </h1>
               <div className="w-32 md:w-56 h-px bg-gradient-to-r from-[#fbcea0] to-transparent mb-6" />
-              <p className="text-gray-300 text-sm md:text-base leading-relaxed max-w-lg mb-8 drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]">
-                {characters[selectedCharacter].backstory}
-              </p>
+              <div className="mt-4 h-32 lg:h-auto overflow-hidden">
+                <p className="text-stone-50 md:text-xl font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)]">
+                  {characters[selectedCharacter].backstory}
+                </p>
+              </div>
             </div>
             {/* Character Stats */}
             <div className="backdrop-blur-sm border border-[#fbcea0]/30 rounded-lg p-4 md:p-6 mt-8 relative hidden xl:block">
@@ -129,12 +200,12 @@ export default function Characters() {
                     </div>
                     <div>
                       <p className="text-[#fbcea0] text-xs uppercase tracking-wider font-oldFenris">Class:</p>
-                      <p className="text-white font-medium">{characters[selectedCharacter].class}</p>
+                      <p className="text-stone-50 text-lg font-quattrocento text-pretty">{characters[selectedCharacter].class}</p>
                     </div>
                   </div>
                   <div>
                     <p className="text-[#fbcea0] text-xs uppercase tracking-wider mb-1 font-oldFenris">Skill Proficiencies:</p>
-                    <p className="text-gray-300 text-sm">{characters[selectedCharacter].skills.join(", ")}</p>
+                    <p className="text-stone-50 text-sm font-quattrocento text-pretty">{characters[selectedCharacter].skills.join(", ")}</p>
                   </div>
                 </div>
                 {/* Right Column */}
@@ -147,16 +218,16 @@ export default function Characters() {
                     </div>
                     <div>
                       <p className="text-[#fbcea0] text-xs uppercase tracking-wider font-oldFenris">Race:</p>
-                      <p className="text-white font-medium">{characters[selectedCharacter].race}</p>
+                      <p className="text-stone-50 text-lg font-quattrocento text-pretty">{characters[selectedCharacter].race}</p>
                     </div>
                   </div>
                   <div>
                     <p className="text-[#fbcea0] text-xs uppercase tracking-wider mb-1 font-oldFenris">Languages:</p>
-                    <p className="text-gray-300 text-sm">{characters[selectedCharacter].languages.join(", ")}</p>
+                    <p className="text-stone-50 text-sm font-quattrocento text-pretty">{characters[selectedCharacter].languages.join(", ")}</p>
                   </div>
                   <div>
                     <p className="text-[#fbcea0] text-xs uppercase tracking-wider mb-1 font-oldFenris">Background:</p>
-                    <p className="text-gray-300 text-sm">{characters[selectedCharacter].background}</p>
+                    <p className="text-stone-50 text-sm font-quattrocento text-pretty">{characters[selectedCharacter].background}</p>
                   </div>
                 </div>
               </div>
@@ -165,9 +236,9 @@ export default function Characters() {
           {/* Center: Main Character Image with Background Accent */}
           <div className="flex-1 flex justify-center items-start relative w-full mb-8 lg:mb-0">
             {/* Background Accent Image */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] md:w-[600px] md:h-[600px] lg:w-[900px] lg:h-[900px] z-0 pointer-events-none select-none">
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[900px] md:h-[900px] z-0 pointer-events-none select-none">
               <Image
-                src={characters[selectedCharacter].backgroundImage}
+                src={characters[selectedCharacter].backgroundImage || "/placeholder.svg"}
                 alt="Background Accent"
                 fill
                 className="object-contain opacity-80"
@@ -175,23 +246,37 @@ export default function Characters() {
                 draggable={false}
               />
             </div>
-            {/* Main Character Image (larger, focal) */}
-            <div className="relative w-[220px] h-[300px] md:w-[350px] md:h-[450px] lg:w-[520px] lg:h-[650px] z-10 drop-shadow-2xl">
-              <Image
-                src={characters[selectedCharacter].image}
-                alt={characters[selectedCharacter].name}
-                fill
-                className="object-contain rounded-lg"
-                priority
-              />
+            {/* Main Character Image (larger, focal) with AnimatePresence */}
+            <div className="relative w-[350px] h-[450px] md:w-[520px] md:h-[650px] z-10 drop-shadow-2xl">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`${characters[selectedCharacter].id}-${previousCharacter}-${selectedCharacter}`}
+                  initial={variants.initial}
+                  animate={variants.animate}
+                  exit={variants.exit}
+                  transition={{ 
+                    duration: 0.2, 
+                    ease: "easeInOut" 
+                  }}
+                  className="absolute inset-0"
+                >
+                  <Image
+                    src={characters[selectedCharacter].image || "/placeholder.svg"}
+                    alt={characters[selectedCharacter].name}
+                    fill
+                    className="object-contain rounded-lg"
+                    priority
+                  />
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
           {/* Right: Thumbnails */}
-          <div className="w-full lg:w-32 flex flex-row lg:flex-col items-center gap-4 pt-8 lg:pt-12 overflow-x-auto lg:overflow-x-visible">
+          <div className="w-full lg:w-32 flex flex-row lg:flex-col items-center gap-4 lg:pt-12 overflow-x-auto lg:overflow-x-visible">
             {characters.map((character, index) => (
               <button
                 key={character.id}
-                onClick={() => setSelectedCharacter(index)}
+                onClick={() => handleCharacterChange(index)}
                 className={`
                   group cursor-pointer relative overflow-hidden w-24 h-32 md:w-28 md:h-36 lg:w-32 lg:h-40 gradient-border-top transition-all duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]
                   ${selectedCharacter === index ? "shadow-none" : ""}
@@ -229,7 +314,7 @@ export default function Characters() {
                     selectedCharacter === index ? "scale-105" : "group-hover:scale-105"
                   }`}>
                     <Image 
-                      src={character.thumbnail} 
+                      src={character.thumbnail || "/placeholder.svg"} 
                       alt={character.name} 
                       fill 
                       className="object-cover w-full h-full select-none scale-[1.75]" 

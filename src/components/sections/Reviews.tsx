@@ -298,7 +298,7 @@ export function Reviews() {
         >
           What Guildies are saying
         </h2>
-        <p className="mt-6 sm:mt-3 text-xl text-stone-50 text-center font-quattrocento text-pretty max-w-xl mx-auto">
+        <p className="mt-6 sm:mt-3 md:text-xl text-stone-50 text-center font-quattrocento text-pretty max-w-xl mx-auto">
           Real reviews from adventurers playing Guild Saga: Vanished Worlds Early Access on Steam.
         </p>
         <ReviewGrid />
