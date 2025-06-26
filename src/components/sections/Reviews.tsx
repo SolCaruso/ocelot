@@ -7,6 +7,7 @@ import DividerTop from '@/components/ui/divider-top';
 import DividerBottom from '@/components/ui/divider-bottom';
 import { Container } from '@/components/ui/container'
 import Characters from '@/components/sections/Characters'
+import BlogPreview from './BlogPreview'
 
 interface Review {
   title: string
@@ -290,7 +291,7 @@ export function Reviews() {
     >
       <Container>
         <Characters />
-
+        <BlogPreview />
         <h2
           id="reviews-title"
           className="text-3xl font-medium tracking-tight  text-center font-oldFenris uppercase text-pretty mt-8 text-transparent bg-clip-text"
@@ -301,7 +302,9 @@ export function Reviews() {
         <p className="mt-6 sm:mt-3 md:text-xl text-stone-50 text-center font-quattrocento text-pretty max-w-xl mx-auto">
           Real reviews from adventurers playing Guild Saga: Vanished Worlds Early Access on Steam.
         </p>
+        
         <ReviewGrid />
+
       </Container>
     </section>
   )
