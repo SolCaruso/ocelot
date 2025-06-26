@@ -286,7 +286,7 @@ export function Reviews() {
     <section
       id="reviews"
       aria-labelledby="reviews-title"
-      className="pt-24 pb-32 sm:pt-32 sm:pb-50 relative bg-[url('/jpg/smoke.jpg')] bg-cover bg-center bg-no-repeat"
+      className="pt-24 pb-32 sm:pt-32 sm:pb-50 relative bg-[url('/jpg/smoke.jpg')] bg-fixed bg-center bg-cover overflow-x-hidden"
     >
       <Container>
         <Characters />
