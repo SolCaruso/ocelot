@@ -5,8 +5,8 @@ import { supabase } from "@/lib/supabase"
 
 const FALLBACKS = ["/jpg/post.jpg", "/jpg/post1.jpg", "/jpg/post2.jpg", "/jpg/post3.jpg"]
 
-export default async function Page({ params }: { params: { date: string } }) {
-  const { date } = params
+export default async function Page({ params }: { params: Promise<{ date: string }> }) {
+  const { date } = await params
 
   try {
     // First, get the post data
@@ -18,7 +18,7 @@ export default async function Page({ params }: { params: { date: string } }) {
 
     if (error || !post) {
       console.error("Supabase error:", error)
-      notFound()
+      return notFound()
     }
 
     // If the post has no image, we need to determine which fallback to use
@@ -64,6 +64,6 @@ export default async function Page({ params }: { params: { date: string } }) {
     )
   } catch (error) {
     console.error("Error fetching post:", error)
-    notFound()
+    return notFound()
   }
 }
