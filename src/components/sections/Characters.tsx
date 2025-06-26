@@ -124,16 +124,16 @@ export default function Characters() {
                   <div className="flex items-center gap-4">
                     <div className="w-8 h-8 flex items-center justify-center">
                       {characters[selectedCharacter].classIcon && (
-                        React.createElement(characters[selectedCharacter].classIcon, { size: 32, color: "#fbcea0", strokeWidth: 2.5 })
+                        React.createElement(characters[selectedCharacter].classIcon, { size: 32, color: "#fbcea0", strokeWidth: 1 })
                       )}
                     </div>
                     <div>
-                      <p className="text-[#fbcea0] text-xs uppercase tracking-wider">Class:</p>
+                      <p className="text-[#fbcea0] text-xs uppercase tracking-wider font-oldFenris">Class:</p>
                       <p className="text-white font-medium">{characters[selectedCharacter].class}</p>
                     </div>
                   </div>
                   <div>
-                    <p className="text-[#fbcea0] text-xs uppercase tracking-wider mb-1">Skill Proficiencies:</p>
+                    <p className="text-[#fbcea0] text-xs uppercase tracking-wider mb-1 font-oldFenris">Skill Proficiencies:</p>
                     <p className="text-gray-300 text-sm">{characters[selectedCharacter].skills.join(", ")}</p>
                   </div>
                 </div>
@@ -142,20 +142,20 @@ export default function Characters() {
                   <div className="flex items-center gap-4">
                     <div className="w-8 h-8 flex items-center justify-center">
                       {characters[selectedCharacter].raceIcon && (
-                        React.createElement(characters[selectedCharacter].raceIcon, { size: 32, color: "#fbcea0", strokeWidth: 2.5 })
+                        React.createElement(characters[selectedCharacter].raceIcon, { size: 32, color: "#fbcea0", strokeWidth: 1 })
                       )}
                     </div>
                     <div>
-                      <p className="text-[#fbcea0] text-xs uppercase tracking-wider">Race:</p>
+                      <p className="text-[#fbcea0] text-xs uppercase tracking-wider font-oldFenris">Race:</p>
                       <p className="text-white font-medium">{characters[selectedCharacter].race}</p>
                     </div>
                   </div>
                   <div>
-                    <p className="text-[#fbcea0] text-xs uppercase tracking-wider mb-1">Languages:</p>
+                    <p className="text-[#fbcea0] text-xs uppercase tracking-wider mb-1 font-oldFenris">Languages:</p>
                     <p className="text-gray-300 text-sm">{characters[selectedCharacter].languages.join(", ")}</p>
                   </div>
                   <div>
-                    <p className="text-[#fbcea0] text-xs uppercase tracking-wider mb-1">Background:</p>
+                    <p className="text-[#fbcea0] text-xs uppercase tracking-wider mb-1 font-oldFenris">Background:</p>
                     <p className="text-gray-300 text-sm">{characters[selectedCharacter].background}</p>
                   </div>
                 </div>
