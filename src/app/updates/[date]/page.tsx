@@ -18,7 +18,7 @@ export default async function Page({ params }: { params: { date: string } }) {
 
     if (error || !post) {
       console.error("Supabase error:", error)
-      return notFound()
+      notFound()
     }
 
     // If the post has no image, we need to determine which fallback to use
@@ -64,6 +64,6 @@ export default async function Page({ params }: { params: { date: string } }) {
     )
   } catch (error) {
     console.error("Error fetching post:", error)
-    return notFound()
+    notFound()
   }
 }
