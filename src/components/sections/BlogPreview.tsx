@@ -73,10 +73,12 @@ export default function BlogPreview() {
 
     {/* Divider with Frame accent */}
     <div className="relative w-full flex items-center justify-center ">
-      {/* Gradient divider */}
+      {/* Gradient divider with mask */}
       <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-px w-full z-0"
         style={{
           background: "linear-gradient(90deg, transparent, #fbcea0 20%, #fbcea0 80%, transparent)",
+          maskImage: "radial-gradient(ellipse 336px 12px at center, transparent 0%, transparent 60%, black 80%)",
+          WebkitMaskImage: "radial-gradient(ellipse 336px 12px at center, transparent 0%, transparent 60%, black 80%)",
         }}
       />
       {/* Frame accent, centered */}
