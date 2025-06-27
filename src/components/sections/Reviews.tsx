@@ -240,7 +240,7 @@ function ReviewGrid() {
   const column3 = splitArray(columns[2], 2)
 
   return (
-    <div className='relative overflow-x-clip'>
+    <div className='relative overflow-x-clip px-8'>
       <DividerTop />
       <div
         ref={containerRef}
@@ -294,12 +294,12 @@ export function Reviews() {
         <BlogPreview />
         <h2
           id="reviews-title"
-          className="text-3xl font-medium tracking-tight  text-center font-oldFenris uppercase text-pretty mt-8 text-transparent bg-clip-text"
+          className="text-3xl font-medium tracking-tight  text-center font-oldFenris uppercase text-pretty mt-8 text-transparent bg-clip-text px-8"
           style={{ backgroundImage: 'linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)' }}
         >
           What Guildies are saying
         </h2>
-        <p className="mt-6 sm:mt-3 md:text-xl text-stone-50 text-center font-quattrocento text-pretty max-w-xl mx-auto">
+        <p className="mt-6 sm:mt-3 md:text-xl text-stone-50 text-center font-quattrocento text-pretty max-w-xl mx-auto px-8">
           Real reviews from adventurers playing Guild Saga: Vanished Worlds Early Access on Steam.
         </p>
         

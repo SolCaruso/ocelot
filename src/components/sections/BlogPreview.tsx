@@ -53,7 +53,7 @@ export default function BlogPreview() {
   if (loading) {
     return (
       <section className="relative mx-auto px-4 pb-24 max-w-7xl">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pb-12">
+        <div className="grid grid-cols-3 gap-8 pb-12">
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="w-full aspect-[450/530] bg-black/20 rounded-xl animate-pulse" />
           ))}
@@ -69,7 +69,7 @@ export default function BlogPreview() {
   const heroSummary = hero.summary || ""
 
   return (
-    <section className="relative mx-auto px-4 pb-24 max-w-7xl">
+    <section className="relative mx-auto pb-24 max-w-7xl">
 
     {/* Divider with Frame accent */}
     <div className="relative w-full flex items-center justify-center ">
@@ -86,8 +86,8 @@ export default function BlogPreview() {
     </div>
 
       {/* HERO SECTION */}
-      <article className="mb-12 relative h-auto lg:h-[500px] max-w-7xl mx-auto">
-        <div className="relative w-full h-64 lg:h-full overflow-hidden">
+      <article className="mb-12 relative h-[500px] max-w-7xl mx-auto">
+        <div className="relative w-full h-full overflow-hidden">
           <div
             className="relative z-0 w-full h-full"
             style={{
@@ -114,7 +114,7 @@ export default function BlogPreview() {
             </div>
           </div>
         </div>
-        <div className="absolute top-32 -left-6 inset-x-4 xl:inset-x-auto xl:right-0 sm:w-[80%] lg:w-1/2 flex-col justify-center items-start p-8 text-white z-20 flex">
+        <div className="absolute top-22 lg:top-32 inset-x-auto xl:right-0 w-4/6 lg:w-2/3 xl:w-1/2 flex-col justify-center items-start sm:p-8 text-white z-20 flex px-8">
           <h1
             className="bg-clip-text text-transparent text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-2 uppercase"
             style={{
@@ -142,11 +142,16 @@ export default function BlogPreview() {
       </article>
 
       {/* CARDS GRID */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pb-12">
-        {cards.map((post) => {
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8 pb-12 px-8">
+        {cards.map((post, index) => {
           const image = post.image && post.image.trim() !== "" ? post.image : "/jpg/post.jpg"
           return (
-            <Link key={post.date} href={`/updates/${post.date}`}>
+            <Link key={post.date} href={`/updates/${post.date}`} className={`${
+              index === 0 ? "block" : // First card always visible
+              index === 1 ? "hidden md:block" : // Second card visible on md and up
+              index === 2 ? "hidden xl:block" : // Third card visible on xl and up
+              "hidden" // Fourth card always hidden
+            }`}>
               <article
                 className={`
                   group cursor-pointer relative overflow-hidden w-full aspect-[450/530] gradient-border-top transition-all duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]
@@ -225,7 +230,7 @@ export default function BlogPreview() {
       </div>
 
       {/* SEE ALL Button */}
-      <div className="flex justify-start">
+      <div className="flex justify-start px-8">
         <Link
           href="/updates"
           className="group cursor-pointer relative overflow-hidden px-16 py-4 gradient-border-top transition-all duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] opacity-100 translate-y-0 backdrop-blur-sm bg-black/20"
