@@ -137,14 +137,16 @@ const Trailer: React.FC<{ src: string }> = ({ src }) => {
         </div>
 
       {/* Undine illustration */}
-      <Image
-        src={src}
-        alt="Undine Illustration"
-        width={1506}
-        height={2000}
-        className="object-contain w-[500px] 4xl:w-[700px] absolute -right-12 bottom-0 z-20 xl:block hidden opacity-30 3xl:opacity-100 select-none animate-slide-in"  
-        draggable={false}
-      />
+      <div className="absolute -right-12 bottom-0 z-20 xl:block hidden opacity-30 3xl:opacity-100 select-none animate-slide-in-transform">
+        <Image
+          src={src}
+          alt="Undine Illustration"
+          width={1506}
+          height={2000}
+          className="object-contain w-[500px] 4xl:w-[700px]"  
+          draggable={false}
+        />
+      </div>
 
       <Divider />
     
