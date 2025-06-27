@@ -8,13 +8,7 @@ const nextConfig = {
       'ejktdpjnbhbgmavwltvb.supabase.co',
     ],
   },
-  webpack(config: any, options: any) {
-    config.resolve = config.resolve || {}
-    config.resolve.alias = {
-      ...(config.resolve.alias ?? {}),
-    }
-    return config
-  },
+  turbopack: {},
 }
 
 export default nextConfig

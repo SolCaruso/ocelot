@@ -18,9 +18,8 @@ interface HeroProps {
 const Hero: React.FC<HeroProps> = ({ className, height }) => {
   return (
     <>
-
       {/* Full‑width smoke background */}
-      <div className="w-full relative bg-[url('/webp/smoke.webp')] bg-cover bg-center">
+      <div className="w-full relative bg-[url('/webp/smoke.webp')] bg-cover bg-center bg-fixed">
         {/* Smoke gradient overlay */}
         <div className="absolute inset-0 z-0 bg-gradient-to-tr from-black/30 to-black/0 pointer-events-none" />
         <div
