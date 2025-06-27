@@ -278,12 +278,12 @@ export default function Characters() {
                 key={character.id}
                 onClick={() => handleCharacterChange(index)}
                 className={`
-                  group cursor-pointer relative overflow-hidden w-24 h-32 md:w-28 md:h-36 lg:w-32 lg:h-40 gradient-border-top transition-all duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]
-                  ${selectedCharacter === index ? "shadow-none" : ""}
+                  group cursor-pointer relative overflow-hidden w-24 h-32 md:w-28 md:h-36 lg:w-32 lg:h-40 transition-all duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]
+                  ${selectedCharacter === index ? "shadow-none" : "gradient-border-top"}
                 `}
                 style={{
                   borderStyle: "solid",
-                  borderWidth: "0 1px 1px 1px",
+                  borderWidth: selectedCharacter === index ? "1px" : "0 1px 1px 1px",
                   borderImage: selectedCharacter === index 
                     ? "linear-gradient(to top, #fbcea0, #fbcfa0) 1"
                     : "linear-gradient(to top, #534C3F, #B4906C) 1",
