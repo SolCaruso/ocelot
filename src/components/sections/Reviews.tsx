@@ -148,20 +148,28 @@ function Review({
   return (
     <figure
       className={clsx(
-        'animate-fade-in rounded-lg bg-black/20 backdrop-blur-md p-6 opacity-0 border border-[#222222]',
+        'animate-fade-in relative p-6 opacity-0 transition-all duration-200 ease-[var(--ease-in-out-quad)]',
+        'bg-black/20 border border-[#534C3F]/40 text-stone-400',
+        'hover:bg-black/50 hover:border-[#B4906C] hover:text-stone-50 hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]',
         className,
       )}
-      style={{ animationDelay }}
+      style={{
+        animationDelay,
+        borderStyle: 'solid',
+        borderWidth: '0 1px 1px 1px',
+        borderImage: 'linear-gradient(to top, #534C3F, #B4906C) 1',
+      }}
       {...props}
     >
-      <blockquote className="text-stone-50">
+      <span className="absolute top-0 left-0 h-[1.2px] w-full z-10" style={{background: 'linear-gradient(to right, #AC8B6A 0%, #ac8b6a68 20%, rgba(172,139,106,0.1) 50%, #ac8b6a52 65%, #AC8B6A 100%)'}} />
+      <blockquote>
         <StarRating rating={rating} />
         <p className="mt-4 text-lg/6 font-semibold before:content-['\201C'] after:content-['\201D']">
           {title}
         </p>
         <p className="mt-3 text-base/7">{body}</p>
       </blockquote>
-      <figcaption className="mt-3 text-sm text-stone-400 before:content-['–_']">
+      <figcaption className="mt-3 text-sm before:content-['–_']">
         {author}
       </figcaption>
     </figure>
@@ -239,10 +247,14 @@ function ReviewGrid() {
 
   return (
     <div className='relative overflow-x-clip px-8'>
-      <DividerTop />
+      {/* <DividerTop /> */}
       <div
         ref={containerRef}
         className="relative -mx-4 mt-16 grid h-[49rem] max-h-[150vh] grid-cols-1 items-start gap-8 overflow-hidden px-4 sm:mt-20 md:grid-cols-2 lg:grid-cols-3"
+        style={{
+          maskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)',
+        }}
       >
         {isInView && (
           <>
@@ -272,10 +284,8 @@ function ReviewGrid() {
             />
           </>
         )}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-22 bg-gradient-to-b from-gs-bg to-transparent mx-4" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-gs-bg to-transparent mx-4"/>
       </div>
-      <DividerBottom />
+      {/* <DividerBottom /> */}
     </div>
   )
 }

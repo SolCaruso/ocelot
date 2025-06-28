@@ -7,7 +7,7 @@ import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { NavDrawer } from "@/components/nav/Mobile"
 import Link from "next/link"
-import Ocelot from "@/components/logos/OcelotHome";
+import Ocelot from "@/components/logos/Ocelot";
 import Steam from "@/components/logos/partners-mobile/Steam";
 import Solana from "@/components/logos/partners-mobile/Solana";
 import { cn } from "@/lib/utils"
@@ -80,8 +80,8 @@ export default function Nav() {
     <div className="flex items-center justify-between px-4 py-2 max-w-9xl mx-auto absolute top-2 left-0 right-0 z-30">
       {/* Left: Logo */}
       <div>
-        <Link href="/" className="inline-block mt-1 ml-2 md:ml-0">
-          <Ocelot className="h-8 w-auto opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]" />
+        <Link href="/" className="inline-block md:ml-0">
+          <Ocelot className="h-11 xl:h-14 w-auto opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]" />
         </Link>
       </div>
 
