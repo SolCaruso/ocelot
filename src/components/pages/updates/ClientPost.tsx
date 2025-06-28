@@ -15,6 +15,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import Image from "next/image"
 
 // Function to clean markdown content - remove frontmatter
 function cleanMarkdownContent(content: string): string {
@@ -119,9 +120,11 @@ export function ClientPost({
             },
             // Enhanced image component
             img: ({ src, alt }: { src?: string; alt?: string }) => (
-              <img
+              <Image
                 src={src || "/placeholder.svg"}
                 alt={alt || ""}
+                width={800}
+                height={600}
                 style={{ maxWidth: "100%", height: "auto", margin: "1.5rem 0" }}
               />
             ),

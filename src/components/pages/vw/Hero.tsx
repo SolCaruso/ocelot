@@ -15,7 +15,6 @@ import Play from "@/components/ui/icons/Play"
 interface HeroProps {
   className?: string
   height?: string
-  children?: React.ReactNode
 }
 
 declare global {
@@ -26,16 +25,15 @@ declare global {
 
 const TrailerSrc = "/webp/persephone.webp"
 
-const Hero: React.FC<HeroProps> = ({ className, height, children }) => {
+const Hero: React.FC<HeroProps> = ({ className, height }) => {
   const [playing, setPlaying] = useState(false)
-  const playerRef = useRef<any>(null)
+  const playerRef = useRef<YT.Player | null>(null)
 
   useEffect(() => {
     const tag = document.createElement("script")
     tag.src = "https://www.youtube.com/iframe_api"
     document.body.appendChild(tag)
     window.onYouTubeIframeAPIReady = () => {
-      // @ts-ignore
       playerRef.current = new window.YT.Player("yt-player", {
         videoId: "feH6zZBT1g8",
         playerVars: {
@@ -45,7 +43,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children }) => {
           disablekb: 1,
         },
         events: {
-          onReady: (e: any) => {
+          onReady: (e: { target: YT.Player }) => {
             if (playing) {
               e.target.playVideo()
             }
@@ -216,7 +214,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children }) => {
                   depth and strategy.
                 </p>
                 <p className="mt-4 md:text-xl text-stone-50 font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)]">
-                  As you recruit and assemble a diverse party, each member's unique abilities become crucial to your
+                  As you recruit and assemble a diverse party, each member&apos;s unique abilities become crucial to your
                   success on the battlefield.
                 </p>
               </div>

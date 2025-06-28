@@ -3,8 +3,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import clsx from 'clsx'
 import { useInView } from 'framer-motion'
-import DividerTop from '@/components/ui/divider-top';
-import DividerBottom from '@/components/ui/divider-bottom';
 import React from 'react';
 
 interface Review {

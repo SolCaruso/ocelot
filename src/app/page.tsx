@@ -7,7 +7,6 @@ import ReviewSection from "@/components/sections/Reviews";
 import Screenshots from "@/components/sections/Screenshots";
 import type { Character } from "@/types/character";
 
-const TrailerSrc = '/webp/undine.webp'
 const characters: Character[] = [
   {
     id: 1,
