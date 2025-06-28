@@ -29,11 +29,9 @@ declare global {
   }
 }
 
-const TrailerSrc = "/webp/undine.webp"
-
 const Hero: React.FC<HeroProps> = ({ className, height, children }) => {
   const [playing, setPlaying] = useState(false)
-  const playerRef = useRef<any>(null)
+  const playerRef = useRef<YT.Player | null>(null)
 
   useEffect(() => {
     const tag = document.createElement("script")
@@ -41,7 +39,6 @@ const Hero: React.FC<HeroProps> = ({ className, height, children }) => {
     document.body.appendChild(tag)
 
     window.onYouTubeIframeAPIReady = () => {
-      // @ts-ignore
       playerRef.current = new window.YT.Player("yt-player", {
         videoId: "feH6zZBT1g8",
         playerVars: {
@@ -51,7 +48,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children }) => {
           disablekb: 1,
         },
         events: {
-          onReady: (e: any) => {
+          onReady: (e: { target: YT.Player }) => {
             if (playing) {
               e.target.playVideo()
             }
@@ -262,7 +259,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children }) => {
       {/* Undine illustration - outside mask */}
       <div className="absolute -right-12 bottom-0 z-50 2xl:block hidden opacity-30 3xl:opacity-100 select-none animate-slide-in-transform pointer-events-none">
         <Image
-          src={TrailerSrc || "/placeholder.svg"}
+          src="/webp/undine.webp"
           alt="Character Illustration"
           width={1506}
           height={2000}
