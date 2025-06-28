@@ -98,7 +98,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children }) => {
           <Image
             src="/webp/guildsaga.webp"
             alt="Guild Saga Logo"
-            className="mx-auto h-auto mb-4 w-[24rem] lg:w-[35rem] select-none animate-slide-up-gentle"
+            className="mx-auto h-auto mb-4 w-[20rem] sm:w-[24rem] lg:w-[35rem] select-none animate-slide-up-gentle"
             width={1920}
             height={1080}
             draggable={false}
@@ -108,11 +108,11 @@ const Hero: React.FC<HeroProps> = ({ className, height, children }) => {
           <div className="space-y-4 md:space-y-6 mb-8 md:mb-12 text-center">
             <div className="relative inline-block animate-slide-up-gentle opacity-0" style={{ animationDelay: "0.2s" }}>
               {/* Beneath, stationary text */}
-              <h2 className="text-[#E0A970] text-4xl lg:text-5xl font-oldFenris layer-blur">
+              <h2 className="text-[#E0A970] text-3xl sm:text-4xl lg:text-5xl font-oldFenris layer-blur">
                 EARLY ACCESS <br /> AVAILABLE NOW
               </h2>
               {/* Overlaying text */}
-              <h2 className="absolute inset-0 text-[#E7E7E7] text-4xl lg:text-5xl font-oldFenris text-shadow-xs">
+              <h2 className="absolute inset-0 text-[#E7E7E7] text-3xl sm:text-4xl lg:text-5xl font-oldFenris text-shadow-xs">
                 EARLY ACCESS <br /> AVAILABLE NOW
               </h2>
             </div>

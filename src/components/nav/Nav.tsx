@@ -81,7 +81,7 @@ export default function Nav() {
       {/* Left: Logo */}
       <div>
         <Link href="/" className="inline-block md:ml-0">
-          <Ocelot className="h-11 xl:h-14 w-auto opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]" />
+          <Ocelot className="h-11 3xl:h-14 w-auto opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]" />
         </Link>
       </div>
 
