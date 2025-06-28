@@ -1,5 +1,4 @@
 import Hero from "@/components/header/Hero";
-import Trailer from "@/components/sections/Trailer";
 import { SmokeContainer } from "@/components/sections/SmokeContainer";
 import { Container } from "@/components/ui/container";
 import Characters from "@/components/sections/Characters";
@@ -66,8 +65,8 @@ const characters: Character[] = [
 export default function Home() {
   return (
     <SmokeContainer>
-      <Hero className='h-[600px] md:h-[800px] lg:h-[900px]'/>
-      <Trailer src={TrailerSrc}/>
+      <Hero className='h-[600px] md:h-[800px] lg:h-[900px]'>
+      </Hero>
       <Container>
         <Characters characters={characters}/>
         <BlogPreview/>
