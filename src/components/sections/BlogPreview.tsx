@@ -1,5 +1,5 @@
 import Link from "next/link"
-import BlogImage from "@/components/updates/BlogImage"
+import BlogImage from "@/components/pages/updates/BlogImage"
 import SvgComponent from "@/components/ui/corner"
 import Frame from "@/components/ui/frame"
 import { useEffect, useState } from "react"
@@ -88,7 +88,7 @@ export default function BlogPreview() {
     </div>
 
       {/* HERO SECTION */}
-      <article className="mb-12 relative h-[500px] max-w-7xl mx-auto">
+      <article className="mb-12 relative h-[400px] md:h-[500px] max-w-7xl mx-auto">
         <div className="relative w-full h-full overflow-hidden">
           <div
             className="relative z-0 w-full h-full"
@@ -116,7 +116,7 @@ export default function BlogPreview() {
             </div>
           </div>
         </div>
-        <div className="absolute top-22 lg:top-32 inset-x-auto xl:right-0 w-4/6 lg:w-2/3 xl:w-1/2 flex-col justify-center items-start sm:p-8 text-white z-20 flex px-8">
+        <div className="absolute top-18 xs:top-22 md:top-32 inset-x-auto xl:right-0 w-full md:w-2/3 lg:w-1/2 flex-col justify-center items-start sm:p-8 text-white z-20 flex px-8">
           <h1
             className="bg-clip-text text-transparent text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-2 uppercase"
             style={{

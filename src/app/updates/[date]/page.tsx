@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
-import PostHero from "@/components/updates/PostHero"
-import { ClientPost } from "@/components/updates/ClientPost"
+import PostHero from "@/components/pages/updates/PostHero"
+import { ClientPost } from "@/components/pages/updates/ClientPost"
 import { supabase } from "@/lib/supabase"
 
 const FALLBACKS = ["/jpg/post.jpg", "/jpg/post1.jpg", "/jpg/post2.jpg", "/jpg/post3.jpg"]

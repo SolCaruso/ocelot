@@ -85,6 +85,9 @@
   --animate-slide-in-transform: slide-in-transform 0.5s var(--ease-in-out-quad) forwards;
   --animate-slide-up-gentle: slide-up-gentle 0.5s var(--ease-in-out-quad) forwards;
 
+  /* Carousel enhancements */
+  --animate-carousel-slide: carousel-slide 0.3s var(--ease-in-out-quad) forwards;
+
   @keyframes fade-in {
     from {
       opacity: 0;
@@ -123,6 +126,16 @@
     }
     to {
       transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  @keyframes carousel-slide {
+    from {
+      transform: scale(0.9);
+      opacity: 0.7;
+    }
+    to {
+      transform: scale(1);
       opacity: 1;
     }
   }
@@ -299,4 +312,28 @@
 }
 .custom-bullet-list li::marker {
   color: #fbcea0;
+}
+
+/* Carousel enhancements for screenshots */
+.embla__slide {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.embla__slide:not(.embla__slide--selected) {
+  opacity: 0.7;
+  transform: scale(0.9);
+}
+
+.embla__slide--selected {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Custom carousel container for screenshots */
+.screenshots-carousel {
+  overflow: visible;
+}
+
+.screenshots-carousel .embla__container {
+  overflow: visible;
 }

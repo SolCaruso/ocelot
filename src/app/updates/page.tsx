@@ -1,4 +1,4 @@
-import BlogPageClient from "../../components/updates/BlogPageClient"
+import BlogPageClient from "@/components/pages/updates/BlogPageClient"
 import { supabase } from "@/lib/supabase"
 
 interface BlogPost {

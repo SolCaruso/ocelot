@@ -7,79 +7,22 @@ import { Container } from "../ui/container"
 import SvgComponent from "../ui/corner"
 import { Droplet, Anchor, Mountain, Leaf, Shield, Crown, type LucideIcon } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
+import type { Character } from '@/types/character'
 
-interface Character {
-  id: number
-  name: string
-  title: string
-  backstory: string
-  class: string
-  race: string
-  skills: string[]
-  languages: string[]
-  background: string
-  image: string
-  backgroundImage: string
-  thumbnail: string
-  classIcon: LucideIcon
-  raceIcon: LucideIcon
+const iconMap: Record<string, LucideIcon> = {
+  Droplet,
+  Anchor,
+  Mountain,
+  Leaf,
+  Shield,
+  Crown,
+};
+
+interface CharactersProps {
+  characters: Character[]
 }
 
-const characters: Character[] = [
-  {
-    id: 1,
-    name: "LEORA",
-    title: "Mystic Wanderer",
-    backstory:
-      "Once a feared pirate sailing treacherous seas, Leora mastered hydromancy to control tides and storms alike. Her prowess in battle and sea magic made her infamous and formidable.",
-    class: "Hydromancer",
-    race: "Unknown",
-    skills: ["Meteor Strike", "Summon Gem Golem"],
-    languages: ["Common", "Aquan"],
-    background: "Pirate Captain",
-    image: "/webp/leora.webp",
-    backgroundImage: "/webp/bg-vanished.webp",
-    thumbnail: "/webp/leora-thumb.webp",
-    classIcon: Droplet,
-    raceIcon: Anchor,
-  },
-  {
-    id: 2,
-    name: "ASKA",
-    title: "Stone Sage",
-    backstory:
-      "A devoted geomancer, Aska commands the earth itself, shaping terrain and summoning protective stone golems to guard allies and crush foes.",
-    class: "Geomancer",
-    race: "Elf",
-    skills: ["Duel", "Forceful Shot"],
-    languages: ["Common", "Elvish"],
-    background: "Hermit",
-    image: "/webp/aska.webp",
-    backgroundImage: "/webp/bg-guild.webp",
-    thumbnail: "/webp/aska-thumb.webp",
-    classIcon: Mountain,
-    raceIcon: Leaf,
-  },
-  {
-    id: 3,
-    name: "LUCEIT",
-    title: "Radiant Champion",
-    backstory:
-      "Clad in radiant armor, Luceit is the epitome of chivalry and valor, leading the charge on the battlefield and inspiring allies with unmatched bravery and resilience.",
-    class: "Knight",
-    race: "Human",
-    skills: ["Vampirism", "Consistent", "Scavenger"],
-    languages: ["Common"],
-    background: "Noble",
-    image: "/webp/luceit.webp",
-    backgroundImage: "/webp/bg-golem.webp",
-    thumbnail: "/webp/luceit-thumb.webp",
-    classIcon: Shield,
-    raceIcon: Crown,
-  },
-]
-
-export default function Characters() {
+export default function Characters({ characters }: CharactersProps) {
   const [selectedCharacter, setSelectedCharacter] = useState(0)
   const [previousCharacter, setPreviousCharacter] = useState(0)
   const [mounted, setMounted] = useState(false)
@@ -154,9 +97,9 @@ export default function Characters() {
     <div className="relative w-full overflow-hidden lg:pt-14 pb-40 px-8">
       {/* Background Accent Image (behind character) */}
       <Container className="relative flex flex-col items-center justify-center min-h-[700px]">
-        <div className="relative w-full flex flex-col lg:flex-row items-start justify-between gap-8 lg:gap-0">
+        <div className="relative w-full flex flex-col lg:flex-row items-start justify-between gap-0">
           {/* Left: Character Info */}
-          <div className="flex-1 max-w-lg pt-8 lg:pt-24 flex flex-col justify-between h-[650px] lg:h-[650px] relative z-20 w-full">
+          <div className="flex-1 max-w-md pt-8 lg:pt-24 flex flex-col justify-between h-auto lg:h-auto relative z-20 w-full">
             <div>
               <p className="text-[#fbcea0] text-xs md:text-sm font-medium tracking-widest mb-4 font-oldFenris drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] uppercase">
                 {characters[selectedCharacter].title}
@@ -165,7 +108,7 @@ export default function Characters() {
                 {characters[selectedCharacter].name}
               </h1>
               <div className="w-32 md:w-56 h-px bg-gradient-to-r from-[#fbcea0] to-transparent mb-6" />
-              <div className="mt-4 h-32 lg:h-auto overflow-hidden">
+              <div className="mt-4 overflow-hidden">
                 <p className="text-stone-50 md:text-xl font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)]">
                   {characters[selectedCharacter].backstory}
                 </p>
@@ -194,8 +137,8 @@ export default function Characters() {
                 <div className="space-y-4">
                   <div className="flex items-center gap-4">
                     <div className="w-8 h-8 flex items-center justify-center">
-                      {characters[selectedCharacter].classIcon && (
-                        React.createElement(characters[selectedCharacter].classIcon, { size: 32, color: "#fbcea0", strokeWidth: 1 })
+                      {iconMap[characters[selectedCharacter].classIcon as string] && (
+                        React.createElement(iconMap[characters[selectedCharacter].classIcon as string], { size: 32, color: "#fbcea0", strokeWidth: 1 })
                       )}
                     </div>
                     <div>
@@ -212,8 +155,8 @@ export default function Characters() {
                 <div className="space-y-4">
                   <div className="flex items-center gap-4">
                     <div className="w-8 h-8 flex items-center justify-center">
-                      {characters[selectedCharacter].raceIcon && (
-                        React.createElement(characters[selectedCharacter].raceIcon, { size: 32, color: "#fbcea0", strokeWidth: 1 })
+                      {iconMap[characters[selectedCharacter].raceIcon as string] && (
+                        React.createElement(iconMap[characters[selectedCharacter].raceIcon as string], { size: 32, color: "#fbcea0", strokeWidth: 1 })
                       )}
                     </div>
                     <div>

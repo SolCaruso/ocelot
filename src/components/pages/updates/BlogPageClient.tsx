@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useTransition } from "react"
 import Link from "next/link"
-import BlogImage from "@/components/updates/BlogImage"
+import BlogImage from "@/components/pages/updates/BlogImage"
 import { getPaginatedPosts } from "@/lib/actions"
 import {
   Pagination,
