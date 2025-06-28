@@ -1,3 +1,5 @@
+'use client'
+
 import Link from "next/link"
 import BlogImage from "@/components/pages/updates/BlogImage"
 import SvgComponent from "@/components/ui/corner"
@@ -111,8 +113,8 @@ export default function BlogPreview() {
                 className="object-cover w-full h-full select-none"
                 draggable={false}
               />
-              <div className="absolute inset-0 z-10 bg-gradient-to-l from-black/50 to-black/0 pointer-events-none" />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/0" />
+              <div className="absolute inset-0 z-10 bg-gradient-to-l xl:from-black/50 sm:from-black/80 from-black/90 to-black/0 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-b xl:from-black/30 sm:from-black/50 from-black/70 to-black/0" />
             </div>
           </div>
         </div>

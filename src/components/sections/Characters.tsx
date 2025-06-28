@@ -94,7 +94,7 @@ export default function Characters({ characters }: CharactersProps) {
   const variants = getAnimationVariants()
 
   return (
-    <div className="relative w-full overflow-hidden lg:pt-14 pb-40 px-8">
+    <div className="relative w-full overflow-hidden pt-22 pb-22 px-8">
       {/* Background Accent Image (behind character) */}
       <Container className="relative flex flex-col items-center justify-center min-h-[700px]">
         <div className="relative w-full flex flex-col lg:flex-row items-start justify-between gap-0">

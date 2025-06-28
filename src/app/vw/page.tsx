@@ -1,6 +1,11 @@
 import Hero from "@/components/pages/vw/Hero";
 import Trailer from "@/components/sections/Trailer";
 import { SmokeContainer } from "@/components/sections/SmokeContainer";
+import { Container } from "@/components/ui/container";
+import Characters from "@/components/sections/Characters";
+import BlogPreview from "@/components/sections/BlogPreview";
+import ReviewSection from "@/components/sections/Reviews";
+import Screenshots from "@/components/sections/Screenshots";
 import type { Character } from "@/types/character";
 
 const TrailerSrc = '/webp/persephone.webp';
@@ -33,7 +38,7 @@ const characters: Character[] = [
     skills: ["Divine Shield", "Lay on Hands"],
     languages: ["Common", "Dwarvish"],
     background: "Soldier",
-    image: "/webp/aska.webp", 
+    image: "/webp/aska.webp",
     backgroundImage: "/webp/bg-guild.webp",
     thumbnail: "/webp/aska-thumb.webp",
     classIcon: "Shield",
@@ -52,7 +57,7 @@ const characters: Character[] = [
     background: "Acolyte",
     image: "/webp/luceit.webp",
     backgroundImage: "/webp/bg-golem.webp",
-    thumbnail: "/webp/luceit-thumb.webp", 
+    thumbnail: "/webp/luceit-thumb.webp",
     classIcon: "Crown",
     raceIcon: "Droplet",
   },
@@ -60,10 +65,15 @@ const characters: Character[] = [
 
 export default function Home() {
   return (
-    <main>
-        <Hero className= 'h-[600px] md:h-[800px] lg:h-[900px]' />
-        <Trailer src={TrailerSrc}/>
-        <SmokeContainer characters={characters} />
-    </main>
+    <SmokeContainer>
+      <Hero className='h-[600px] md:h-[800px] lg:h-[900px]'/>
+      <Trailer src={TrailerSrc}/>
+      <Container>
+        <Characters characters={characters}/>
+        <BlogPreview/>
+        <ReviewSection/>
+        <Screenshots/>
+      </Container>
+    </SmokeContainer>
   );
 }
