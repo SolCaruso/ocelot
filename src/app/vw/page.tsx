@@ -26,10 +26,16 @@ const heroConfig = {
     showSolana: false
   },
   layout: {
-    logoPadding: "md:pt-32",
+    logoPadding: "md:pt-32 pb-32 md:pb-0",
     partnerMargin: "md:mb-8",
-    buttonPosition: "mt-2 md:mt-8",
-    buttonSize: "text-base md:text-xl"
+    buttonPosition: "mt-4 sm:mt-8",
+    buttonSize: "text-sm md:text-xl",
+    buttonTop: "68%"
+  },
+  shadows: {
+    topGradient: "bg-gradient-to-b from-black/40 to-black/0",
+    bottomGradient: "",
+    overlay: "bg-black/0"
   }
 };
 

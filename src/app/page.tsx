@@ -3,7 +3,6 @@ import { SmokeContainer } from "@/components/sections/SmokeContainer";
 import { Container } from "@/components/ui/container";
 import Characters from "@/components/sections/Characters";
 import ReviewSection from "@/components/sections/Reviews";
-import Screenshots from "@/components/sections/Screenshots";
 import type { Character } from "@/types/character";
 
 const backgroundClasses = "min-h-[230px] sm:min-h-[300px] flex flex-col";
@@ -25,10 +24,16 @@ const heroConfig = {
     showSolana: true
   },
   layout: {
-    logoPadding: "md:pt-44",
+    logoPadding: "md:pt-44 pb-26 md:pb-0",
     partnerMargin: "md:mb-8",
     buttonPosition: "",
-    buttonSize: "text-base md:text-xl"
+    buttonSize: "text-base md:text-xl",
+    buttonTop: "68%"
+  },
+  shadows: {
+    topGradient: "bg-gradient-to-b from-black/[36%] via-black/0 to-black/[36%]",
+    bottomGradient: "",
+    overlay: "bg-black/[30%]"
   }
 };
 
@@ -97,7 +102,6 @@ export default function Home() {
           backgroundClasses={backgroundClasses}
         />
         <ReviewSection/>
-        <Screenshots/>
       </Container>
     </SmokeContainer>
   );

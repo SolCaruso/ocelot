@@ -43,6 +43,12 @@ interface HeroProps {
       partnerMargin: string
       buttonPosition: string
       buttonSize: string
+      buttonTop: string
+    }
+    shadows: {
+      topGradient: string
+      bottomGradient: string
+      overlay: string
     }
   }
 }
@@ -113,8 +119,8 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
           />
 
           {/* Masks/Shaders */}
-          <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/[36%] via-black/0 to-black/[36%] pointer-events-none hidden md:block" />
-          <div className="absolute inset-0 z-15 bg-black/[30%] pointer-events-none" />
+          <div className={`absolute inset-0 z-10 ${config.shadows.topGradient} pointer-events-none hidden md:block`} />
+          <div className={`absolute inset-0 z-15 ${config.shadows.overlay} pointer-events-none`} />
         </div>
 
         <div className={`absolute inset-x-0 top-0 bottom-0 transform-gpu z-20 flex flex-col items-center justify-center md:justify-start text-center ${config.layout.logoPadding}`}>
@@ -130,8 +136,8 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
 
           {/* Text */}
           {config.title && (
-            <div className="space-y-4 md:space-y-6 mb-8 md:mb-12 text-center">
-              <div className="relative inline-block animate-slide-up-gentle opacity-0" style={{ animationDelay: "0.2s" }}>
+            <div className="space-y-4 md:space-y-6 mb-8 md:mb-12 text-center" style={{ contain: 'layout' }}>
+              <div className="relative inline-block animate-slide-up-gentle opacity-0 transform-gpu" style={{ animationDelay: "0.2s" }}>
                 {/* Beneath, stationary text */}
                 <h2 className="text-[#E0A970] text-3xl sm:text-4xl lg:text-5xl font-oldFenris layer-blur whitespace-pre-line">
                   {config.title}
@@ -148,13 +154,15 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
               )}
             </div>
           )}
+        </div>
 
-          {/* Button */}
+        {/* Button - positioned separately to avoid layout shifts */}
+        <div className={`absolute inset-x-0 transform-gpu z-20 flex items-center justify-center ${config.layout.buttonPosition}`} style={{ top: config.layout.buttonTop }}>
           <a
             href="https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"
             target="_blank"
             rel="noopener noreferrer"
-            className={`px-8 py-2 font-oldFenris bg-black hover:bg-[#18160d] opacity-80 hover:opacity-100 cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)] ${config.layout.buttonSize} ${config.layout.buttonPosition}`}
+            className={`px-8 py-2 font-oldFenris bg-black hover:bg-[#18160d] opacity-80 hover:opacity-100 cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)] ${config.layout.buttonSize}`}
             style={{
               border: "10px solid transparent",
               borderImage: 'url("/webp/temp-btn.webp") 20 round',
