@@ -2,10 +2,35 @@ import Hero from "@/components/header/Hero";
 import { SmokeContainer } from "@/components/sections/SmokeContainer";
 import { Container } from "@/components/ui/container";
 import Characters from "@/components/sections/Characters";
-import BlogPreview from "@/components/sections/BlogPreview";
 import ReviewSection from "@/components/sections/Reviews";
 import Screenshots from "@/components/sections/Screenshots";
 import type { Character } from "@/types/character";
+
+const backgroundClasses = "min-h-[230px] sm:min-h-[300px] flex flex-col";
+
+const heroConfig = {
+  videoSrc: "/video/hero.mp4",
+  logo: {
+    src: "/webp/guildsaga.webp",
+    alt: "Guild Saga Logo",
+    widthClasses: "w-[20rem] sm:w-[24rem] lg:w-[35rem]"
+  },
+  title: "EARLY ACCESS \n AVAILABLE NOW",
+  subtitle: "FANTASY RPG",
+  characterIllustration: {
+    src: "/webp/undine.webp",
+    alt: "Character Illustration"
+  },
+  partners: {
+    showSolana: true
+  },
+  layout: {
+    logoPadding: "md:pt-44",
+    partnerMargin: "md:mb-8",
+    buttonPosition: "",
+    buttonSize: "text-base md:text-xl"
+  }
+};
 
 const characters: Character[] = [
   {
@@ -64,11 +89,13 @@ const characters: Character[] = [
 export default function Home() {
   return (
     <SmokeContainer>
-      <Hero className='h-[600px] md:h-[800px] lg:h-[900px]'>
+      <Hero className='h-[600px] md:h-[800px] lg:h-[900px]' config={heroConfig}>
       </Hero>
       <Container>
-        <Characters characters={characters}/>
-        <BlogPreview/>
+        <Characters 
+          characters={characters}
+          backgroundClasses={backgroundClasses}
+        />
         <ReviewSection/>
         <Screenshots/>
       </Container>

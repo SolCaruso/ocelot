@@ -5,7 +5,7 @@ import React from "react"
 import Image from "next/image"
 import { Container } from "../ui/container"
 import SvgComponent from "../ui/corner"
-import { Droplet, Anchor, Mountain, Leaf, Shield, Crown, type LucideIcon } from 'lucide-react'
+import { Droplet, Anchor, Mountain, Leaf, Shield, Crown, Sword, Clock, Skull, Zap, type LucideIcon } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import type { Character } from '@/types/character'
 
@@ -16,13 +16,18 @@ const iconMap: Record<string, LucideIcon> = {
   Leaf,
   Shield,
   Crown,
+  Sword,
+  Clock,
+  Skull,
+  Zap,
 };
 
 interface CharactersProps {
   characters: Character[]
+  backgroundClasses?: string
 }
 
-export default function Characters({ characters }: CharactersProps) {
+export default function Characters({ characters, backgroundClasses }: CharactersProps) {
   const [selectedCharacter, setSelectedCharacter] = useState(0)
   const [previousCharacter, setPreviousCharacter] = useState(0)
   const [mounted, setMounted] = useState(false)
@@ -100,7 +105,7 @@ export default function Characters({ characters }: CharactersProps) {
         <div className="relative w-full flex flex-col lg:flex-row items-start justify-between gap-0">
           {/* Left: Character Info */}
           <div className="flex-1 max-w-md pt-8 lg:pt-24 flex flex-col justify-between h-auto lg:h-auto relative z-20 w-full">
-            <div>
+            <div className={`${backgroundClasses}`}>
               <p className="text-[#fbcea0] text-xs md:text-sm font-medium tracking-widest mb-4 font-oldFenris drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] uppercase">
                 {characters[selectedCharacter].title}
               </p>

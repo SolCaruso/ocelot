@@ -1,4 +1,4 @@
-import Hero from "@/components/pages/vw/Hero";
+import Hero from "@/components/header/Hero";
 import { SmokeContainer } from "@/components/sections/SmokeContainer";
 import { Container } from "@/components/ui/container";
 import Characters from "@/components/sections/Characters";
@@ -7,66 +7,95 @@ import ReviewSection from "@/components/sections/Reviews";
 import Screenshots from "@/components/sections/Screenshots";
 import type { Character } from "@/types/character";
 
+const backgroundClasses = "min-h-[280px] sm:min-h-[350px] flex flex-col";
+
+const heroConfig = {
+  videoSrc: "/video/vw-hero.mp4",
+  logo: {
+    src: "/webp/vw.webp",
+    alt: "Vanished Worlds Logo",
+    widthClasses: "w-[20rem] sm:w-[24rem] lg:w-[30rem]"
+  },
+  title: "",
+  subtitle: "",
+  characterIllustration: {
+    src: "/webp/persephone.webp",
+    alt: "Persephone Character Illustration"
+  },
+  partners: {
+    showSolana: false
+  },
+  layout: {
+    logoPadding: "md:pt-32",
+    partnerMargin: "md:mb-8",
+    buttonPosition: "mt-2 md:mt-8",
+    buttonSize: "text-base md:text-xl"
+  }
+};
+
 const characters: Character[] = [
   {
     id: 1,
-    name: "PERSEPHONE",
-    title: "Shadow Dancer",
+    name: "ZILLFRED",
+    title: "General",
     backstory:
-      "A mysterious figure who moves through shadows like a whisper, Persephone's mastery of stealth and deception makes her an unpredictable force on the battlefield.",
-    class: "Rogue",
-    race: "Half-Elf",
-    skills: ["Shadow Step", "Poison Strike"],
-    languages: ["Common", "Elvish", "Thieves' Cant"],
-    background: "Assassin",
-    image: "/webp/persephone.webp",
-    backgroundImage: "/webp/bg-vanished.webp",
-    thumbnail: "/webp/persephone.webp",
-    classIcon: "Shield",
-    raceIcon: "Leaf",
+      "House Mazan general and Commander of the respite island Mazan detachment. Father of Persephone, this seasoned military leader commands with unyielding resolve and deep ties to the noble House Mazan. A master tactician who leads with honor.",
+    class: "Fighter",
+    race: "Human",
+    skills: ["Tactical Command", "Defensive Stance"],
+    languages: ["Common", "Military Code"],
+    background: "Soldier",
+    image: "/webp/general.webp",
+    backgroundImage: "/webp/bg-general.webp",
+    thumbnail: "/webp/general-thumb.webp",
+    classIcon: "Sword",
+    raceIcon: "Crown",
   },
   {
     id: 2,
-    name: "THORIN",
-    title: "Iron Guardian",
+    name: "THEVYRE, M.T.",
+    title: "Weaver of Time",
     backstory:
-      "A stalwart defender with unbreakable resolve, Thorin's mastery of heavy armor and defensive tactics makes him an immovable wall against any threat.",
-    class: "Paladin",
-    race: "Dwarf",
-    skills: ["Divine Shield", "Lay on Hands"],
-    languages: ["Common", "Dwarvish"],
-    background: "Soldier",
-    image: "/webp/aska.webp",
-    backgroundImage: "/webp/bg-guild.webp",
-    thumbnail: "/webp/aska-thumb.webp",
-    classIcon: "Shield",
-    raceIcon: "Mountain",
+      "The enigmatic master of temporal arts who bends the very fabric of time to his will. As the game's primary antagonist, Thevyre's mastery of chronomancy makes him a foe unlike any other. M.T., standing for Magus Temporalis, is a title earned through centuries of manipulating time itself.",
+    class: "Wizard",
+    race: "Human",
+    skills: ["Time Manipulation", "Chronomancy"],
+    languages: ["Common", "Ancient Tongues"],
+    background: "Sage",
+    image: "/webp/thevyre.webp",
+    backgroundImage: "/webp/bg-thevyre.webp",
+    thumbnail: "/webp/thevyre-thumb.webp",
+    classIcon: "Zap",
+    raceIcon: "Clock",
   },
   {
     id: 3,
-    name: "SERAPHINA",
-    title: "Celestial Healer",
+    name: "MOREY",
+    title: "Headstrong Pirate",
     backstory:
-      "Blessed with divine magic, Seraphina channels the power of the heavens to heal allies and smite enemies with radiant energy.",
-    class: "Cleric",
-    race: "Aasimar",
-    skills: ["Healing Word", "Sacred Flame"],
-    languages: ["Common", "Celestial"],
-    background: "Acolyte",
-    image: "/webp/luceit.webp",
-    backgroundImage: "/webp/bg-golem.webp",
-    thumbnail: "/webp/luceit-thumb.webp",
-    classIcon: "Crown",
-    raceIcon: "Droplet",
+      "A former pirate with a sharp tongue and sharper wit, Morey now exists as a disembodied head buried beneath the earth. Despite his grim circumstances, his spirit remains unbroken—literally. This undead companion brings comic relief to your journey, though his constant jabs at Luceit might test your patience.",
+    class: "Rogue",
+    race: "Undead",
+    skills: ["Pirate Tactics", "Skeleton Resilience"],
+    languages: ["Common", "Pirate Slang"],
+    background: "Criminal",
+    image: "/webp/morey.webp",
+    backgroundImage: "/webp/bg-morey.webp",
+    thumbnail: "/webp/morey-thumb.webp",
+    classIcon: "Anchor",
+    raceIcon: "Skull",
   },
 ]
 
 export default function Home() {
   return (
     <SmokeContainer>
-      <Hero className='h-[600px] md:h-[800px] lg:h-[900px]'/>
+      <Hero className='h-[600px] md:h-[800px] lg:h-[900px]' config={heroConfig}/>
       <Container>
-        <Characters characters={characters}/>
+        <Characters 
+          characters={characters}
+          backgroundClasses={backgroundClasses}
+        />
         <BlogPreview/>
         <ReviewSection/>
         <Screenshots/>

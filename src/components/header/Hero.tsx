@@ -21,6 +21,30 @@ interface HeroProps {
   /** Optional inline height fallback, e.g. "900px" */
   height?: string
   children?: React.ReactNode
+  /** Hero configuration object */
+  config: {
+    videoSrc: string
+    logo: {
+      src: string
+      alt: string
+      widthClasses: string
+    }
+    title: string
+    subtitle: string
+    characterIllustration: {
+      src: string
+      alt: string
+    }
+    partners: {
+      showSolana: boolean
+    }
+    layout: {
+      logoPadding: string
+      partnerMargin: string
+      buttonPosition: string
+      buttonSize: string
+    }
+  }
 }
 
 declare global {
@@ -29,7 +53,7 @@ declare global {
   }
 }
 
-const Hero: React.FC<HeroProps> = ({ className, height, children }) => {
+const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
   const [playing, setPlaying] = useState(false)
   const playerRef = useRef<YT.Player | null>(null)
 
@@ -80,7 +104,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children }) => {
       >
         <div className="[mask-image:radial-gradient(circle_at_center,_white_40%,_transparent_85%)] [mask-repeat:no-repeat] [mask-position:center] relative w-full h-full">
           <video
-            src="/video/hero.mp4"
+            src={config.videoSrc}
             className="w-full h-full object-cover z-0 scale-x-[-1]"
             autoPlay
             loop
@@ -93,40 +117,44 @@ const Hero: React.FC<HeroProps> = ({ className, height, children }) => {
           <div className="absolute inset-0 z-15 bg-black/[30%] pointer-events-none" />
         </div>
 
-        <div className="absolute inset-x-0 top-0 bottom-0 transform-gpu z-20 flex flex-col items-center justify-center md:justify-start text-center md:pt-44">
+        <div className={`absolute inset-x-0 top-0 bottom-0 transform-gpu z-20 flex flex-col items-center justify-center md:justify-start text-center ${config.layout.logoPadding}`}>
           {/* Logo */}
           <Image
-            src="/webp/guildsaga.webp"
-            alt="Guild Saga Logo"
-            className="mx-auto h-auto mb-4 w-[20rem] sm:w-[24rem] lg:w-[35rem] select-none animate-slide-up-gentle"
+            src={config.logo.src}
+            alt={config.logo.alt}
+            className={`mx-auto h-auto mb-4 ${config.logo.widthClasses} select-none animate-slide-up-gentle`}
             width={1920}
             height={1080}
             draggable={false}
           />
 
           {/* Text */}
-          <div className="space-y-4 md:space-y-6 mb-8 md:mb-12 text-center">
-            <div className="relative inline-block animate-slide-up-gentle opacity-0" style={{ animationDelay: "0.2s" }}>
-              {/* Beneath, stationary text */}
-              <h2 className="text-[#E0A970] text-3xl sm:text-4xl lg:text-5xl font-oldFenris layer-blur">
-                EARLY ACCESS <br /> AVAILABLE NOW
-              </h2>
-              {/* Overlaying text */}
-              <h2 className="absolute inset-0 text-[#E7E7E7] text-3xl sm:text-4xl lg:text-5xl font-oldFenris text-shadow-xs">
-                EARLY ACCESS <br /> AVAILABLE NOW
-              </h2>
+          {config.title && (
+            <div className="space-y-4 md:space-y-6 mb-8 md:mb-12 text-center">
+              <div className="relative inline-block animate-slide-up-gentle opacity-0" style={{ animationDelay: "0.2s" }}>
+                {/* Beneath, stationary text */}
+                <h2 className="text-[#E0A970] text-3xl sm:text-4xl lg:text-5xl font-oldFenris layer-blur whitespace-pre-line">
+                  {config.title}
+                </h2>
+                {/* Overlaying text */}
+                <h2 className="absolute inset-0 text-[#E7E7E7] text-3xl sm:text-4xl lg:text-5xl font-oldFenris text-shadow-xs whitespace-pre-line">
+                  {config.title}
+                </h2>
+              </div>
+              {config.subtitle && (
+                <h3 className="font-semibold text-[#B9B9B9] md:text-lg text-center filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+                  {config.subtitle}
+                </h3>
+              )}
             </div>
-            <h3 className="font-semibold text-[#B9B9B9] md:text-lg text-center filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
-              FANTASY RPG
-            </h3>
-          </div>
+          )}
 
           {/* Button */}
           <a
             href="https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-8 py-2 font-oldFenris text-xl bg-black hover:bg-[#18160d] opacity-80 hover:opacity-100 cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)]"
+            className={`px-8 py-2 font-oldFenris bg-black hover:bg-[#18160d] opacity-80 hover:opacity-100 cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)] ${config.layout.buttonSize} ${config.layout.buttonPosition}`}
             style={{
               border: "10px solid transparent",
               borderImage: 'url("/webp/temp-btn.webp") 20 round',
@@ -136,7 +164,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children }) => {
           </a>
         </div>
 
-        <div className="absolute inset-x-0 bottom-0 md:mb-8 flex items-center justify-center opacity-50">
+        <div className={`absolute inset-x-0 bottom-0 ${config.layout.partnerMargin} flex items-center justify-center opacity-50`}>
           {/* Partner logos */}
           <div>
             <Steam className="h-18 w-auto hidden lg:block" />
@@ -150,12 +178,16 @@ const Hero: React.FC<HeroProps> = ({ className, height, children }) => {
             <Ocelot className="h-20 w-auto mb-4 hidden lg:block" />
             <OcelotMobile className="h-14 w-auto mb-4 lg:hidden" />
           </div>
-          <div>
-            <Solana className="h-20 w-auto hidden lg:block" />
-            <SolanaMobile className="h-14 w-auto lg:hidden" />
-          </div>
+          {config.partners.showSolana && (
+            <div>
+              <Solana className="h-20 w-auto hidden lg:block" />
+              <SolanaMobile className="h-14 w-auto lg:hidden" />
+            </div>
+          )}
         </div>
       </div>
+
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-[#232325] to-transparent" />
 
       {/* Trailer section with elliptical mask */}
       <div className="3xl:[mask-image:radial-gradient(ellipse_40%_100%_at_center,_white_45%,_transparent_85%)] 2xl:[mask-image:radial-gradient(ellipse_60%_100%_at_center,_white_45%,_transparent_85%)] [mask-image:radial-gradient(ellipse_80%_100%_at_center,_white_45%,_transparent_85%)] 2xl:[mask-repeat:no-repeat] 2xl:[mask-position:center] relative w-full">
@@ -193,8 +225,10 @@ const Hero: React.FC<HeroProps> = ({ className, height, children }) => {
               </div>
             </div>
           </div>
+          
         </section>
         {/* --- TRAILER SECTION END --- */}
+        <div className="w-full h-px bg-[#232325]" />
       </div>
 
       {/* Video and text block - moved outside mask */}
@@ -259,8 +293,8 @@ const Hero: React.FC<HeroProps> = ({ className, height, children }) => {
       {/* Undine illustration - outside mask */}
       <div className="absolute -right-12 bottom-0 z-50 2xl:block hidden opacity-30 3xl:opacity-100 select-none animate-slide-in-transform pointer-events-none">
         <Image
-          src="/webp/undine.webp"
-          alt="Character Illustration"
+          src={config.characterIllustration.src}
+          alt={config.characterIllustration.alt}
           width={1506}
           height={2000}
           className="object-contain w-[500px] 4xl:w-[700px]"
