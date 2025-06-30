@@ -2,7 +2,6 @@ import Steam from "@/components/logos/partners-mobile/Steam";
 import Solana from "@/components/logos/partners-mobile/Solana";
 import Link from "next/link";
 import Back from "@/components/ui/icons/Back";
-import { usePathname, useRouter } from "next/navigation"
 
 import * as React from "react"
 import {
@@ -22,8 +21,6 @@ interface NavDrawerProps {
 
 export function NavDrawer({ open, onOpenChange }: NavDrawerProps) {
   const [menu, setMenu] = React.useState<"main" | "guild">("main");
-  const pathname = usePathname();
-  const router = useRouter();
 
   // Custom handler to manage menu reset timing
   const handleOpenChange = (isOpen: boolean) => {
