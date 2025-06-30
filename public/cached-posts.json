@@ -79,8 +79,80 @@
       "summary": "Breakdown of hero rarity and stat bonuses.",
       "body": "Your NFT heroes come with unique perks:\n\n- **Rarity Tiers**: Common, Rare, Epic, Legendary.\n- **Attributes**: Each hero has strength, agility, intelligence.\n- **Art Styles**: Hand-drawn pixel sprites with exclusive skins for top-tier.\n\nDiscover your next champion today.",
       "image": "/jpg/post1.jpg"
+    },
+    {
+      "id": 10,
+      "date": "2025-06-09",
+      "title": "Lore Chronicles: The Battle of Silverpeak",
+      "summary": "Dive into the history of the Silverpeak conflict.",
+      "body": "> The armies clashed beneath moonlit skies, steel meeting steel in a symphony of war.\n\nKey events:\n- **King Aldric's Fall**: Betrayed by his closest advisor.\n- **The Mage's Sacrifice**: A last-ditch spell that turned the tide.\n- **Aftermath**: Rebuilding efforts that shaped the modern guild system.\n\nExplore this epic chapter in *Guild Saga* lore.",
+      "image": "/jpg/post2.jpg"
+    },
+    {
+      "id": 9,
+      "date": "2025-06-08",
+      "title": "Level Up Fast: Stats and Progression",
+      "summary": "Optimize your leveling path for rapid growth.",
+      "body": "Speed through early levels with these strategies:\n\n1. **Quest Stacking**: Accept multiple quests in the same area.\n2. **Experience Boosts**: Consume **Arcane Scrolls** for +20% XP for 30 minutes.\n3. **Profession Attributes**: Focus on your chosen class tree first.\n\nFollow this guide to achieve max level efficiently.",
+      "image": "/jpg/post3.jpg"
+    },
+    {
+      "id": 8,
+      "date": "2025-06-07",
+      "title": "Dialogue Deep Dive: Storytelling Tips",
+      "summary": "How to write engaging NPC conversations.",
+      "body": "Great dialogue can transform your world:\n\n- **Branching Choices**: Offer meaningful options that impact outcomes.\n- **Personality**: Use distinct voices—formal knights vs. streetwise rogues.\n- **Pacing**: Keep exchanges concise but flavorful.\n\nUse these techniques to craft memorable interactions in *Guild Saga*.",
+      "image": "/jpg/post.jpg"
+    },
+    {
+      "id": 7,
+      "date": "2025-06-06",
+      "title": "Tool Time: Crafting Essentials in Guild Saga",
+      "summary": "All you need to know about crafting tools and materials.",
+      "body": "Crafting is key to survival—here's what you need:\n\n- **Blacksmith Hammer**: Required for forging weapons.\n- **Alchemy Kit**: Mix potions and elixirs in the **Witch's Hut**.\n- **Enchanting Scrolls**: Enhance gear with elemental effects.\n\nGather these tools to master the art of creation.",
+      "image": "/jpg/post1.jpg"
+    },
+    {
+      "id": 6,
+      "date": "2025-06-05",
+      "title": "Guilds 101: Finding Your Tribe",
+      "summary": "Discover how to join and create guilds.",
+      "body": "Guilds provide collaboration and bonuses:\n\n- **Joining**: Browse public guilds in the **Guild Hall** or request an invite.\n- **Creating**: Pay 100 $GGEM and recruit at least 3 members.\n- **Perks**: Guild quests grant exclusive gear and shared treasury.\n\nJoin a guild today and grow together in *Guild Saga*.",
+      "image": "/jpg/post2.jpg"
+    },
+    {
+      "id": 5,
+      "date": "2025-06-04",
+      "title": "Keep Building: Strategies for Fortification",
+      "summary": "Tips to design an impenetrable keep.",
+      "body": "Your keep is your sanctuary—here's how to reinforce it:\n\n- **Stone Walls**: Upgrade from wood to withstand siege weapons.\n- **Watchtowers**: Place at corners for long-range archer support.\n- **Moat**: Surround with water to slow down invaders.\n\nImplement these defenses to keep your *Guild Saga* stronghold safe.",
+      "image": "/jpg/post3.jpg"
+    },
+    {
+      "id": 4,
+      "date": "2025-06-03",
+      "title": "Mastering Skills: A Beginner's Guide",
+      "summary": "Learn how to build and evolve your character's skill tree.",
+      "body": "New players often ask how to allocate skill points efficiently:\n\n1. **Balance Offense & Defense**: Invest in both *Strike* and *Guard* early.\n2. **Specialization**: Focus on one branch—Magic or Melee—to unlock ultimate abilities.\n3. **Respec Option**: Visit the **Guild Hall** NPC to reassign points for 500 $GGLD.\n\nFollow these tips to master your hero's potential.",
+      "image": "/jpg/post.jpg"
+    },
+    {
+      "id": 3,
+      "date": "2025-06-02",
+      "title": "New Combat Mechanics Unveiled",
+      "summary": "Get to know the latest improvements to turn-based combat.",
+      "body": "Today we're rolling out two exciting combat updates:\n\n- **Flanking Bonus**: Units attacking from behind deal 15% extra damage.\n- **Stamina System**: Actions now consume stamina, requiring careful resource management.\n- **Terrain Effects**: High ground grants +10% defense, swamp tiles slow movement by 20%.\n\nSharpen your tactics and dominate the battlefield in *Guild Saga*.",
+      "image": "/jpg/post1.jpg"
+    },
+    {
+      "id": 2,
+      "date": "2025-06-01",
+      "title": "Community Spotlight: Fan Art Showcase",
+      "summary": "Explore the best fan-created artwork in our community.",
+      "body": "Our community continues to impress with their artistic talents and innovations:\n\n- **Fan Art**: Stunning illustrations of characters and scenes.\n- **Mods**: Enhancements and custom content created by dedicated fans.\n- **Stories**: Original narratives expanding the game's universe.\n\nWe encourage all players to share their creations and contribute to the vibrant world of *Guild Saga*.",
+      "image": "/jpg/post2.jpg"
     }
   ],
-  "lastUpdated": "2025-06-30T02:32:08.506Z",
-  "count": 10
+  "lastUpdated": "2025-06-30T02:40:14.392Z",
+  "count": 19
 }

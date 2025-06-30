@@ -1,48 +1,34 @@
 import { notFound } from "next/navigation"
 import PostHero from "@/components/pages/updates/PostHero"
 import { ClientPost } from "@/components/pages/updates/ClientPost"
-import { supabase } from "@/lib/supabase"
+import { readFileSync } from "fs"
+import { join } from "path"
 
 const FALLBACKS = ["/jpg/post.jpg", "/jpg/post1.jpg", "/jpg/post2.jpg", "/jpg/post3.jpg"]
 
-export default async function Page({ params }: { params: Promise<{ date: string }> }) {
-  const { date } = await params
+export default async function Page({ params }: { params: { date: string } }) {
+  const { date } = params
 
   try {
-    // First, get the post data
-    const { data: post, error } = await supabase
-      .from("blog_posts")
-      .select("id, date, title, summary, body, image")
-      .eq("date", date)
-      .single()
+    // Read cached posts from JSON
+    const cachePath = join(process.cwd(), 'public', 'cached-posts.json')
+    const cacheData = JSON.parse(readFileSync(cachePath, 'utf-8'))
+    const posts = cacheData.posts || []
 
-    if (error || !post) {
-      console.error("Supabase error:", error)
+    // Find the post by date
+    const post = posts.find((p: any) => p.date === date)
+    if (!post) {
       return notFound()
     }
 
-    // If the post has no image, we need to determine which fallback to use
+    // Fallback image logic
     let image = post.image && post.image.trim() !== "" ? post.image : null
-
     if (!image) {
-      // Get all posts ordered by date to find this post's index
-      const { data: allPosts, error: allPostsError } = await supabase
-        .from("blog_posts")
-        .select("id, date")
-        .order("date", { ascending: false })
-
-      if (!allPostsError && allPosts) {
-        // Find the index of the current post
-        const postIndex = allPosts.findIndex((p) => p.date === date)
-        if (postIndex !== -1) {
-          // Use the same fallback logic as the cards
-          image = FALLBACKS[postIndex % FALLBACKS.length]
-        } else {
-          // Fallback to first image if not found
-          image = FALLBACKS[0]
-        }
+      // Find the index of the current post
+      const postIndex = posts.findIndex((p: any) => p.date === date)
+      if (postIndex !== -1) {
+        image = FALLBACKS[postIndex % FALLBACKS.length]
       } else {
-        // Fallback to first image if query fails
         image = FALLBACKS[0]
       }
     }
@@ -63,7 +49,7 @@ export default async function Page({ params }: { params: Promise<{ date: string 
       </section>
     )
   } catch (error) {
-    console.error("Error fetching post:", error)
+    console.error("Error reading cached post:", error)
     return notFound()
   }
 }
