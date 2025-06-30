@@ -22,7 +22,6 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 import SvgComponent from "@/components/ui/corner"
-import { usePathname, useRouter } from "next/navigation"
 import { useRecentPosts } from "@/hooks/useRecentPosts"
 
 export default function Nav() {
