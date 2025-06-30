@@ -6,14 +6,14 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel"
-import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react"
+import useEmblaCarousel from "embla-carousel-react"
 import SvgComponent from "@/components/ui/corner"
 
 const screenshots = Array.from({ length: 9 }).map((_, i) => `/webp/Screenshot${i + 1}.webp`)
 
 export default function Screenshots() {
   const [centerIndex, setCenterIndex] = React.useState(Math.floor(screenshots.length / 2))
-  const [api, setApi] = React.useState<UseEmblaCarouselType | null>(null)
+  const [api, setApi] = React.useState<ReturnType<typeof useEmblaCarousel>[1] | null>(null)
   const [zoomed, setZoomed] = React.useState(false)
   const [zoomedIndex, setZoomedIndex] = React.useState<number | null>(null)
 
