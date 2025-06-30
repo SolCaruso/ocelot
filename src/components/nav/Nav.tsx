@@ -22,6 +22,8 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 import SvgComponent from "@/components/ui/corner"
+import { usePathname, useRouter } from "next/navigation"
+import { useRecentPosts } from "@/hooks/useRecentPosts"
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -71,11 +73,23 @@ export default function Nav() {
     '/gif/world.gif',
   ];
   const prevIndexRef = useRef(imageOrder.indexOf(defaultImage));
+  const pathname = usePathname();
+  const router = useRouter();
+  const { posts: recentPosts } = useRecentPosts();
+  const MAX_SUMMARY_LENGTH = 71;
 
   const handlePreview = (img: string) => {
     const newIndex = imageOrder.indexOf(img);
     prevIndexRef.current = newIndex;
     setPreviewImage(img);
+  };
+
+  const handleSocialsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const target = document.getElementById("socials");
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
@@ -171,7 +185,9 @@ export default function Nav() {
                   className={cn(previewImage === '/gif/vw.gif' && 'bg-accent/70')}
                   onMouseEnter={() => handlePreview('/gif/vw.gif')}
                 >
-                  Fantasy tactics CRPG, early access available now on Steam.
+                  <span className="line-clamp-2 text-sm leading-snug opacity-50 group-hover:opacity-80 text-white">
+                    Fantasy tactics CRPG, early access available now on Steam.
+                  </span>
                 </ListItem>
                 <ListItem
                   href="/"
@@ -184,7 +200,9 @@ export default function Nav() {
                   className={cn(previewImage === '/gif/lab.gif' && 'bg-accent/70')}
                   onMouseEnter={() => handlePreview('/gif/lab.gif')}
                 >
-                  Pvp gauntlet mode game built on Solana (coming soon).
+                  <span className="line-clamp-2 text-sm leading-snug opacity-50 group-hover:opacity-80 text-white">
+                    Pvp gauntlet mode game built on Solana (coming soon).
+                  </span>
                 </ListItem>
                 <ListItem
                   href="https://world.guildsaga.com/" target="_blank" rel="noopener noreferrer"
@@ -197,7 +215,9 @@ export default function Nav() {
                   className={cn(previewImage === '/gif/world.gif' && 'bg-accent/70')}
                   onMouseEnter={() => handlePreview('/gif/world.gif')}
                 >
-                  Gamified staking web app built on Solana.
+                  <span className="line-clamp-2 text-sm leading-snug opacity-50 group-hover:opacity-80 text-white">
+                    Gamified staking web app built on Solana.
+                  </span>
                 </ListItem>
               </ul>
             </NavigationMenuContent>
@@ -206,25 +226,53 @@ export default function Nav() {
           <NavigationMenuItem>
             <NavigationMenuTrigger>UPDATES</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                {components.map((component) => (
-                  <ListItem
-                    key={component.title}
-                    title={component.title}
-                    href={component.href}
-                  >
-                    {component.description}
-                  </ListItem>
-                ))}
+              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] items-stretch">
+                {recentPosts.slice(0, 5).map((post) => {
+                  const words = post.title.split(" ");
+                  const shortTitle = words.length > 3 ? words.slice(0, 3).join(" ") + "..." : post.title;
+                  const summary = post.summary && post.summary.length > MAX_SUMMARY_LENGTH ? `${post.summary.slice(0, MAX_SUMMARY_LENGTH)}...` : post.summary;
+                  return (
+                    <li key={post.id} className="h-full">
+                      <NavigationMenuLink asChild>
+                        <Link href={`/updates/${post.date}`} className="group flex flex-col justify-between h-full select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground min-h-[64px]">
+                          <div className="flex items-center font-semibold opacity-80 group-hover:opacity-100 group-focus:opacity-100 group-active:opacity-100 transition-opacity">
+                            {shortTitle}
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug opacity-50 group-hover:opacity-80 text-white">
+                            {summary}
+                          </p>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                  );
+                })}
+                <li className="h-full flex items-center justify-center">
+                  <NavigationMenuLink asChild>
+                    <Link
+                      href="/updates"
+                      className="group cursor-pointer relative  w-full flex items-center justify-center px-8 py-4 transition-all duration-200 ease-[var(--ease-in-out-quad)]  opacity-100 translate-y-0 border border-[#534C3F]/40"
+                      
+                    >
+                      <div className="relative">
+                        <p className="uppercase font-quattrocento text-base tracking-wide font-semibold text-[#8F8B8A] group-hover:text-white text-center">
+                          See All
+                        </p>
+                        <span className="absolute left-full ml-2 top-0 opacity-0 translate-x-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200 ease-[var(--ease-in-out-quad)] text-[#8F8B8A] group-hover:text-white">
+                          →
+                        </span>
+                      </div>
+                    </Link>
+                  </NavigationMenuLink>
+                </li>
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
 
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link href="/#socials" className={navigationMenuTriggerStyle()}>
+              <a href="#socials" className={navigationMenuTriggerStyle()} onClick={handleSocialsClick}>
                 SOCIALS
-              </Link>
+              </a>
             </NavigationMenuLink>
           </NavigationMenuItem>
 
@@ -318,12 +366,8 @@ const ListItem = React.forwardRef<
           )}
           {...props}
         >
-          <div className="flex items-center font-semibold opacity-80 group-hover:opacity-100 group-focus:opacity-100 group-active:opacity-100 transition-opacity">
-            {title}
-          </div>
-          <p className="line-clamp-2 text-sm leading-snug opacity-50 group-hover:opacity-80 text-white">
-            {children}
-          </p>
+          {title}
+          {children}
         </Link>
       </NavigationMenuLink>
     </li>

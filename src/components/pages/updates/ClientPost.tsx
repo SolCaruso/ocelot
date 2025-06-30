@@ -16,6 +16,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import Image from "next/image"
+import React from "react"
 
 // Function to clean markdown content - remove frontmatter
 function cleanMarkdownContent(content: string): string {
@@ -100,9 +101,16 @@ export function ClientPost({
               <h4 className="text-lg font-medium mb-2 mt-4 text-[#fbcea0] font-quattrocento">{children}</h4>
             ),
             // Simple paragraph component
-            p: ({ children }: { children: ReactNode }) => (
-              <p className="mb-4 leading-relaxed text-white">{children}</p>
-            ),
+            p: ({ children }: { children: ReactNode }) => {
+              // If any child is a div, render a div instead of p
+              const hasBlock = React.Children.toArray(children).some(
+                (child: any) => child?.type === 'div'
+              );
+              const Wrapper = hasBlock ? 'div' : 'p';
+              return (
+                <Wrapper className="mb-4 leading-relaxed text-white">{children}</Wrapper>
+              );
+            },
             // Enhanced link component
             a: ({ href, children }: { href?: string; children: ReactNode }) => {
               if (!href) return <span className="text-white">{children}</span>
