@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useTransition } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import BlogImage from "@/components/pages/updates/BlogImage"
 import {
@@ -56,7 +56,6 @@ export default function BlogPageClient({ allPosts }: { allPosts: BlogPost[] }) {
   const [currentPage, setCurrentPage] = useState(1)
   const [loading, setLoading] = useState(true)
   const [animateIn, setAnimateIn] = useState(false)
-  const [isPending, startTransition] = useTransition()
 
   // Always show the hero post (most recent)
   const hero = allPosts[0] || null
@@ -178,7 +177,7 @@ export default function BlogPageClient({ allPosts }: { allPosts: BlogPost[] }) {
 
       {/* CARDS GRID */}
       <div className="max-w-7xl mx-auto relative z-5">
-        {loading || isPending ? (
+        {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-62 lg:pt-12 pb-12">
             {Array.from({ length: 9 }).map((_, i) => (
               <SkeletonCard key={i} />
@@ -279,12 +278,12 @@ export default function BlogPageClient({ allPosts }: { allPosts: BlogPost[] }) {
                   href="#"
                   onClick={(e) => {
                     e.preventDefault()
-                    if (hasPrevPage && !isPending) {
+                    if (hasPrevPage) {
                       setCurrentPage(currentPage - 1)
                       window.scrollTo({ top: 0, behavior: "smooth" })
                     }
                   }}
-                  className={!hasPrevPage || isPending ? "pointer-events-none opacity-50" : ""}
+                  className={!hasPrevPage ? "pointer-events-none opacity-50" : ""}
                 />
               </PaginationItem>
 
@@ -295,11 +294,9 @@ export default function BlogPageClient({ allPosts }: { allPosts: BlogPost[] }) {
                     isActive={pageNum === currentPage}
                     onClick={(e) => {
                       e.preventDefault()
-                      if (!isPending) {
-                        setCurrentPage(pageNum)
-                      }
+                      setCurrentPage(pageNum)
                     }}
-                    className={isPending ? "pointer-events-none opacity-50" : ""}
+                    className={""}
                   >
                     {pageNum}
                   </PaginationLink>
@@ -311,12 +308,12 @@ export default function BlogPageClient({ allPosts }: { allPosts: BlogPost[] }) {
                   href="#"
                   onClick={(e) => {
                     e.preventDefault()
-                    if (hasNextPage && !isPending) {
+                    if (hasNextPage) {
                       setCurrentPage(currentPage + 1)
                       window.scrollTo({ top: 0, behavior: "smooth" })
                     }
                   }}
-                  className={!hasNextPage || isPending ? "pointer-events-none opacity-50" : ""}
+                  className={!hasNextPage ? "pointer-events-none opacity-50" : ""}
                 />
               </PaginationItem>
             </PaginationContent>
