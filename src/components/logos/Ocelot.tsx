@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-export default function Ocelot({ className = "" }: { className?: string }) {
+export default function Ocelot() {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
