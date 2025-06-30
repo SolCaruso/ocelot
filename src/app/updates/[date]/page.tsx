@@ -4,6 +4,31 @@ import { ClientPost } from "@/components/pages/updates/ClientPost"
 import { readFileSync } from "fs"
 import { join } from "path"
 
+interface BlogPost {
+  id: number
+  date: string
+  title: string
+  summary: string
+  body: string
+  image?: string | null
+}
+
+function formatDateUTC(dateString: string): string {
+  try {
+    // Parse as UTC, not local time
+    const [year, month, day] = dateString.split('-').map(Number)
+    const date = new Date(Date.UTC(year, month - 1, day))
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      timeZone: "UTC",
+    })
+  } catch {
+    return dateString
+  }
+}
+
 const FALLBACKS = ["/jpg/post.jpg", "/jpg/post1.jpg", "/jpg/post2.jpg", "/jpg/post3.jpg"]
 
 export default async function Page({ params }: { params: { date: string } }) {
@@ -13,10 +38,10 @@ export default async function Page({ params }: { params: { date: string } }) {
     // Read cached posts from JSON
     const cachePath = join(process.cwd(), 'public', 'cached-posts.json')
     const cacheData = JSON.parse(readFileSync(cachePath, 'utf-8'))
-    const posts = cacheData.posts || []
+    const posts: BlogPost[] = cacheData.posts || []
 
     // Find the post by date
-    const post = posts.find((p: any) => p.date === date)
+    const post = posts.find((p: BlogPost) => p.date === date)
     if (!post) {
       return notFound()
     }
@@ -25,7 +50,7 @@ export default async function Page({ params }: { params: { date: string } }) {
     let image = post.image && post.image.trim() !== "" ? post.image : null
     if (!image) {
       // Find the index of the current post
-      const postIndex = posts.findIndex((p: any) => p.date === date)
+      const postIndex = posts.findIndex((p: BlogPost) => p.date === date)
       if (postIndex !== -1) {
         image = FALLBACKS[postIndex % FALLBACKS.length]
       } else {
@@ -40,7 +65,7 @@ export default async function Page({ params }: { params: { date: string } }) {
             image,
             title: post.title,
             summary: post.summary,
-            date: post.date,
+            date: formatDateUTC(post.date),
           }}
         />
         <div className="max-w-7xl mx-auto px-4 mt-12 text-white">

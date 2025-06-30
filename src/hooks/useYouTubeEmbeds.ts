@@ -58,5 +58,5 @@ export function useYouTubeEmbeds(contentRef: RefObject<HTMLDivElement | null>, c
         }
       }
     })
-  }, [content])
+  }, [content, contentRef])
 }

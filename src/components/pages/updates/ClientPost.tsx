@@ -120,13 +120,16 @@ export function ClientPost({
             },
             // Enhanced image component
             img: ({ src, alt }: { src?: string; alt?: string }) => (
-              <Image
-                src={src || "/placeholder.svg"}
-                alt={alt || ""}
-                width={800}
-                height={600}
-                style={{ maxWidth: "100%", height: "auto", margin: "1.5rem 0" }}
-              />
+              <div className="w-full my-6">
+                <Image
+                  src={src || "/placeholder.svg"}
+                  alt={alt || ""}
+                  width={800}
+                  height={600}
+                  className="w-full h-auto rounded-lg"
+                  style={{ display: "block", margin: "0 auto" }}
+                />
+              </div>
             ),
             // Enhanced list styling
             ul: ({ children }: { children: ReactNode }) => (
