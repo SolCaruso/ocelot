@@ -1,0 +1,86 @@
+{
+  "posts": [
+    {
+      "id": 20,
+      "date": "2025-06-24",
+      "title": "Looking Ahead: Roadmap for Future Updates",
+      "summary": "A glimpse into the upcoming features and content planned",
+      "body": "Exciting developments are on the horizon, and try not to trip about that neitha, ya dig? We been bippin on it for a whole while now.\n\n# New Regions\n\n- Explore uncharted territories.\n- Dive deeper into the lore.\n- Improved systems and mechanics based on player feedback.\n\n## Enhanced Features\n\n- Explore uncharted territories.\n- Dive deeper into the lore.\n- Improved systems and mechanics based on player feedback.\n\n![Screenshot](https://ejktdpjnbhbgmavwltvb.supabase.co/storage/v1/object/public/blog-images//screenshot.webp)\n\nStay tuned for more adventures and enhancements in the world of *Guild Saga*.\n\nhttps://youtu.be/7FAwDzveszI",
+      "image": "/jpg/post.jpg"
+    },
+    {
+      "id": 19,
+      "date": "2025-06-18",
+      "title": "Witch’s Hut: Potion Crafting and Alchemy",
+      "summary": "Master the art of brewing powerful potions.",
+      "body": "Visit the **Witch's Hut** for these recipes:\n\n- **Health Potion**: Red herb + water.\n- **Mana Elixir**: Blue crystal + distilled essence.\n- **Stamina Draught**: Root blend + minor enchantment.\n\nBrewing is an art—experiment to find new effects.",
+      "image": "/jpg/post1.jpg"
+    },
+    {
+      "id": 18,
+      "date": "2025-06-17",
+      "title": "Blacksmith’s Corner: Weapon Upgrade Tips",
+      "summary": "How to get the most out of upgrades.",
+      "body": "Use these tips at the **Blacksmith**:\n\n- **Salvage Materials**: Recycle unwanted gear for components.\n- **Upgrade Order**: Reinforce blade before hilt for best durability.\n- **Enhancement Runes**: Apply to add elemental damage.\n\nUpgrade smarter, fight stronger!",
+      "image": "/jpg/post2.jpg"
+    },
+    {
+      "id": 17,
+      "date": "2025-06-16",
+      "title": "Player’s Keep Tour: Housing Your Heroes",
+      "summary": "A walkthrough of customizing your Player’s Keep.",
+      "body": "Your **Player's Keep** is more than storage:\n\n1. **Furniture**: Place trophies and banners.\n2. **Workshops**: Build a **Blacksmith** or **Alchemy Lab**.\n3. **Defense**: Add traps and guards to protect your assets.\n\nShow off your achievements in style.",
+      "image": "/jpg/post3.jpg"
+    },
+    {
+      "id": 16,
+      "date": "2025-06-15",
+      "title": "Event Recap: Catacombs Raid Success",
+      "summary": "Highlights from our latest community raid.",
+      "body": "Last weekend's **Catacombs Raid** was a triumph:\n\n- **Participants**: Over 200 players joined.\n- **Boss Defeated**: The Undead King fell in under 15 minutes.\n- **Rewards**: Exclusive titles and loot drops for top contributors.\n\nThanks to everyone who took part!",
+      "image": "/jpg/post.jpg"
+    },
+    {
+      "id": 15,
+      "date": "2025-06-14",
+      "title": "World Mode Preview: The Heroes Guild",
+      "summary": "Get ready for the upcoming World Mode features.",
+      "body": "World Mode introduces:\n\n- **Open World**: Explore beyond the main campaign.\n- **Player Housing**: Customize your **Player's Keep**.\n- **Community Projects**: Collaborate on world events and builds.\n\nStay tuned for launch details!",
+      "image": "/jpg/post1.jpg"
+    },
+    {
+      "id": 14,
+      "date": "2025-06-13",
+      "title": "Tokenomics: Understanding $GGLD and $GGEM",
+      "summary": "A deep dive into in-game currencies.",
+      "body": "Guild Saga uses two main tokens:\n\n- **$GGLD**: Earned through gameplay; used for basics like repairs.\n- **$GGEM**: Premium currency; used for cosmetic items and special quests.\n- **Exchange Rates**: 1 $GGEM = 100 $GGLD on the open market.\n\nManage your wallet to maximize your adventure.",
+      "image": "/jpg/post2.jpg"
+    },
+    {
+      "id": 13,
+      "date": "2025-06-12",
+      "title": "Loot Drop Tables Demystified",
+      "summary": "Understanding how loot is distributed.",
+      "body": "Loot falls into three categories:\n\n1. **Common**: High drop rate, basic gear.\n2. **Uncommon**: Moderate drop rate, improved stats.\n3. **Rare/Epic**: Low drop rate, powerful effects.\n\nCheck *Loot Drop Tables* in the docs to plan your hunts.",
+      "image": "/jpg/post3.jpg"
+    },
+    {
+      "id": 12,
+      "date": "2025-06-11",
+      "title": "Mercenary Guide: Class and Level Overview",
+      "summary": "Learn how to hire and level mercenaries.",
+      "body": "Mercenaries offer flexible support:\n\n- **Classes**: Swordsman, Archer, Mage, Healer.\n- **Level Cap**: Your account level determines max mercenary rank.\n- **Hiring Costs**: Pay 50 $GGLD per rank increase.\n\nRecruit mercenaries to adapt to any challenge.",
+      "image": "/jpg/post.jpg"
+    },
+    {
+      "id": 11,
+      "date": "2025-06-10",
+      "title": "NFT Heroes: Art and Attributes Explained",
+      "summary": "Breakdown of hero rarity and stat bonuses.",
+      "body": "Your NFT heroes come with unique perks:\n\n- **Rarity Tiers**: Common, Rare, Epic, Legendary.\n- **Attributes**: Each hero has strength, agility, intelligence.\n- **Art Styles**: Hand-drawn pixel sprites with exclusive skins for top-tier.\n\nDiscover your next champion today.",
+      "image": "/jpg/post1.jpg"
+    }
+  ],
+  "lastUpdated": "2025-06-30T02:32:08.506Z",
+  "count": 10
+}

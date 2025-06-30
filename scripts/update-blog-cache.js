@@ -27,7 +27,6 @@ async function updateBlogCache() {
       .from("blog_posts")
       .select("id, date, title, summary, body, image")
       .order("date", { ascending: false })
-      .limit(10)
 
     if (error) {
       console.error("❌ Supabase error:", error)
