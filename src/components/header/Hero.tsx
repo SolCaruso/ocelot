@@ -157,7 +157,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
         </div>
 
         {/* Button - positioned separately to avoid layout shifts */}
-        <div className={`absolute inset-x-0 transform-gpu z-20 flex items-center justify-center ${config.layout.buttonPosition}`} style={{ top: config.layout.buttonTop }}>
+        <div className={`absolute inset-x-0 transform-gpu z-20 flex items-center hue-rotate-[200deg] justify-center ${config.layout.buttonPosition}`} style={{ top: config.layout.buttonTop }}>
           <a
             href="https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"
             target="_blank"

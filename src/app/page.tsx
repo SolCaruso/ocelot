@@ -27,7 +27,7 @@ const heroConfig = {
     logoPadding: "md:pt-44 pb-26 md:pb-0",
     partnerMargin: "md:mb-8",
     buttonPosition: "",
-    buttonSize: "text-base md:text-xl",
+    buttonSize: "text-sm md:text-base 3xl:text-xl",
     buttonTop: "68%"
   },
   shadows: {

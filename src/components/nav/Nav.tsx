@@ -52,11 +52,11 @@ export default function Nav() {
   };
 
   return (
-    <div className="flex items-center justify-end px-4 py-2 max-w-9xl mx-auto absolute top-2 left-0 right-0 z-30">
+    <div className="flex items-center justify-end px-4 py-2 max-w-7xl mx-auto absolute top-2 left-0 right-0 z-30">
       {/* Left: Logo */}
       <Link
   href="/"
-  className="absolute top-0 left-4 z-50 w-[90px] h-[112.5px] xl:w-[120px] xl:h-[150px] opacity-80 hover:opacity-100 transition-opacity duration-200 ease-[var(--ease-in-out-quad)]"
+  className="absolute top-0 left-4 z-50 w-[90px] h-[112.5px] 3xl:w-[108px] 3xl:h-[135px] opacity-80 hover:opacity-100 transition-opacity duration-200 ease-[var(--ease-in-out-quad)]"
 >
   <div className="md:hidden">
     <OcelotLogo className="w-34 mt-2 h-full text-[#FEE8D1]" />
@@ -213,7 +213,7 @@ export default function Nav() {
                       
                     >
                       <div className="relative">
-                        <p className="uppercase font-quattrocento text-base tracking-wide font-semibold text-[#8F8B8A] group-hover:text-white text-center">
+                        <p className="uppercase font-quattrocento text-sm tracking-wide font-semibold text-[#8F8B8A] group-hover:text-white text-center">
                           See All
                         </p>
                         <span className="absolute left-full ml-2 top-0 opacity-0 translate-x-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200 ease-[var(--ease-in-out-quad)] text-[#8F8B8A] group-hover:text-white">
@@ -239,12 +239,12 @@ export default function Nav() {
       </NavigationMenu>
 
       {/* Right: Button */}
-      <div className="justify-start mt-1 hidden md:flex">
+      <div className="justify-start mt-1 3xl:mt-1.5 hidden md:flex">
         <Link
           href="https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"
           target="_blank"
           rel="noopener noreferrer"
-          className="group cursor-pointer relative overflow-hidden xl:px-9 xl:py-3.5 py-3 px-8 gradient-border-top transition-all duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] opacity-100 translate-y-0 backdrop-blur-sm bg-black/20"
+          className="group cursor-pointer relative overflow-hidden 3xl:px-8 3xl:py-3 py-3 px-8 gradient-border-top transition-all duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] opacity-100 translate-y-0 backdrop-blur-sm bg-black/20"
           style={{
             borderStyle: "solid",
             borderWidth: "0 1px 1px 1px",
@@ -253,19 +253,19 @@ export default function Nav() {
         >
           {/* Top Left Corner */}
           <div className="absolute top-0 left-0 z-10 scale-x-[-1] opacity-50">
-            <SvgComponent className="xl:w-14 xl:h-14 w-10 h-10" />
+            <SvgComponent className="3xl:w-14 3xl:h-14 w-10 h-10" />
           </div>
           {/* Top Right Corner */}
           <div className="absolute top-0 right-0 z-10 opacity-50">
-            <SvgComponent className="xl:w-14 xl:h-14 w-10 h-10" />
+            <SvgComponent className="3xl:w-14 3xl:h-14 w-10 h-10" />
           </div>
           {/* Bottom Left Corner */}
           <div className="absolute bottom-0 left-0 z-10 scale-x-[-1] scale-y-[-1] opacity-50">
-            <SvgComponent className="xl:w-14 xl:h-14 w-10 h-10" />
+            <SvgComponent className="3xl:w-14 3xl:h-14 w-10 h-10" />
           </div>
           {/* Bottom Right Corner */}
           <div className="absolute bottom-0 right-0 z-10 scale-y-[-1] opacity-50">
-            <SvgComponent className="xl:w-14 xl:h-14 w-10 h-10" />
+            <SvgComponent className="3xl:w-14 3xl:h-14 w-10 h-10" />
           </div>
           
           <div className="relative">
