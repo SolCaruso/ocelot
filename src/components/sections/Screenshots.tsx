@@ -35,8 +35,6 @@ export default function Screenshots() {
     else setZoomedIndex(null)
   }, [zoomed, centerIndex])
 
-  const dragState = React.useRef<{ startX: number | null, dragging: boolean }>({ startX: null, dragging: false })
-
   return (
     <div className="my-42 relative">
       <div className="w-[1200px] mx-auto relative">
