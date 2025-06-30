@@ -8,7 +8,7 @@ import type { Character } from "@/types/character";
 const backgroundClasses = "min-h-[230px] sm:min-h-[300px] flex flex-col";
 
 const heroConfig = {
-  videoSrc: "/video/hero.mp4",
+  videoSrc: "/video/hero.webm",
   logo: {
     src: "/webp/guildsaga.webp",
     alt: "Guild Saga Logo",

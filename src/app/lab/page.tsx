@@ -10,20 +10,20 @@ import type { Character } from "@/types/character";
 const backgroundClasses = "min-h-[280px] sm:min-h-[350px] flex flex-col";
 
 const heroConfig = {
-  videoSrc: "/video/vw-hero.webm",
+  videoSrc: "/video/lab-hero.webm",
   logo: {
-    src: "/webp/vw.webp",
+    src: "/webp/lab.webp",
     alt: "Vanished Worlds Logo",
     widthClasses: "w-[20rem] sm:w-[24rem] lg:w-[30rem]"
   },
   title: "",
   subtitle: "",
   characterIllustration: {
-    src: "/webp/persephone.webp",
+    src: "/webp/thal.webp",
     alt: "Persephone Character Illustration"
   },
   partners: {
-    showSolana: false
+    showSolana: true,
   },
   layout: {
     logoPadding: "md:pt-32 pb-32 md:pb-0",
