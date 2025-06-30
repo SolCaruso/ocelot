@@ -6,14 +6,14 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel"
-import useEmblaCarousel from "embla-carousel-react"
+import useEmblaCarousel, { type EmblaCarouselType } from "embla-carousel-react"
 import SvgComponent from "@/components/ui/corner"
 
 const screenshots = Array.from({ length: 9 }).map((_, i) => `/webp/Screenshot${i + 1}.webp`)
 
 export default function Screenshots() {
   const [centerIndex, setCenterIndex] = React.useState(Math.floor(screenshots.length / 2))
-  const [api, setApi] = React.useState<any>(null)
+  const [api, setApi] = React.useState<EmblaCarouselType | null>(null)
   const [zoomed, setZoomed] = React.useState(false)
   const [zoomedIndex, setZoomedIndex] = React.useState<number | null>(null)
 
@@ -36,37 +36,6 @@ export default function Screenshots() {
   }, [zoomed, centerIndex])
 
   const dragState = React.useRef<{ startX: number | null, dragging: boolean }>({ startX: null, dragging: false })
-  function handleModalMouseDown(e: React.MouseEvent) {
-    dragState.current.startX = e.clientX
-    dragState.current.dragging = true
-  }
-  function handleModalMouseUp(e: React.MouseEvent) {
-    if (!dragState.current.dragging || dragState.current.startX === null) return
-    const dx = e.clientX - dragState.current.startX
-    if (dx > 60) {
-      setZoomedIndex(idx => idx !== null ? (idx - 1 + screenshots.length) % screenshots.length : null)
-    } else if (dx < -60) {
-      setZoomedIndex(idx => idx !== null ? (idx + 1) % screenshots.length : null)
-    }
-    dragState.current.startX = null
-    dragState.current.dragging = false
-  }
-  function handleModalTouchStart(e: React.TouchEvent) {
-    dragState.current.startX = e.touches[0].clientX
-    dragState.current.dragging = true
-  }
-  function handleModalTouchEnd(e: React.TouchEvent) {
-    if (!dragState.current.dragging || dragState.current.startX === null) return
-    const touch = e.changedTouches[0]
-    const dx = touch.clientX - dragState.current.startX
-    if (dx > 60) {
-      setZoomedIndex(idx => idx !== null ? (idx - 1 + screenshots.length) % screenshots.length : null)
-    } else if (dx < -60) {
-      setZoomedIndex(idx => idx !== null ? (idx + 1) % screenshots.length : null)
-    }
-    dragState.current.startX = null
-    dragState.current.dragging = false
-  }
 
   return (
     <div className="my-42 relative">
@@ -89,7 +58,7 @@ export default function Screenshots() {
           >
             <CarouselContent className="-ml-4">
               {screenshots.map((src, index) => {
-                let cursorClass = "cursor-pointer"
+                const cursorClass = "cursor-pointer"
                 let onClick = undefined
                 let opacityClass = ""
                 let borderStyle = {}
@@ -161,7 +130,7 @@ export default function Screenshots() {
 
 // ModalCarousel component for zoomed modal with Embla
 function ModalCarousel({ screenshots, initialIndex, onClose }: { screenshots: string[]; initialIndex: number; onClose: () => void }) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
+  const [emblaRef] = useEmblaCarousel({
     startIndex: initialIndex,
     loop: true,
     dragFree: false,
