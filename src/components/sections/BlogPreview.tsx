@@ -4,8 +4,7 @@ import Link from "next/link"
 import BlogImage from "@/components/pages/updates/BlogImage"
 import SvgComponent from "@/components/ui/corner"
 import Frame from "@/components/ui/frame"
-import { useEffect, useState } from "react"
-import { getPaginatedPosts } from "@/lib/actions"
+import { useRecentPosts } from "@/hooks/useRecentPosts"
 
 export interface BlogPost {
   id: number
@@ -35,22 +34,7 @@ const MAX_SUMMARY_LENGTH = 71
 const HERO_TITLE_MAX_LENGTH = 33
 
 export default function BlogPreview() {
-  const [posts, setPosts] = useState<BlogPost[] | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    async function fetchPosts() {
-      setLoading(true)
-      const { posts: fetchedPosts, error } = await getPaginatedPosts(1)
-      if (!error && fetchedPosts && fetchedPosts.length > 0) {
-        setPosts(fetchedPosts.slice(0, 4))
-      } else {
-        setPosts([])
-      }
-      setLoading(false)
-    }
-    fetchPosts()
-  }, [])
+  const { posts, loading, error } = useRecentPosts()
 
   if (loading) {
     return (
@@ -64,7 +48,8 @@ export default function BlogPreview() {
     )
   }
 
-  if (!posts || posts.length === 0) return null
+  if (error || !posts || posts.length === 0) return null
+  
   const hero = posts[0]
   const cards = posts.slice(1, 4)
   const heroTitle = hero.title || ""
