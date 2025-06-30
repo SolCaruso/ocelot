@@ -11,7 +11,7 @@ const SvgComponent = (props: SVGProps<SVGSVGElement>) => (
     <defs>
       <style>{".logoFullSVG .st0{fill:url(#logoGradient);}"}</style>
       <linearGradient id="logoGradient" x1="0%" y1="100%" x2="100%" y2="0%" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#fff" />
+        <stop offset="0%" stopColor="#CEB387" />
         <stop offset="66%" stopColor="#fbcea0" />
         <stop offset="100%" stopColor="#fbcfa0" />
       </linearGradient>

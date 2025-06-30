@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { NavDrawer } from "@/components/nav/Mobile"
 import Link from "next/link"
 import Ocelot from "@/components/logos/Ocelot";
+import OcelotLogo from "@/components/logos/OcelotLogo";
 import Steam from "@/components/logos/partners-mobile/Steam";
 import Solana from "@/components/logos/partners-mobile/Solana";
 import { cn } from "@/lib/utils"
@@ -20,6 +21,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
+import SvgComponent from "@/components/ui/corner"
 
 // const components: { title: string; href: string; description: string }[] = [
 //   {
@@ -77,13 +79,19 @@ export default function Nav() {
   };
 
   return (
-    <div className="flex items-center justify-between px-4 py-2 max-w-9xl mx-auto absolute top-2 left-0 right-0 z-30">
+    <div className="flex items-center justify-end px-4 py-2 max-w-9xl mx-auto absolute top-2 left-0 right-0 z-30">
       {/* Left: Logo */}
-      <div>
-        <Link href="/" className="inline-block md:ml-0">
-          <Ocelot className="h-11 3xl:h-14 w-auto opacity-80 transition-opacity hover:opacity-100 cursor-pointer duration-200 ease-[var(--ease-in-out-quad)]" />
-        </Link>
-      </div>
+      <Link
+  href="/"
+  className="absolute top-0 left-4 z-50 w-[90px] h-[112.5px] xl:w-[120px] xl:h-[150px] opacity-80 hover:opacity-100 transition-opacity duration-200 ease-[var(--ease-in-out-quad)]"
+>
+  <div className="md:hidden">
+    <OcelotLogo className="w-34 mt-2 h-full text-[#FEE8D1]" />
+  </div>
+  <div className="hidden md:block">
+    <Ocelot />
+  </div>
+</Link>
 
       {/* Center: Navigation */}
       <NavigationMenu className='hidden md:block absolute top-3 left-1/2 transform -translate-x-1/2'>
@@ -247,12 +255,43 @@ export default function Nav() {
       </NavigationMenu>
 
       {/* Right: Button */}
-      <Link
-        href='https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/'
-        className="py-3 px-6 text-[0.75rem] leading-[1rem] font-bold tracking-[0.2px] rounded-[5px] bg-[#E6E6E6] hover:bg-[#FFF] shadow-md text-black uppercase transition-colors md:block hidden"
-      >
-        BUY NOW
-      </Link>
+      <div className="justify-start mt-1 hidden md:flex">
+        <Link
+          href="https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group cursor-pointer relative overflow-hidden xl:px-9 xl:py-3.5 py-3 px-8 gradient-border-top transition-all duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] opacity-100 translate-y-0 backdrop-blur-sm bg-black/20"
+          style={{
+            borderStyle: "solid",
+            borderWidth: "0 1px 1px 1px",
+            borderImage: "linear-gradient(to top, #534C3F, #B4906C) 1",
+          }}
+        >
+          {/* Top Left Corner */}
+          <div className="absolute top-0 left-0 z-10 scale-x-[-1] opacity-50">
+            <SvgComponent className="xl:w-14 xl:h-14 w-10 h-10" />
+          </div>
+          {/* Top Right Corner */}
+          <div className="absolute top-0 right-0 z-10 opacity-50">
+            <SvgComponent className="xl:w-14 xl:h-14 w-10 h-10" />
+          </div>
+          {/* Bottom Left Corner */}
+          <div className="absolute bottom-0 left-0 z-10 scale-x-[-1] scale-y-[-1] opacity-50">
+            <SvgComponent className="xl:w-14 xl:h-14 w-10 h-10" />
+          </div>
+          {/* Bottom Right Corner */}
+          <div className="absolute bottom-0 right-0 z-10 scale-y-[-1] opacity-50">
+            <SvgComponent className="xl:w-14 xl:h-14 w-10 h-10" />
+          </div>
+          
+          <div className="relative">
+            <p className="uppercase font-quattrocento text-base tracking-wide font-semibold text-[#fbcea0] group-hover:text-white text-center">
+              BUY NOW
+            </p>
+
+          </div>
+        </Link>
+      </div>
 
       {/* Mobile: Hamburger */}
       <div className="md:hidden flex items-center ml-auto">
@@ -262,10 +301,10 @@ export default function Nav() {
           aria-label="Toggle mobile menu"
         >
           <div className="relative w-6 h-6">
-            <span className={`absolute block h-[2px] bg-white transition-all duration-300 ${isOpen ? "top-[8px] w-0 left-[50%]" : "top-0 w-full left-0"}`}></span>
-            <span className={`absolute block h-[2px] bg-white transition-all duration-300 origin-center top-[8px] w-full left-0 ${isOpen ? "rotate-45" : ""}`}></span>
-            <span className={`absolute block h-[2px] bg-white transition-all duration-300 origin-center top-[8px] w-full left-0 ${isOpen ? "-rotate-45" : ""}`}></span>
-            <span className={`absolute block h-[2px] bg-white transition-all duration-300 ${isOpen ? "top-[8px] w-0 left-[50%]" : "top-[16px] w-full left-0"}`}></span>
+            <span className={`absolute block h-[2px] bg-[#FEE8D1] transition-all duration-300 ${isOpen ? "top-[8px] w-0 left-[50%]" : "top-0 w-full left-0"}`}></span>
+            <span className={`absolute block h-[2px] bg-[#FEE8D1] transition-all duration-300 origin-center top-[8px] w-full left-0 ${isOpen ? "rotate-45" : ""}`}></span>
+            <span className={`absolute block h-[2px] bg-[#FEE8D1] transition-all duration-300 origin-center top-[8px] w-full left-0 ${isOpen ? "-rotate-45" : ""}`}></span>
+            <span className={`absolute block h-[2px] bg-[#FEE8D1] transition-all duration-300 ${isOpen ? "top-[8px] w-0 left-[50%]" : "top-[16px] w-full left-0"}`}></span>
           </div>
         </button>
       </div>
@@ -281,19 +320,21 @@ export default function Nav() {
   )
 }
 
-type ListItemProps = Omit<React.ComponentPropsWithoutRef<'a'>, 'title'> & {
+type ListItemProps = Omit<React.ComponentPropsWithoutRef<'a'>, 'title' | 'href'> & {
   title: React.ReactNode;
+  href: string;
 };
 
 const ListItem = React.forwardRef<
   React.ElementRef<'a'>,
   ListItemProps
->(({ className, title, children, ...props }, ref) => {
+>(({ className, title, children, href, ...props }, ref) => {
   return (
     <li>
       <NavigationMenuLink asChild>
-        <a
-          ref={ref}
+        <Link
+          ref={ref as any}
+          href={href}
           className={cn(
             "group block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
             className
@@ -303,10 +344,10 @@ const ListItem = React.forwardRef<
           <div className="flex items-center font-semibold opacity-80 group-hover:opacity-100 group-focus:opacity-100 group-active:opacity-100 transition-opacity">
             {title}
           </div>
-          <p className="line-clamp-2 text-sm leading-snug opacity-50 group-hover:opacity-80 ">
+          <p className="line-clamp-2 text-sm leading-snug opacity-50 group-hover:opacity-80 text-white">
             {children}
           </p>
-        </a>
+        </Link>
       </NavigationMenuLink>
     </li>
   )

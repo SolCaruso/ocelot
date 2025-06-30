@@ -167,9 +167,35 @@ export default function BlogPageClient({ heroPost, initialPosts }: { heroPost: B
           <div className="flex justify-between items-center w-full pt-4 max-w-3xl">
             <Link
               href={`/updates/${hero.date ?? ""}`}
-              className="py-3 px-6 text-[0.75rem] leading-[1rem] font-bold tracking-[0.2px] rounded-[5px] bg-[#E6E6E6] hover:bg-[#FFF] shadow-md text-black uppercase transition-colors"
+              className="group cursor-pointer relative overflow-hidden px-8 py-3.5 gradient-border-top transition-all duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] opacity-100 translate-y-0 backdrop-blur-sm bg-black/20"
+              style={{
+                borderStyle: "solid",
+                borderWidth: "0 1px 1px 1px",
+                borderImage: "linear-gradient(to top, #534C3F, #B4906C) 1",
+              }}
             >
-              Read more
+              {/* Top Left Corner */}
+              <div className="absolute top-0 left-0 z-10 scale-x-[-1] opacity-50">
+                <SvgComponent className="w-12 h-12" />
+              </div>
+              {/* Top Right Corner */}
+              <div className="absolute top-0 right-0 z-10 opacity-50">
+                <SvgComponent className="w-12 h-12" />
+              </div>
+              {/* Bottom Left Corner */}
+              <div className="absolute bottom-0 left-0 z-10 scale-x-[-1] scale-y-[-1] opacity-50">
+                <SvgComponent className="w-12 h-12" />
+              </div>
+              {/* Bottom Right Corner */}
+              <div className="absolute bottom-0 right-0 z-10 scale-y-[-1] opacity-50">
+                <SvgComponent className="w-12 h-12" />
+              </div>
+              
+              <div className="relative">
+                <p className="uppercase font-quattrocento text-sm tracking-wide font-semibold text-[#fbcea0] group-hover:text-white text-center">
+                  Read More
+                </p>
+              </div>
             </Link>
             <time className="text-[#fbcea0] font-quattrocento hidden md:block">
               {hero.date && formatDateUTC(hero.date)}

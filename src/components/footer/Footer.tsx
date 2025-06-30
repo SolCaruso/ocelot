@@ -110,7 +110,7 @@ const Trailer: React.FC = () => {
                 <div className='flex flex-col lg:flex-row lg:justify-between justify-center items-center'>
                     <div className="flex flex-col items-center lg:gap-6 md:mt-6 lg:mt-0 lg:flex-row py-6 lg:py-12 align-middle">
                         <Link href='/'>
-                            <Ocelot className="h-40 w-auto opacity-80 cursor-pointer"/>
+                            <Ocelot className="h-40 w-auto opacity-80 cursor-pointer hover:opacity-100 transition-opacity duration-200 ease-[var(--ease-in-out-quad)]"/>
                         </Link>
                         <div>
                             <div className='mb-3 pl-2'>
