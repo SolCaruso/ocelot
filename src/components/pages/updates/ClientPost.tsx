@@ -102,11 +102,15 @@ export function ClientPost({
             ),
             // Simple paragraph component
             p: ({ children }: { children: ReactNode }) => {
-              // If any child is a div, render a div instead of p
-              const hasBlock = React.Children.toArray(children).some(
-                (child: any) => child?.type === 'div'
+              // If any child is not a string or number (i.e., is a React element), render a div instead of p
+              const childrenArray = React.Children.toArray(children);
+              const hasBlock = childrenArray.some(
+                (child) =>
+                  typeof child !== "string" &&
+                  typeof child !== "number" &&
+                  React.isValidElement(child)
               );
-              const Wrapper = hasBlock ? 'div' : 'p';
+              const Wrapper = hasBlock ? "div" : "p";
               return (
                 <Wrapper className="mb-4 leading-relaxed text-white">{children}</Wrapper>
               );
