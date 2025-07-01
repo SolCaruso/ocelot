@@ -7,6 +7,7 @@ import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { NavDrawer } from "@/components/nav/Mobile"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import Ocelot from "@/components/logos/Ocelot";
 import OcelotLogo from "@/components/logos/OcelotLogo";
 import Steam from "@/components/logos/partners-mobile/Steam";
@@ -25,6 +26,8 @@ import SvgComponent from "@/components/ui/corner"
 import { useRecentPosts } from "@/hooks/useRecentPosts"
 
 export default function Nav() {
+  const pathname = usePathname();
+  const isLabPage = pathname === '/lab';
   const defaultImage = '/gif/vw.gif';
   const [isOpen, setIsOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState<string>(defaultImage);
@@ -241,9 +244,9 @@ export default function Nav() {
       {/* Right: Button */}
       <div className="justify-start mt-1 3xl:mt-1.5 hidden md:flex">
         <Link
-          href="https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"
-          target="_blank"
-          rel="noopener noreferrer"
+          href={isLabPage ? "#" : "https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"}
+          target={isLabPage ? undefined : "_blank"}
+          rel={isLabPage ? undefined : "noopener noreferrer"}
           className="group cursor-pointer relative overflow-hidden 3xl:px-8 3xl:py-3 py-3 px-8 gradient-border-top transition-all duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] opacity-100 translate-y-0 backdrop-blur-sm bg-black/20"
           style={{
             borderStyle: "solid",
@@ -252,25 +255,25 @@ export default function Nav() {
           }}
         >
           {/* Top Left Corner */}
-          <div className="absolute top-0 left-0 z-10 scale-x-[-1] opacity-50">
-            <SvgComponent className="3xl:w-14 3xl:h-14 w-10 h-10" />
+          <div className="absolute top-0 left-0 z-10 scale-x-[-1] group-hover:opacity-30 transition-opacity duration-600 ease-[var(--ease-in-out-quad)]">
+            <SvgComponent className="w-18 h-18 group-hover:w-18 group-hover:h-18" />
           </div>
           {/* Top Right Corner */}
-          <div className="absolute top-0 right-0 z-10 opacity-50">
-            <SvgComponent className="3xl:w-14 3xl:h-14 w-10 h-10" />
+          <div className="absolute top-0 right-0 z-10 opacity-30 group-hover:opacity-100 transition-opacity duration-600 ease-[var(--ease-in-out-quad)]">
+            <SvgComponent className="w-18 h-18 group-hover:w-18 group-hover:h-18" />
           </div>
           {/* Bottom Left Corner */}
-          <div className="absolute bottom-0 left-0 z-10 scale-x-[-1] scale-y-[-1] opacity-50">
-            <SvgComponent className="3xl:w-14 3xl:h-14 w-10 h-10" />
+          <div className="absolute bottom-0 left-0 z-10 scale-x-[-1] opacity-30 scale-y-[-1] group-hover:opacity-600 transition-opacity duration-300 ease-[var(--ease-in-out-quad)]">
+            <SvgComponent className="w-18 h-18 group-hover:w-18 group-hover:h-18" />
           </div>
           {/* Bottom Right Corner */}
-          <div className="absolute bottom-0 right-0 z-10 scale-y-[-1] opacity-50">
-            <SvgComponent className="3xl:w-14 3xl:h-14 w-10 h-10" />
+          <div className="absolute bottom-0 right-0 z-10 scale-y-[-1] group-hover:opacity-30 transition-opacity duration-600 ease-[var(--ease-in-out-quad)]">
+            <SvgComponent className="w-18 h-18 group-hover:w-18 group-hover:h-18" />
           </div>
           
           <div className="relative">
             <p className="uppercase font-quattrocento text-base tracking-wide font-semibold text-[#fbcea0] group-hover:text-white text-center">
-              BUY NOW
+              {isLabPage ? "CONNECT" : "BUY NOW"}
             </p>
 
           </div>
@@ -281,14 +284,14 @@ export default function Nav() {
       <div className="md:hidden flex items-center ml-auto">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="p-4 absolute top-1 right-2"
+          className="p-4 absolute top-1 right-1 scale-110"
           aria-label="Toggle mobile menu"
         >
-          <div className="relative w-6 h-6">
-            <span className={`absolute block h-[2px] bg-[#FEE8D1] transition-all duration-300 ${isOpen ? "top-[8px] w-0 left-[50%]" : "top-0 w-full left-0"}`}></span>
-            <span className={`absolute block h-[2px] bg-[#FEE8D1] transition-all duration-300 origin-center top-[8px] w-full left-0 ${isOpen ? "rotate-45" : ""}`}></span>
-            <span className={`absolute block h-[2px] bg-[#FEE8D1] transition-all duration-300 origin-center top-[8px] w-full left-0 ${isOpen ? "-rotate-45" : ""}`}></span>
-            <span className={`absolute block h-[2px] bg-[#FEE8D1] transition-all duration-300 ${isOpen ? "top-[8px] w-0 left-[50%]" : "top-[16px] w-full left-0"}`}></span>
+          <div className="relative w-6 h-6 ">
+            <span className={`rounded-full absolute block h-[2.5px] bg-[#FEE8D1] transition-all duration-300 ${isOpen ? "top-[8px] w-0 left-[50%]" : "top-0 w-full left-0"}`}></span>
+            <span className={`rounded-full absolute block h-[2.5px] bg-[#FEE8D1] transition-all duration-300 origin-center top-[8px] w-full right-0 ${isOpen ? "rotate-45" : ""}`}></span>
+            <span className={`rounded-full absolute block h-[2.5px] bg-[#FEE8D1] transition-all duration-300 origin-center top-[8px] w-full right-0 ${isOpen ? "-rotate-45" : ""}`}></span>
+            <span className={`rounded-full absolute block h-[2.5px] bg-[#FEE8D1] transition-all duration-300 ${isOpen ? "top-[8px] w-0 left-[50%]" : "top-[16px] w-1/2 right-0"}`}></span>
           </div>
         </button>
       </div>

@@ -14,6 +14,8 @@ import OcelotMobile from "@/components/logos/partners-mobile/Ocelot"
 import Image from "next/image"
 import Divider from "@/components/ui/divider"
 import Play from "@/components/ui/icons/Play"
+import SmokeLogo from "@/components/ui/smoke-logo"
+import "./SmokeFX.css"
 
 interface HeroProps {
   /** Tailwind classes for responsive sizing, e.g. "h-40 md:h-56 lg:h-72" */
@@ -97,6 +99,24 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
     }
   }, [playing])
 
+  // Smoke effect for FANTASY TACTICS text
+  useEffect(() => {
+    const smokeElement = document.getElementById('fantasy-tactics-smoke')
+    if (smokeElement) {
+      // Trigger smoke effect when element comes into view
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active')
+            observer.unobserve(entry.target)
+          }
+        })
+      }, { threshold: 0.5 })
+      
+      observer.observe(smokeElement)
+    }
+  }, [])
+
   const handlePlay = () => {
     setPlaying(true)
     if (playerRef.current && playerRef.current.playVideo) {
@@ -126,20 +146,58 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
           <div className={`absolute inset-0 z-15 ${config.shadows.overlay} pointer-events-none`} />
         </div>
 
-        <div className={`absolute inset-x-0 top-0 bottom-0 transform-gpu z-20 flex flex-col items-center justify-center md:justify-start text-center ${config.layout.logoPadding}`}>
+        <div className={`absolute inset-x-0 top-0 bottom-0 transform-gpu z-20 flex flex-col items-center justify-center md:justify-start text-center ${config.layout.logoPadding} ${config.logo.src.includes('lab.webp') ? 'translate-y-8 md:translate-y-12' : ''}`}>
           {/* Logo */}
-          <Image
-            src={config.logo.src}
-            alt={config.logo.alt}
-            className={`mx-auto h-auto mb-2 ${config.logo.widthClasses} select-none animate-slide-up-gentle`}
-            width={1920}
-            height={1080}
-            draggable={false}
-          />
+          {config.logo.src.includes('vw.webp') ? (
+            <SmokeLogo
+              src={config.logo.src}
+              alt={config.logo.alt}
+              widthClasses={config.logo.widthClasses}
+            />
+          ) : config.logo.src.includes('lab.webp') ? (
+            <div className={`mx-auto md:mb-2 ${config.logo.widthClasses} select-none relative`}>
+              {/* Main logo */}
+              <Image
+                src={config.logo.src}
+                alt={config.logo.alt}
+                className="w-full h-auto animate-glitch-main"
+                width={1920}
+                height={1080}
+                draggable={false}
+              />
+              {/* Blue glitch layer */}
+              <Image
+                src={config.logo.src}
+                alt=""
+                className="w-full h-auto absolute top-0 left-0 animate-glitch-blue"
+                width={1920}
+                height={1080}
+                draggable={false}
+              />
+              {/* Green glitch layer */}
+              <Image
+                src={config.logo.src}
+                alt=""
+                className="w-full h-auto absolute top-0 left-0 animate-glitch-green"
+                width={1920}
+                height={1080}
+                draggable={false}
+              />
+            </div>
+          ) : (
+            <Image
+              src={config.logo.src}
+              alt={config.logo.alt}
+              className={`mx-auto h-auto mb-2 ${config.logo.widthClasses} select-none animate-slide-up-gentle`}
+              width={1920}
+              height={1080}
+              draggable={false}
+            />
+          )}
 
           {/* Text */}
           {(config.title || config.subtitle) && (
-            <div className="space-y-4 md:space-y-6 mb-8 md:mb-12 text-center" style={{ contain: 'layout' }}>
+            <div className={`space-y-4 md:space-y-6 mb-8 md:mb-12 text-center ${config.logo.src.includes('lab.webp') ? 'h-8 md:h-10' : ''}`} style={{ contain: 'layout' }}>
               {config.title && (
                 <div className="relative inline-block animate-slide-up-gentle opacity-0 transform-gpu" style={{ animationDelay: "0.2s" }}>
                   {/* Beneath, stationary text */}
@@ -153,7 +211,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
                 </div>
               )}
               {config.subtitle && (
-                <h3 className="font-semibold text-[#B9B9B9] md:text-lg text-center filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+                <h3 className={`font-bold text-[#B9B9B9] md:text-lg text-center filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] whitespace-nowrap ${config.logo.src.includes('lab.webp') ? 'absolute top-0 left-1/2 transform -translate-x-1/2' : ''}`}>
                   {config.subtitle}
                 </h3>
               )}
@@ -308,12 +366,25 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
 
                   {/* Text block */}
                   <div className="md:ml-8 flex-1 text-center lg:text-left max-w-xl min-w-[20rem]">
-                    <h3
-                      className="bg-clip-text text-transparent text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4"
-                      style={{ backgroundImage: "linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)" }}
-                    >
-                      FANTASY TACTICS
-                    </h3>
+                    {config.logo.src.includes('vw.webp') ? (
+                      // Smoke effect version for vw page
+                      <h3
+                        className="smoke text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4 tracking-[0.02em]"
+                        id="fantasy-tactics-smoke"
+                      >
+                        <div>
+                          <span>F</span><span>A</span><span>N</span><span>T</span><span>A</span><span>S</span><span>Y</span><span>&nbsp;</span><span>T</span><span>A</span><span>C</span><span>T</span><span>I</span><span>C</span><span>S</span>
+                        </div>
+                      </h3>
+                    ) : (
+                      // Static version for all other pages
+                      <h3
+                        className="bg-clip-text text-transparent text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4 tracking-[0.04em] whitespace-nowrap"
+                        style={{ backgroundImage: "linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)" }}
+                      >
+                        FANTASY TACTICS
+                      </h3>
+                    )}
                     <p className="mt-4 text-stone-50 md:text-xl font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] ">
                       Tactical, isometric turn-based combat draws inspiration from the classic RPGs of old, offering both
                       depth and strategy.

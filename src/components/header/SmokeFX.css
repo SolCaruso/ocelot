@@ -1,0 +1,68 @@
+.smoke {
+  display: block;
+  letter-spacing: 0.0075em;
+}
+
+.smoke span {
+  background: #FEE8D1;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.smoke div {
+  display: flex;
+}
+
+.smoke span {
+  display: block;
+  backface-visibility: hidden;
+}
+
+.smoke span:nth-child(1) { --d: 0.05s; }
+.smoke span:nth-child(2) { --d: 0.1s; }
+.smoke span:nth-child(3) { --d: 0.15s; }
+.smoke span:nth-child(4) { --d: 0.2s; }
+.smoke span:nth-child(5) { --d: 0.25s; }
+.smoke span:nth-child(6) { --d: 0.3s; }
+.smoke span:nth-child(7) { --d: 0.35s; }
+.smoke span:nth-child(8) { --d: 0.4s; }
+.smoke span:nth-child(9) { --d: 0.45s; }
+.smoke span:nth-child(10) { --d: 0.5s; }
+.smoke span:nth-child(11) { --d: 0.55s; }
+.smoke span:nth-child(12) { --d: 0.6s; }
+.smoke span:nth-child(13) { --d: 0.65s; }
+.smoke span:nth-child(14) { --d: 0.7s; }
+.smoke span:nth-child(15) { --d: 0.75s; }
+
+.smoke {
+  --move: 24px;
+  --move-y: -16px;
+  --blur: 6px;
+}
+
+.smoke.active span {
+  --duration: 1.25s;
+  animation: smoke var(--duration) linear var(--d);
+}
+
+@keyframes smoke {
+  45%,
+  55% {
+    filter: blur(var(--blur));
+  }
+  50%,
+  50.1% {
+    opacity: 0;
+  }
+  25%,
+  75% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(var(--move)) translateY(var(--move-y));
+  }
+  50.1% {
+    transform: translateX(calc(var(--move) * -1));
+  }
+}

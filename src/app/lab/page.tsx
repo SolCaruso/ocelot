@@ -2,6 +2,7 @@ import Hero from "@/components/header/Hero";
 import { SmokeContainer } from "@/components/sections/SmokeContainer";
 import { Container } from "@/components/ui/container";
 import Screenshots from "@/components/sections/Screenshots";
+import Swap from "@/components/pages/labyrinths/Swap";
 
 const heroConfig = {
   videoSrc: "/video/lab-hero.webm",
@@ -21,7 +22,7 @@ const heroConfig = {
     showSteam: false,
   },
   layout: {
-    logoPadding: "md:pt-32 md:pb-0",
+    logoPadding: "md:pt-32 pb-16 md:pb-0",
     partnerMargin: "md:mb-8",
     buttonPosition: "mt-4 sm:mt-8",
     buttonSize: "text-sm md:text-base 3xl:text-xl",
@@ -41,9 +42,9 @@ export default function Home() {
     <SmokeContainer>
       <Hero className='h-[600px] md:h-[800px] lg:h-[900px]' config={heroConfig}/>
       <Container>
-        
+        <Swap/>
         <Screenshots/>
       </Container>
     </SmokeContainer>
   );
-}
+} 

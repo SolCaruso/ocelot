@@ -353,11 +353,11 @@ function ModalCarousel({ screenshots, initialIndex, onClose }: {
                     
                     {/* Top Left Corner */}
                     <div className="absolute top-0 left-0 z-10 scale-x-[-1]">
-                      <SvgComponent className="w-32 h-32" />
+                      <SvgComponent className="w-42 h-42" />
                     </div>
                     {/* Top Right Corner */}
                     <div className="absolute top-0 right-0 z-10">
-                      <SvgComponent className="w-32 h-32" />
+                      <SvgComponent className="w-42 h-42" />
                     </div>
                     
                     {/* Only render images that are visible or adjacent for performance */}

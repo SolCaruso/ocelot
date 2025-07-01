@@ -4,6 +4,7 @@ import { montserrat } from '@/fonts'
 import Nav from "@/components/nav/Nav"  
 import Footer from '@/components/footer/Footer';
 import { Toaster } from '@/components/ui/sonner'
+import SolanaWalletProvider from '@/components/pages/labyrinths/SolanaWalletProvider';
 
 export const metadata: Metadata = {
   title: "Guild Saga",
@@ -23,14 +24,16 @@ export default function RootLayout({
       `}
     >
       <body className="antialiased bg-gs-bg h-screen font-sans">
-        <header>
-         <Nav />
-        </header>
-        <main>
-          {children}
-        </main>  
-        <Toaster position="bottom-right" />
-        <Footer/>
+        <SolanaWalletProvider>
+          <header>
+            <Nav />
+          </header>
+          <main>
+            {children}
+          </main>  
+          <Toaster position="bottom-right" />
+          <Footer/>
+        </SolanaWalletProvider>
       </body>
     </html>
   )
