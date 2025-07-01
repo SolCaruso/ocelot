@@ -1,6 +1,7 @@
 "use client"
 import * as React from "react"
 import Image from "next/image"
+import { motion, AnimatePresence } from "framer-motion"
 import {
   Carousel,
   CarouselContent,
@@ -12,11 +13,43 @@ import Frame from "@/components/ui/frame"
 
 const screenshots = Array.from({ length: 9 }).map((_, i) => `/webp/Screenshot${i + 1}.webp`)
 
+// Pre-calculate modal dimensions for better performance
+const getModalDimensions = () => {
+  if (typeof window === 'undefined') return { width: 800, height: 450 }
+  
+  const vw = window.innerWidth * 0.8
+  const vh = window.innerHeight * 0.8
+  const aspectRatio = 16 / 9
+  
+  let width = vw
+  let height = vw / aspectRatio
+  
+  if (height > vh) {
+    height = vh
+    width = vh * aspectRatio
+  }
+  
+  return { width: Math.min(width, 2133), height }
+}
+
 export default function Screenshots() {
   const [centerIndex, setCenterIndex] = React.useState(Math.floor(screenshots.length / 2))
   const [api, setApi] = React.useState<ReturnType<typeof useEmblaCarousel>[1] | null>(null)
   const [zoomed, setZoomed] = React.useState(false)
   const [zoomedIndex, setZoomedIndex] = React.useState<number | null>(null)
+  const [isAnimating, setIsAnimating] = React.useState(false)
+
+  // Debounce zoom state to prevent rapid toggling
+  const debouncedSetZoomed = React.useCallback(
+    React.useMemo(() => {
+      let timeout: NodeJS.Timeout
+      return (value: boolean) => {
+        if (timeout) clearTimeout(timeout)
+        timeout = setTimeout(() => setZoomed(value), 50)
+      }
+    }, []),
+    []
+  )
 
   React.useEffect(() => {
     if (!api) return
@@ -32,12 +65,23 @@ export default function Screenshots() {
   }, [api])
 
   React.useEffect(() => {
-    if (zoomed) setZoomedIndex(centerIndex)
-    else setZoomedIndex(null)
+    if (zoomed) {
+      setZoomedIndex(centerIndex)
+      setIsAnimating(true)
+    } else {
+      setZoomedIndex(null)
+      setIsAnimating(false)
+    }
   }, [zoomed, centerIndex])
 
+  const handleZoomClick = React.useCallback(() => {
+    if (!isAnimating) {
+      debouncedSetZoomed(true)
+    }
+  }, [isAnimating, debouncedSetZoomed])
+
   return (
-    <div className="my-42 relative">
+    <div className="lg:mb-42 mb-24 lg:mt-34 sm:mt-24 mt-12 relative">
       <h2
         className="text-xl md:text-2xl font-medium tracking-widest md:mb-6 mb-5 font-oldFenris drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] uppercase text-center text-transparent bg-clip-text"
         style={{ backgroundImage: 'linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)' }}
@@ -80,27 +124,23 @@ export default function Screenshots() {
                 const cursorClass = "cursor-pointer"
                 let onClick = undefined
                 let opacityClass = ""
-                let borderStyle = {}
+                let borderClass = ""
                 
                 if (index === (centerIndex - 1 + screenshots.length) % screenshots.length) {
                   onClick = () => api && api.scrollPrev()
-                  opacityClass = "opacity-50 hover:opacity-80 transition-opacity duration-300 border-2 border-transparent"
+                  opacityClass = "opacity-50 hover:opacity-80 transition-opacity duration-300"
                 } else if (index === (centerIndex + 1) % screenshots.length) {
                   onClick = () => api && api.scrollNext()
-                  opacityClass = "opacity-50 hover:opacity-80 transition-opacity duration-300 border-2 border-transparent"
+                  opacityClass = "opacity-50 hover:opacity-80 transition-opacity duration-300"
                 } else if (index === centerIndex) {
-                  onClick = () => setZoomed(true)
-                  opacityClass = "border-2 border-transparent hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-all duration-300"
-                  borderStyle = {
-                    borderStyle: 'solid',
-                    borderWidth: '1px',
-                    borderImage: 'linear-gradient(to top, #534C3F, #B4906C) 1',
-                    borderColor: 'transparent',
-                  }
+                  onClick = handleZoomClick
+                  opacityClass = "hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-shadow duration-300"
+                  borderClass = "border border-[#B4906C]/60"
                 }
+                
                 return (
                   <CarouselItem key={index} className="pl-4 basis-[700px]">
-                    <div className={`${cursorClass} ${opacityClass} overflow-hidden relative`} onClick={onClick} style={borderStyle}>
+                    <div className={`${cursorClass} ${opacityClass} ${borderClass} overflow-hidden relative`} onClick={onClick}>
                       {index === centerIndex && (
                         <>
                           {/* Top Left Corner */}
@@ -118,8 +158,9 @@ export default function Screenshots() {
                         alt={`Screenshot ${index + 1}`}
                         width={700}
                         height={394}
-                        className={`object-cover w-full h-full transition-transform duration-300 ${index === centerIndex ? '' : ''}`}
+                        className="object-cover w-full h-full"
                         draggable={false}
+                        priority={Math.abs(index - centerIndex) <= 1} // Priority load for visible images
                       />
                     </div>
                   </CarouselItem>
@@ -136,19 +177,18 @@ export default function Screenshots() {
       </div>
 
       {/* Modal Zoom Overlay - only for desktop */}
-      {zoomed && zoomedIndex !== null && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 transition-colors duration-300"
-          onClick={() => setZoomed(false)}
-        >
-          {/* Modal Embla Carousel */}
+      <AnimatePresence mode="wait">
+        {zoomed && zoomedIndex !== null && (
           <ModalCarousel
             screenshots={screenshots}
             initialIndex={zoomedIndex}
-            onClose={() => setZoomed(false)}
+            onClose={() => {
+              setIsAnimating(false)
+              setZoomed(false)
+            }}
           />
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   )
 }
@@ -165,9 +205,15 @@ function MobileScreenshots({ screenshots }: { screenshots: string[] }) {
   return (
     <div className="w-full xs:px-6.5">
       <div
-        ref={emblaRef}
-        className="overflow-hidden"
+        style={{
+          maskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)'
+        }}
       >
+        <div
+          ref={emblaRef}
+          className="overflow-hidden"
+        >
         <div className="flex">
           {screenshots.map((src, index) => (
             <div
@@ -176,14 +222,9 @@ function MobileScreenshots({ screenshots }: { screenshots: string[] }) {
             >
               <div className="w-full px-1">
                 <div 
-                  className="w-full relative bg-black/20 border border-[#534C3F]/40"
-                  style={{
-                    borderStyle: 'solid',
-                    borderWidth: '0 1px 1px 1px',
-                    borderImage: 'linear-gradient(to top, #534C3F, #B4906C) 1',
-                  }}
+                  className="w-full relative bg-black/20 border-t border-b border-r border-l border-[#B4906C]/40"
                 >
-                  <span className="absolute top-0 left-0 h-[1.2px] w-full z-10" style={{background: 'linear-gradient(to right, #AC8B6A 0%, #ac8b6a68 20%, rgba(172,139,106,0.1) 50%, #ac8b6a52 65%, #AC8B6A 100%)'}} />
+                  <span className="absolute top-0 left-0 h-[1.2px] w-full z-10 bg-gradient-to-r from-[#AC8B6A] via-[#AC8B6A]/20 to-[#AC8B6A]" />
                   <Image
                     src={src}
                     alt={`Screenshot ${index + 1}`}
@@ -197,93 +238,147 @@ function MobileScreenshots({ screenshots }: { screenshots: string[] }) {
             </div>
           ))}
         </div>
+        </div>
       </div>
     </div>
   )
 }
 
-// ModalCarousel component for zoomed modal with Embla
-function ModalCarousel({ screenshots, initialIndex, onClose }: { screenshots: string[]; initialIndex: number; onClose: () => void }) {
-  const [emblaRef] = useEmblaCarousel({
+// Optimized ModalCarousel component
+function ModalCarousel({ screenshots, initialIndex, onClose }: { 
+  screenshots: string[]; 
+  initialIndex: number; 
+  onClose: () => void 
+}) {
+  const [currentIndex, setCurrentIndex] = React.useState(initialIndex)
+  const [emblaRef, emblaApi] = useEmblaCarousel({
     startIndex: initialIndex,
     loop: true,
     dragFree: false,
     containScroll: 'trimSnaps',
   })
+  
+  const modalDimensions = React.useMemo(() => getModalDimensions(), [])
+  
   React.useEffect(() => {
-    function handleKey(e: KeyboardEvent) {
+    if (!emblaApi) return undefined
+    
+    const onSelect = () => {
+      setCurrentIndex(emblaApi.selectedScrollSnap())
+    }
+    
+    emblaApi.on('select', onSelect)
+    return () => {
+      emblaApi.off('select', onSelect)
+    }
+  }, [emblaApi])
+
+  React.useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowLeft') emblaApi?.scrollPrev()
+      if (e.key === 'ArrowRight') emblaApi?.scrollNext()
     }
-    function handleScroll() {
-      onClose()
-    }
+    
+    const handleScroll = () => onClose()
+    
     window.addEventListener('keydown', handleKey)
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    
     return () => {
       window.removeEventListener('keydown', handleKey)
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [onClose])
+  }, [onClose, emblaApi])
+
+  // Only render visible slides + buffer for performance
+  const getVisibleSlides = React.useMemo(() => {
+    const buffer = 1
+    const visibleSlides = new Set()
+    
+    for (let i = -buffer; i <= buffer; i++) {
+      const index = (currentIndex + i + screenshots.length) % screenshots.length
+      visibleSlides.add(index)
+    }
+    
+    return visibleSlides
+  }, [currentIndex, screenshots.length])
+
   return (
-    <div className="w-full h-full flex items-center justify-center select-none">
-      <div
-        ref={emblaRef}
-        className="overflow-hidden shadow-2xl bg-black/0"
-        style={{ 
-          cursor: 'zoom-out',
-          width: '80vw',
-          height: 'calc(80vw * 9 / 16)',
-          maxHeight: '80vh'
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-sm"
+      onClick={onClose}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+    >
+      <motion.div
+        className="relative select-none"
+        style={{
+          width: modalDimensions.width,
+          height: modalDimensions.height,
         }}
-        onClick={e => { e.stopPropagation(); onClose(); }}
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        transition={{ 
+          type: "spring", 
+          stiffness: 400,
+          damping: 25,
+          mass: 0.8
+        }}
+        onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex h-full">
-          {screenshots.map((src, idx) => (
-            <div
-              key={idx}
-              className="min-w-0 shrink-0 grow-0 basis-full flex items-center justify-center h-full"
-            >
-              <div 
-                className="w-full h-full flex items-center justify-center"
+        <div
+          ref={emblaRef}
+          className="overflow-hidden w-full h-full cursor-zoom-out px-12"
+          style={{
+            maskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)'
+          }}
+          onClick={onClose}
+        >
+          <div className="flex h-full">
+            {screenshots.map((src, idx) => (
+              <div
+                key={idx}
+                className="min-w-0 shrink-0 grow-0 basis-full flex items-center justify-center h-full mx-6"
               >
-                <div 
-                  className="relative w-full max-w-[2133px] aspect-[16/9] bg-black/20 border border-[#534C3F]/40 flex items-center justify-center"
-                  style={{
-                    borderStyle: 'solid',
-                    borderWidth: '0 1px 1px 1px',
-                    borderImage: 'linear-gradient(to top, #534C3F, #B4906C) 1',
-                  }}
-                >
-                  <span className="absolute top-0 left-0 h-[1.2px] w-full z-10" style={{background: 'linear-gradient(to right, #AC8B6A 0%, #ac8b6a68 20%, rgba(172,139,106,0.1) 50%, #ac8b6a52 65%, #AC8B6A 100%)'}} />
-                  {/* Top Left Corner */}
-                  <div className="absolute top-0 left-0 z-10 scale-x-[-1]">
-                    <SvgComponent className="w-24 h-24" />
+                <div className="w-full h-full flex items-center justify-center">
+                  <div 
+                    className="relative w-full h-full border border-[#B4906C]/60"
+                  >
+                    <span className="absolute top-0 left-0 h-[2px] w-full z-10 bg-gradient-to-r from-[#AC8B6A] via-[#AC8B6A]/30 to-[#AC8B6A]" />
+                    
+                    {/* Top Left Corner */}
+                    <div className="absolute top-0 left-0 z-10 scale-x-[-1]">
+                      <SvgComponent className="w-32 h-32" />
+                    </div>
+                    {/* Top Right Corner */}
+                    <div className="absolute top-0 right-0 z-10">
+                      <SvgComponent className="w-32 h-32" />
+                    </div>
+                    
+                    {/* Only render images that are visible or adjacent for performance */}
+                    {getVisibleSlides.has(idx) && (
+                      <Image
+                        src={src}
+                        alt={`Screenshot ${idx + 1}`}
+                        fill
+                        className="object-cover"
+                        draggable={false}
+                        priority={idx === currentIndex}
+                        sizes="80vw"
+                      />
+                    )}
                   </div>
-                  {/* Top Right Corner */}
-                  <div className="absolute top-0 right-0 z-10">
-                    <SvgComponent className="w-24 h-24" />
-                  </div>
-                  {/* Bottom Left Corner */}
-                  <div className="absolute bottom-0 left-0 z-10 scale-x-[-1] scale-y-[-1]">
-                    <SvgComponent className="w-24 h-24" />
-                  </div>
-                  {/* Bottom Right Corner */}
-                  <div className="absolute bottom-0 right-0 z-10 scale-y-[-1]">
-                    <SvgComponent className="w-24 h-24" />
-                  </div>
-                  <Image
-                    src={src}
-                    alt={`Screenshot ${idx + 1}`}
-                    fill
-                    className="object-contain w-full h-full"
-                    draggable={false}
-                  />
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }

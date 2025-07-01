@@ -17,20 +17,23 @@ const heroConfig = {
     widthClasses: "w-[20rem] sm:w-[24rem] lg:w-[30rem]"
   },
   title: "",
-  subtitle: "",
+  subtitle: "COMING SOON",
   characterIllustration: {
     src: "/webp/thal.webp",
     alt: "Persephone Character Illustration"
   },
   partners: {
     showSolana: true,
+    showSteam: false,
   },
   layout: {
-    logoPadding: "md:pt-32 pb-32 md:pb-0",
+    logoPadding: "md:pt-32 md:pb-0",
     partnerMargin: "md:mb-8",
     buttonPosition: "mt-4 sm:mt-8",
     buttonSize: "text-sm md:text-base 3xl:text-xl",
-    buttonTop: "68%"
+    buttonTop: "68%",
+    showButton: false,
+    showTrailer: false
   },
   shadows: {
     topGradient: "bg-gradient-to-b from-black/40 to-black/0",
@@ -98,12 +101,7 @@ export default function Home() {
     <SmokeContainer>
       <Hero className='h-[600px] md:h-[800px] lg:h-[900px]' config={heroConfig}/>
       <Container>
-        <Characters 
-          characters={characters}
-          backgroundClasses={backgroundClasses}
-        />
-        <BlogPreview/>
-        <ReviewSection/>
+        
         <Screenshots/>
       </Container>
     </SmokeContainer>

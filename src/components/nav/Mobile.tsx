@@ -111,7 +111,7 @@ export function NavDrawer({ open, onOpenChange }: NavDrawerProps) {
                         <Steam className="h-5 w-auto mt-0.5 flex-shrink-0" />
                       </li>
                       <li className="flex items-start space-x-2">
-                        <Link href="/" onClick={() => onOpenChange(false)}>
+                        <Link href="/lab" onClick={() => onOpenChange(false)}>
                           <DrawerTitle className="text-[#FEE8D1] hover:text-white transition-colors">Labyrinths (coming soon)</DrawerTitle>
                         </Link>
                         <Solana className="h-5 w-auto mt-0.5 flex-shrink-0" />

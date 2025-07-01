@@ -293,7 +293,7 @@ export default function ReviewSection() {
     <>
       <h2
         id="reviews-title"
-        className="text-3xl font-medium tracking-tight text-center font-oldFenris uppercase text-pretty mt-8 text-transparent bg-clip-text px-8"
+        className="text-3xl font-medium tracking-tight text-center font-oldFenris uppercase text-pretty text-transparent bg-clip-text px-8"
         style={{ backgroundImage: 'linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)' }}
       >
         What Guildies are saying
