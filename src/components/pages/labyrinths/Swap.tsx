@@ -254,9 +254,10 @@ export default function Swap() {
   }
 
   return (
-    <section className='max-w-2xl mx-auto px-6 mt-36'>
+    <section className='max-w-2xl mx-auto px-6 mt-30 sm:mt-44 pb-8'>
 
-      <p className="text-[#fbcea0] text-lg font-medium tracking-widest font-oldFenris drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] uppercase md:mx-8 mb-4">
+      <p className="text-xl sm:text-2xl font-medium tracking-widest font-oldFenris uppercase md:mx-8 sm:mb-0 mb-6 text-transparent bg-clip-text drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]"
+      style={{ backgroundImage: 'linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)' }}>
         Chaos Is Coming...  
       </p>
       

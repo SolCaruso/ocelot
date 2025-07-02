@@ -37,13 +37,23 @@ const heroConfig = {
   }
 };
 
+const labScreenshots = [
+  "/webp/lab-screenshot1.webp",
+  "/webp/lab-screenshot2.webp",
+  "/webp/lab-screenshot3.webp",
+  "/webp/lab-screenshot4.webp",
+  "/webp/lab-screenshot5.webp",
+  "/webp/lab-screenshot6.webp",
+  "/webp/lab-screenshot7.webp",
+];
+
 export default function Home() {
   return (
     <SmokeContainer>
       <Hero className='h-[600px] md:h-[800px] lg:h-[900px]' config={heroConfig}/>
       <Container>
         <Swap/>
-        <Screenshots/>
+        <Screenshots images={labScreenshots} />
       </Container>
     </SmokeContainer>
   );

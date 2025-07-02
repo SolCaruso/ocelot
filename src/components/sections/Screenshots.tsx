@@ -11,7 +11,7 @@ import useEmblaCarousel from "embla-carousel-react"
 import SvgComponent from "@/components/ui/corner"
 import Frame from "@/components/ui/frame"
 
-const screenshots = Array.from({ length: 9 }).map((_, i) => `/webp/Screenshot${i + 1}.webp`)
+const defaultScreenshots = Array.from({ length: 9 }).map((_, i) => `/webp/Screenshot${i + 1}.webp`)
 
 // Pre-calculate modal dimensions for better performance
 const getModalDimensions = () => {
@@ -32,7 +32,8 @@ const getModalDimensions = () => {
   return { width: Math.min(width, 2133), height }
 }
 
-export default function Screenshots() {
+export default function Screenshots({ images }: { images?: string[] }) {
+  const screenshots = images ?? defaultScreenshots;
   const [centerIndex, setCenterIndex] = React.useState(Math.floor(screenshots.length / 2))
   const [api, setApi] = React.useState<ReturnType<typeof useEmblaCarousel>[1] | null>(null)
   const [zoomed, setZoomed] = React.useState(false)

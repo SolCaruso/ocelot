@@ -93,6 +93,18 @@ const characters: Character[] = [
   },
 ]
 
+const vwScreenshots = [
+  "/webp/Screenshot1.webp",
+  "/webp/Screenshot2.webp",
+  "/webp/Screenshot3.webp",
+  "/webp/Screenshot4.webp",
+  "/webp/Screenshot5.webp",
+  "/webp/Screenshot6.webp",
+  "/webp/Screenshot7.webp",
+  "/webp/Screenshot8.webp",
+  "/webp/Screenshot9.webp",
+];
+
 export default function Home() {
   return (
     <SmokeContainer>
@@ -104,7 +116,7 @@ export default function Home() {
         />
         <BlogPreview/>
         <ReviewSection/>
-        <Screenshots/>
+        <Screenshots images={vwScreenshots} />
       </Container>
     </SmokeContainer>
   );
