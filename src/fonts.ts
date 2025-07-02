@@ -1,6 +1,6 @@
 // src/fonts.ts
 import localFont from 'next/font/local'
-import { Quattrocento, Montserrat } from 'next/font/google'
+import { Quattrocento, Montserrat, Inter } from 'next/font/google'
 
 // 1) Old Fenris (self-hosted)
 export const oldFenris = localFont({
@@ -33,5 +33,12 @@ export const montserrat = Montserrat({
   subsets: ['latin'],
   weight: ['100','200','300','400','500','600','700','800','900'],
   variable: '--font-montserrat',
+  display: 'swap',
+})
+
+export const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400','500','600','700'],
+  variable: '--font-inter',
   display: 'swap',
 })

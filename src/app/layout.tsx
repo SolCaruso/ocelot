@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import "./globals.css"
-import { montserrat } from '@/fonts'
+import { montserrat, inter } from '@/fonts'
 import Nav from "@/components/nav/Nav"  
 import Footer from '@/components/footer/Footer';
 import { Toaster } from '@/components/ui/sonner'
@@ -20,7 +20,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`dark scroll-smooth
-      ${montserrat.className} ${montserrat.variable}
+      ${montserrat.className} ${montserrat.variable} ${inter.variable}
       `}
     >
       <body className="antialiased bg-gs-bg h-screen font-sans">
