@@ -173,7 +173,6 @@ export default function Swap() {
 
 import * as React from "react"
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   CommandDialog,
   CommandEmpty,
@@ -218,7 +217,7 @@ export default function Swap() {
     // Only allow one dot
     const parts = cleaned.split(".");
     let intPart = parts[0].slice(0, 17); // max 17 chars
-    let decPart = parts[1] ? parts[1].replace(/\./g, "").slice(0, 6) : "";
+    const decPart = parts[1] ? parts[1].replace(/\./g, "").slice(0, 6) : "";
     intPart = intPart.replace(/^0+(?!$)/, ''); // Remove leading zeros
     let formatted = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     if (decPart) formatted += "." + decPart;
@@ -256,29 +255,34 @@ export default function Swap() {
 
   return (
     <section className='max-w-2xl mx-auto px-6 mt-36'>
+
+      <p className="text-[#fbcea0] text-lg font-medium tracking-widest font-oldFenris drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] uppercase md:mx-8 mb-4">
+        Chaos Is Coming...  
+      </p>
       
       {/* Settings */}
-        <div className="flex justify-end items-center px-6 mb-4">
+        <div className="flex justify-end items-center md:px-6 mb-3">
             <div className="flex gap-2">
               {/* Market Button */}
-              <button className="flex items-center gap-2 rounded-full bg-stone-800/80 px-3 py-1 text-[12px] font-semibold text-stone-200 shadow-sm border border-transparent hover:bg-stone-700/60  transition">
-                <CandlestickChart size={15} className="text-stone-400" />
-                <span className="drop-shadow-[0_2px_0_#000]">Market</span>
-              </button>
+              <Button variant="outline"  className="group font-semibold text-xs text-stone-500 cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)] rounded-full">
+                <CandlestickChart size={15} className="text-stone-400 group-hover:text-stone-200" />
+                <span>Market</span>
+              </Button>
               {/* Slippage Button */}
-              <button className="flex items-center gap-2 rounded-full bg-stone-800/80 px-4 py-2 text-[15px] font-semibold text-stone-200 shadow-sm border border-transparent hover:border-[#2CB394] transition">
-                <SlidersHorizontal size={20} className="text-stone-400" />
-                <span className="drop-shadow-[0_2px_0_#000]">0.5%</span>
-              </button>
+              <Button variant="outline"  className="group font-semibold text-xs text-stone-500 cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)] rounded-full">
+                <SlidersHorizontal size={15} className="text-stone-400 group-hover:text-stone-200" />
+                <span>0.5%</span>
+              </Button>
               {/* Settings Button */}
-              <button className="flex items-center justify-center rounded-full bg-stone-800/80 w-10 h-10 text-stone-400 shadow-sm border border-transparent hover:border-[#2CB394] transition">
-                <Settings size={20} className="text-stone-400" />
-              </button>
+              <Button variant="outline"  className="group font-semibold text-xs text-stone-500 cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)] rounded-full">
+                <Settings size={15} className="text-stone-400 group-hover:text-stone-200" />
+              </Button>
+              
             </div>
         </div>
 
-      <div className="w-full  mx-auto max-w-2xl px-2 flex flex-col gap-6 ">
-        <div className="px-6">
+      <div className="w-full  mx-auto max-w-2xl md:px-2 flex flex-col gap-6 ">
+        <div className="md:px-6">
           <form autoComplete="off">
             <div className="relative w-full flex flex-col gap-1">
 
@@ -410,6 +414,7 @@ export default function Swap() {
 
                   {/* Amount */}
                   <div className="flex flex-col flex-1 items-end gap-1">
+
                     <input
                       id="buying"
                       type="text"
@@ -428,14 +433,12 @@ export default function Swap() {
                     {/* Price */}
                     <div className="text-xs text-stone-500 font-medium mt-1 text-left">$0</div>
                   </div>
-
                 </div>
               </div>
-
             </div>
           </form>
         </div>
-        <div className="flex items-center px-6">
+        <div className="flex items-center md:px-6">
           <Button variant="outline" className="w-full h-18 font-semibold text-xl text-stone-500 cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)]">
             <span className="">Swap</span>
           </Button>
@@ -496,7 +499,7 @@ export default function Swap() {
           </CommandGroup>
         </CommandList>
       </CommandDialog>
-      <div className="flex items-center px-6 opacity-40 mt-3 ml-3">
+      <div className="flex items-center md:px-6 opacity-40 mt-3 ml-3">
             <span className='font-inter text-[12px] text-neutral-400 -mr-2'>powered by:</span><JupiterLogo className="w-[33px] h-8 shrink-0 scale-30 -mr-2" /><span className="font-inter font-bold text-[12px] text-neutral-200">Jupiter</span>
       </div>
     </section>
