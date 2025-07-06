@@ -105,7 +105,6 @@ function Review({
   title,
   body,
   author,
-  rating,
   className,
   ...props
 }: Omit<React.ComponentPropsWithoutRef<'figure'>, keyof Review> & Review) {

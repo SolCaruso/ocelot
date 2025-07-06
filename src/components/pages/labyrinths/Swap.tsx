@@ -119,25 +119,25 @@ export default function Swap() {
     //           {tokens && tokens.length > 0 ? (
     //             tokens.map(t =>
     //               t.address ? (
-    //                 <option key={t.address} value={t.address}>{t.symbol}</option>
-    //               ) : null
-    //             )
-    //           ) : (
-    //             <option disabled>Loading...</option>
-    //           )}
-    //         </select>
-    //         <div style={{
-    //           fontSize: 28,
-    //           fontWeight: 700,
-    //           color: "#fff",
-    //           minWidth: 120,
-    //           textAlign: "right"
-    //         }}>
-    //           {outputToken && quote ? (quote.outAmount / 10 ** outputToken.decimals).toLocaleString(undefined, { maximumFractionDigits: 6 }) : "-"}
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
+        //                 <option key={t.address} value={t.address}>{t.symbol}</option>
+        //               ) : null
+        //             )
+        //           ) : (
+        //             <option disabled>Loading...</option>
+        //           )}
+        //         </select>
+        //         <div style={{
+        //           fontSize: 28,
+        //           fontWeight: 700,
+        //           color: "#fff",
+        //           minWidth: 120,
+        //           textAlign: "right"
+        //         }}>
+        //           {outputToken && quote ? (quote.outAmount / 10 ** outputToken.decimals).toLocaleString(undefined, { maximumFractionDigits: 6 }) : "-"}
+        //         </div>
+        //       </div>
+        //     </div>
+        //   </div>
       /* Route info */
 //       {loading && <div style={{ color: "#ff0050", marginBottom: 16 }}>Loading quote...</div>}
 //       {quote && (
@@ -185,7 +185,7 @@ import CheckIcon from "@/components/ui/icons/Check";
 import WalletIcon from "@/components/ui/icons/Wallet";
 import { CandlestickChart, SlidersHorizontal, Settings } from "lucide-react";
 import JupiterLogo from '@/components/logos/partners/Jupiter';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import type { TooltipProps } from 'recharts';
 
@@ -269,8 +269,8 @@ export default function Swap() {
 
   // Custom tooltip for charts
   const ChartTooltip = (props: TooltipProps<number, string>) => {
-    const payload = (props as any).payload as { value: number }[] | undefined;
-    const label = (props as any).label as string | undefined;
+    const payload = (props as unknown as { payload?: { value: number }[] }).payload;
+    const label = (props as unknown as { label?: string }).label;
     if (!props.active || !payload || !payload.length || !label) return null;
     const time = formatTooltipTime(label);
     const price = payload[0].value;
