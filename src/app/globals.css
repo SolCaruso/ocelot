@@ -361,7 +361,7 @@
   }
   15% {
     transform: translate(-12px, -13px);
-    opacity: 0.5;
+    opacity: 0.3;
   }
   25% {
     transform: translateY(0);
@@ -373,7 +373,7 @@
   }
   35% {
     transform: translate(15px, 0);
-    opacity: 0.5;
+    opacity: 0.3;
   }
   45% {
     transform: translateY(0);
@@ -392,7 +392,7 @@
   }
   15% {
     transform: translate(12px, -13px);
-    opacity: 0.5;
+    opacity: 0.3;
   }
   25% {
     transform: translateY(0);
@@ -404,7 +404,7 @@
   }
   35% {
     transform: translate(15px, 0);
-    opacity: 0.5;
+    opacity: 0.3;
   }
   45% {
     transform: translateY(0);
@@ -447,4 +447,12 @@
 
 .font-inter {
   font-family: var(--font-inter), Inter, sans-serif;
+}
+
+.command-dialog-bg {
+  background: rgba(24, 24, 27, 0.5) !important; /* fallback for bg-popover/50 */
+  backdrop-filter: blur(24px) !important; /* fallback for backdrop-blur-xl */
+  -webkit-backdrop-filter: blur(24px) !important;
+  will-change: backdrop-filter, background;
+  transition: none !important;
 }

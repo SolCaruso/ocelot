@@ -105,7 +105,7 @@ export function NavDrawer({ open, onOpenChange }: NavDrawerProps) {
                       transition={{ duration: 0.2, ease: [0.455, 0.03, 0.515, 0.955] }}
                     >
                       <li className="flex items-start space-x-2">
-                        <Link href="/vw" onClick={() => onOpenChange(false)}>
+                        <Link href="/" onClick={() => onOpenChange(false)}>
                           <DrawerTitle className="text-[#FEE8D1] hover:text-white transition-colors">Vanished Worlds</DrawerTitle>
                         </Link>
                         <Steam className="h-5 w-auto mt-0.5 flex-shrink-0" />

@@ -49,6 +49,7 @@ interface HeroProps {
       buttonTop: string
       showButton?: boolean
       showTrailer?: boolean
+      characterSize?: string
     }
     shadows: {
       topGradient: string
@@ -146,7 +147,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
           <div className={`absolute inset-0 z-15 ${config.shadows.overlay} pointer-events-none`} />
         </div>
 
-        <div className={`absolute inset-x-0 top-0 bottom-0 transform-gpu z-20 flex flex-col items-center justify-center md:justify-start text-center ${config.layout.logoPadding} ${config.logo.src.includes('lab.webp') ? 'translate-y-8 md:translate-y-12' : ''}`}>
+        <div className={`absolute inset-x-0 top-0 bottom-0 transform-gpu z-20 flex flex-col items-center justify-center md:justify-start text-center ${config.layout.logoPadding} ${config.logo.src.includes('lab.webp') || config.logo.src.includes('lab.webm') ? 'translate-y-8 md:translate-y-12' : ''}`}>
           {/* Logo */}
           {config.logo.src.includes('vw.webp') ? (
             <SmokeLogo
@@ -154,6 +155,36 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
               alt={config.logo.alt}
               widthClasses={config.logo.widthClasses}
             />
+          ) : config.logo.src.includes('lab.webm') ? (
+            <div className={`mx-auto md:mb-2 ${config.logo.widthClasses} select-none relative flex flex-col items-center`}>
+              {/* Video logo */}
+              <video
+                src={config.logo.src}
+                className="w-full h-auto animate-glitch-main"
+                autoPlay
+                muted
+                playsInline
+                draggable={false}
+              />
+              {/* Blue glitch layer */}
+              <video
+                src={config.logo.src}
+                className="w-full h-auto absolute top-0 left-0 animate-glitch-blue"
+                autoPlay
+                muted
+                playsInline
+                draggable={false}
+              />
+              {/* Green glitch layer */}
+              <video
+                src={config.logo.src}
+                className="w-full h-auto absolute top-0 left-0 animate-glitch-green"
+                autoPlay
+                muted
+                playsInline
+                draggable={false}
+              />
+            </div>
           ) : config.logo.src.includes('lab.webp') ? (
             <div className={`mx-auto md:mb-2 ${config.logo.widthClasses} select-none relative`}>
               {/* Main logo */}
@@ -195,10 +226,19 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
             />
           )}
 
+          {/* Subtitle for lab.webm - positioned absolutely */}
+          {config.subtitle && config.logo.src.includes('lab.webm') && (
+            <h3
+              className="my-0 py-0 leading-none lg:mt-6 font-bold text-[#B9B9B9] md:text-lg text-center filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] whitespace-nowrap absolute left-1/2 -translate-x-1/2 z-20 top-[calc(50%+8rem)] md:top-[calc(50%+10rem)]"
+            >
+              {config.subtitle}
+            </h3>
+          )}
+
           {/* Text */}
-          {(config.title || config.subtitle) && (
-            <div className={`space-y-4 md:space-y-6 mb-8 md:mb-12 text-center ${config.logo.src.includes('lab.webp') ? 'h-8 md:h-10' : ''}`} style={{ contain: 'layout' }}>
-              {config.title && (
+          {(config.title || config.subtitle) && !config.logo.src.includes('lab.webm') && (
+            config.title ? (
+              <div className={`${config.logo.src.includes('lab.webp') ? 'space-y-0' : 'space-y-4 md:space-y-6'} text-center ${config.logo.src.includes('lab.webp') ? 'h-8 md:h-10' : ''} ${config.logo.src.includes('lab.webp') ? 'mb-2 md:mb-2' : 'mb-8 md:mb-12'}`} style={{ contain: 'layout' }}>
                 <div className="relative inline-block animate-slide-up-gentle opacity-0 transform-gpu" style={{ animationDelay: "0.2s" }}>
                   {/* Beneath, stationary text */}
                   <h2 className="text-[#E0A970] text-3xl sm:text-4xl lg:text-5xl font-oldFenris layer-blur whitespace-pre-line">
@@ -209,13 +249,31 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
                     {config.title}
                   </h2>
                 </div>
-              )}
-              {config.subtitle && (
-                <h3 className={`font-bold text-[#B9B9B9] md:text-lg text-center filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] whitespace-nowrap ${config.logo.src.includes('lab.webp') ? 'absolute top-0 left-1/2 transform -translate-x-1/2' : ''}`}>
+                {config.subtitle && (
+                  <h3
+                    className={`font-bold text-[#B9B9B9] md:text-lg text-center filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] whitespace-nowrap
+                      ${config.logo.src.includes('lab.webp') ? 'absolute top-0 left-1/2 transform -translate-x-1/2' : ''}
+                      ${config.logo.src.includes('lab.webm') ? 'mt-0 mb-0 pt-0 pb-0 leading-none' : ''}
+                    `}
+                    style={config.logo.src.includes('lab.webm') ? { marginTop: 0, marginBottom: 0, paddingTop: 0, paddingBottom: 0, lineHeight: 1 } : {}}
+                  >
+                    {config.subtitle}
+                  </h3>
+                )}
+              </div>
+            ) : (
+              config.subtitle && (
+                <h3
+                  className={`font-bold text-[#B9B9B9] md:text-lg text-center filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] whitespace-nowrap
+                    ${config.logo.src.includes('lab.webp') ? 'absolute top-0 left-1/2 transform -translate-x-1/2' : ''}
+                    ${config.logo.src.includes('lab.webm') ? 'mt-0 mb-0 pt-0 pb-0 leading-none' : ''}
+                  `}
+                  style={config.logo.src.includes('lab.webm') ? { marginTop: 0, marginBottom: 0, paddingTop: 0, paddingBottom: 0, lineHeight: 1 } : {}}
+                >
                   {config.subtitle}
                 </h3>
-              )}
-            </div>
+              )
+            )
           )}
         </div>
 
@@ -245,19 +303,32 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
               <SteamMobile className="h-14 w-auto lg:hidden" />
             </div>
           )}
-          <div>
-            <Unity className="h-20 ml-6 w-auto hidden lg:block" />
-            <UnityMobile className="h-14 w-auto lg:hidden" />
-          </div>
-          <div>
-            <Ocelot className="h-20 w-auto mb-4 hidden lg:block" />
-            <OcelotMobile className="h-14 w-auto mb-4 lg:hidden" />
-          </div>
-          {config.partners.showSolana && (
-            <div>
-              <Solana className="h-20 w-auto hidden lg:block" />
-              <SolanaMobile className="h-14 w-auto lg:hidden" />
-            </div>
+          {config.logo.src.includes('lab.webm') ? (
+            <>
+              {config.partners.showSolana && (
+                <div>
+                  <Solana className="h-20 w-auto hidden lg:block" />
+                  <SolanaMobile className="h-14 w-auto lg:hidden" />
+                </div>
+              )}
+              <div>
+                <Ocelot className="h-20 w-auto mb-4 hidden lg:block" />
+                <OcelotMobile className="h-14 w-auto mb-4 lg:hidden" />
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                <Ocelot className="h-20 w-auto mb-4 hidden lg:block" />
+                <OcelotMobile className="h-14 w-auto mb-4 lg:hidden" />
+              </div>
+              {config.partners.showSolana && (
+                <div>
+                  <Solana className="h-20 w-auto hidden lg:block" />
+                  <SolanaMobile className="h-14 w-auto lg:hidden" />
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -269,7 +340,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
           alt={config.characterIllustration.alt}
           width={1506}
           height={2000}
-          className={`object-contain w-[500px] ${config.layout.showTrailer === false ? '4xl:w-[600px]' : '4xl:w-[700px]'}`}
+          className={`object-contain ${config.layout.characterSize || `w-[500px] ${config.layout.showTrailer === false ? '4xl:w-[600px]' : '4xl:w-[700px]'}`}`}
           draggable={false}
         />
       </div>

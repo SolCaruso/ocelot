@@ -5,6 +5,7 @@ import Nav from "@/components/nav/Nav"
 import Footer from '@/components/footer/Footer';
 import { Toaster } from '@/components/ui/sonner'
 import SolanaWalletProvider from '@/components/pages/labyrinths/SolanaWalletProvider';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   title: "Guild Saga",
@@ -35,6 +36,7 @@ export default function RootLayout({
           <Footer/>
         </SolanaWalletProvider>
       </body>
+      <SpeedInsights />
     </html>
   )
 }

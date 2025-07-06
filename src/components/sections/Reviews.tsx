@@ -99,34 +99,7 @@ const reviews: Array<Review> = [
   },
 ]
 
-function StarIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
-  return (
-    <svg viewBox="0 0 20 20" aria-hidden="true" {...props}>
-      <defs>
-        <linearGradient id="starGradient" x1="100%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#fff" />
-          <stop offset="66%" stopColor="#fbcea0" />
-          <stop offset="100%" stopColor="#fbcfa0" />
-        </linearGradient>
-      </defs>
-      <path fill="url(#starGradient)" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-    </svg>
-  )
-}
 
-function StarRating({ rating }: { rating: Review['rating'] }) {
-  return (
-    <div className="flex">
-      {[...Array(5).keys()].map((index) => (
-        <StarIcon
-          key={index}
-          className={rating > index ? 'h-5 w-5' : 'h-5 w-5 text-stone-400'}
-          fill={rating > index ? 'url(#starGradient)' : undefined}
-        />
-      ))}
-    </div>
-  )
-}
 
 function Review({
   title,
@@ -161,8 +134,7 @@ function Review({
     >
       <span className="absolute top-0 left-0 h-[1.2px] w-full z-10" style={{background: 'linear-gradient(to right, #AC8B6A 0%, #ac8b6a68 20%, rgba(172,139,106,0.1) 50%, #ac8b6a52 65%, #AC8B6A 100%)'}} />
       <blockquote>
-        <StarRating rating={rating} />
-        <p className="mt-4 text-lg/6 font-semibold before:content-['\201C'] after:content-['\201D']">
+        <p className="mt-px text-lg/6 font-semibold before:content-['\201C'] after:content-['\201D']">
           {title}
         </p>
         <p className="mt-3 text-base/7">{body}</p>

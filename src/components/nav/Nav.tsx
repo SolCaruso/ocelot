@@ -33,7 +33,7 @@ export default function Nav() {
   const [previewImage, setPreviewImage] = useState<string>(defaultImage);
   const imageOrder = [
     '/gif/vw.gif',
-    '/gif/Flank.gif',
+    '/gif/lab-hero.gif',
     '/gif/world.gif',
   ];
   const prevIndexRef = useRef(imageOrder.indexOf(defaultImage));
@@ -92,7 +92,7 @@ export default function Nav() {
                               style={{
                                 backgroundImage: `url(${previewImage})`,
                                 // Increase height slightly for the Labyrinth GIF to hide its white top edge
-                                backgroundSize: previewImage === '/gif/Flank.gif' ? 'cover' : 'cover',
+                                backgroundSize: previewImage === '/gif/lab-hero.gif' ? 'cover' : 'cover',
                                 backgroundPosition: 'center',
                               }}
                               initial={{ opacity: 0 }}
@@ -120,7 +120,7 @@ export default function Nav() {
                             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none h-42 w-auto"
                           />
                         )}
-                        {previewImage === '/gif/Flank.gif' && (
+                        {previewImage === '/gif/lab-hero.gif' && (
                           <motion.img
                             key="logo-lab"
                             src="/webp/lab.webp"
@@ -137,7 +137,7 @@ export default function Nav() {
                   </NavigationMenuLink>
                 </li>
                 <ListItem
-                  href="/vw"
+                  href="/"
                   title={
                     <div className="flex items-center font-semibold opacity-80 group-hover:opacity-100 group-focus:opacity-100 group-active:opacity-100 transition-opacity">
                       <span>Vanished Worlds</span>
@@ -159,8 +159,8 @@ export default function Nav() {
                       <Solana className="ml-1 h-4 w-auto" />
                     </div>
                   }
-                  className={cn(previewImage === '/gif/Flank.gif' && 'bg-accent/70')}
-                  onMouseEnter={() => handlePreview('/gif/Flank.gif')}
+                  className={cn(previewImage === '/gif/lab-hero.gif' && 'bg-accent/70')}
+                  onMouseEnter={() => handlePreview('/gif/lab-hero.gif')}
                 >
                   <span className="line-clamp-2 text-sm leading-snug opacity-50 group-hover:opacity-80 text-white">
                     Pvp gauntlet mode game built on Solana (coming soon).

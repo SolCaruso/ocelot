@@ -7,28 +7,29 @@ import Swap from "@/components/pages/labyrinths/Swap";
 const heroConfig = {
   videoSrc: "/video/lab-hero.webm",
   logo: {
-    src: "/webp/lab.webp",
-    alt: "Vanished Worlds Logo",
-    widthClasses: "w-[20rem] sm:w-[24rem] lg:w-[30rem]"
+    src: "/video/lab.webm",
+    alt: "Lab Logo",
+    widthClasses: "w-[20rem] md:w-[30rem] lg:w-[36rem]"
   },
   title: "",
   subtitle: "COMING SOON",
   characterIllustration: {
     src: "/webp/thal.webp",
-    alt: "Persephone Character Illustration"
+    alt: "Thal Character Illustration"
   },
   partners: {
     showSolana: true,
     showSteam: false,
   },
   layout: {
-    logoPadding: "md:pt-32 pb-16 md:pb-0",
+    logoPadding: "lg:pt-16 pb-20 md:pt-20", 
     partnerMargin: "md:mb-8",
     buttonPosition: "mt-4 sm:mt-8",
     buttonSize: "text-sm md:text-base 3xl:text-xl",
     buttonTop: "68%",
     showButton: false,
-    showTrailer: false
+    showTrailer: false,
+    characterSize: "w-[500px] 3xl:w-[550px] 4xl:w-[650px]"
   },
   shadows: {
     topGradient: "bg-gradient-to-b from-black/40 to-black/0",
