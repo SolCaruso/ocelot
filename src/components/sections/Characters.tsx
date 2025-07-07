@@ -178,6 +178,7 @@ export default function Characters({ characters, backgroundClasses }: Characters
 
   const variants = getAnimationVariants()
   const currentCharacter = filledCharacters[selectedCharacter]
+  if (!mounted) return null;
   if (!currentCharacter) return null
 
   const maxBackstoryLength = 300;
