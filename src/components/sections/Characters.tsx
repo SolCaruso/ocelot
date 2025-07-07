@@ -183,11 +183,11 @@ export default function Characters({ characters, backgroundClasses }: Characters
   const maxBackstoryLength = 300;
 
   return (
-    <div className="relative w-full overflow-hidden py-42 px-8">
+    <div className="relative w-full overflow-hidden pb-24 pt-18 lg:py-42 px-8">
       <Container className="relative flex flex-col items-center justify-center min-h-[700px]">
-        <motion.div layout className="relative w-full flex flex-col lg:flex-row items-start justify-between gap-0">
+        <div className="relative w-full flex flex-col lg:flex-row items-start justify-between gap-0">
           {/* Left: Character Info */}
-          <motion.div layout className="flex-1 max-w-md pt-8 lg:pt-24 flex flex-col justify-between h-auto lg:h-auto relative z-20 w-full">
+          <div className="flex-1 max-w-md pt-8 lg:pt-24 flex flex-col justify-between h-auto lg:h-auto relative z-20 w-full">
             <div className={`${backgroundClasses}`}>
               <p className="text-[#fbcea0] text-xs md:text-sm font-medium tracking-widest mb-4 font-oldFenris drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] uppercase">
                 {currentCharacter.title}
@@ -200,39 +200,37 @@ export default function Characters({ characters, backgroundClasses }: Characters
               </h1>
               <div className="w-32 md:w-56 h-px bg-gradient-to-r from-[#fbcea0] to-transparent mb-6" />
               <div className="mt-4 overflow-hidden">
-                <motion.div layout>
-                  <p className="text-stone-50 md:text-xl font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)]">
-                    {currentCharacter.backstory.length > maxBackstoryLength && currentCharacter.name === "THEVYRE, M.T." ? (
-                      <>
-                        {currentCharacter.backstory.slice(0, maxBackstoryLength)}
-                        {!expandedBackstory || expandedBackstory !== selectedCharacter ? (
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={expandedBackstory === selectedCharacter ? 'expanded' : 'collapsed'}
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  >
+                    <p className="text-stone-50 md:text-xl font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)]">
+                      {currentCharacter.backstory.length > maxBackstoryLength && currentCharacter.name === "THEVYRE, M.T." ? (
+                        expandedBackstory === selectedCharacter ? (
                           <>
-                            ...
-                            <span
-                              className="text-[#fbcea0] underline ml-1 cursor-pointer"
-                              onClick={() => setExpandedBackstory(selectedCharacter)}
-                            >
-                              more
-                            </span>
-                          </>
-                        ) : null}
-                        {expandedBackstory === selectedCharacter && (
-                          <>
-                            {currentCharacter.backstory.slice(maxBackstoryLength)}
-                            <span
-                              className="text-[#fbcea0] underline ml-1 cursor-pointer"
-                              onClick={() => setExpandedBackstory(null)}
-                            >
+                            {currentCharacter.backstory}
+                            <button className="text-[#fbcea0] underline ml-1" onClick={() => setExpandedBackstory(null)}>
                               less
-                            </span>
+                            </button>
                           </>
-                        )}
-                      </>
-                    ) : (
-                      currentCharacter.backstory
-                    )}
-                  </p>
-                </motion.div>
+                        ) : (
+                          <>
+                            {currentCharacter.backstory.slice(0, maxBackstoryLength)}... 
+                            <button className="text-[#fbcea0] underline ml-1" onClick={() => setExpandedBackstory(selectedCharacter)}>
+                              more
+                            </button>
+                          </>
+                        )
+                      ) : (
+                        currentCharacter.backstory
+                      )}
+                    </p>
+                  </motion.div>
+                </AnimatePresence>
               </div>
             </div>
 
@@ -308,7 +306,7 @@ export default function Characters({ characters, backgroundClasses }: Characters
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Center: Main Character Image with Background Accent */}
           <div className="flex-1 flex justify-center items-start relative w-full mb-8 lg:mb-0">
@@ -449,9 +447,13 @@ export default function Characters({ characters, backgroundClasses }: Characters
                     <div className="flex gap-4 pt-4">
                       {filledCharacters.map((character, index) => {
                         const isSelected = selectedCharacter === index
-
+                        const isFirst = index === 0;
+                        const isLast = index === filledCharacters.length - 1;
                         return (
-                          <div key={`mobile-${character.id}-${index}`} className="flex-none w-28 h-36">
+                          <div
+                            key={`mobile-${character.id}-${index}`}
+                            className={`flex-none w-28 h-36${isFirst ? ' pl-2' : ''}${isLast ? ' pr-2' : ''}`}
+                          >
                             <button
                               onClick={(e) => {
                                 e.stopPropagation()
@@ -516,7 +518,7 @@ export default function Characters({ characters, backgroundClasses }: Characters
               </div>
             )}
           </div>
-        </motion.div>
+        </div>
       </Container>
     </div>
   )

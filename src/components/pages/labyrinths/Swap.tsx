@@ -346,7 +346,7 @@ export default function Swap() {
       </p>
       
       {/* Settings */}
-        <div className="flex justify-end items-center md:px-6 mb-3">
+        <div className="flex justify-end items-center md:px-6 mb-3 mr-2">
             <div className="flex gap-2">
               {/* Market Button */}
               <Button
@@ -482,7 +482,7 @@ export default function Swap() {
 
               {/* Buying */}
               <div
-                className={`flex flex-col rounded-lg p-4 gap-5 border transition-all duration-200 ease-[var(--ease-in-out-quad)] ${buyingFocused ? 'border-[#2CB394] shadow-[0_0_12px_2px_#2CB39433]' : 'border-stone-700'}`}
+                className={`flex flex-col rounded-lg p-4 gap-5 border transition-all duration-200 ease-[var(--ease-in-out-quad)] backdrop-blur-lg ${buyingFocused ? 'border-[#2CB394] shadow-[0_0_12px_2px_#2CB39433]' : 'border-stone-700'}`}
               >
 
                 {/* Header */}
@@ -586,7 +586,7 @@ export default function Swap() {
                     <div className="flex flex-col min-w-0">
                       <div className="flex items-center gap-1">
                         <span className="text-white font-bold text-base tracking-wide">{token.label}</span>
-                        <CheckIcon className="w-4 h-4 text-[#c6f36b]" />
+                        <CheckIcon className="w-4 h-4" style={{ color: '#2CB394' }} />
                       </div>
                       <span className="text-stone-400 text-xs font-medium leading-tight truncate">Solana</span>
                       <span className="text-stone-500 text-[11px] font-medium leading-tight truncate">So111...11112</span>
@@ -619,9 +619,9 @@ export default function Swap() {
       >
         {chartsVisible && (
           <div className="mx-auto">
-            <div className="flex flex-row gap-4 mt-8 max-w-2xl md:mx-8">
+            <div className="flex flex-row gap-4 mt-4 max-w-2xl md:mx-8">
               {/* 1st Chart Card */}
-              <Card className="flex-1">
+              <Card className="flex-1 bg-stone-900/0 border-stone-700">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <img src="/png/sol.png" alt="SOL" className="w-6 h-6 rounded-full" />
@@ -643,11 +643,11 @@ export default function Swap() {
                   </ResponsiveContainer>
                 </CardContent>
                 <CardFooter className="flex-col items-start gap-1 text-xs">
-                  <span className="text-muted-foreground">Open Page ↗</span>
+                  <span className="text-muted-foreground cursor-pointer hover:text-white transition-all duration-200 ease-[var(--ease-in-out-quad)]">Open Page ↗</span>
                 </CardFooter>
               </Card>
               {/* 2nd Chart Card */}
-              <Card className="flex-1">
+              <Card className="flex-1 bg-stone-900/0 border-stone-700">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <img src="/png/ggem.png" alt="GGEM" className="w-6 h-6 rounded-full" />
@@ -669,7 +669,7 @@ export default function Swap() {
                   </ResponsiveContainer>
                 </CardContent>
                 <CardFooter className="flex-col items-start gap-1 text-xs">
-                  <span className="text-muted-foreground">Open Page ↗</span>
+                  <span className="text-muted-foreground cursor-pointer hover:text-white transition-all duration-200 ease-[var(--ease-in-out-quad)]">Open Page ↗</span>
                 </CardFooter>
               </Card>
             </div>
