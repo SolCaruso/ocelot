@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/navigation-menu"
 import SvgComponent from "@/components/ui/corner"
 import { useRecentPosts } from "@/hooks/useRecentPosts"
+import WalletButton from "@/components/nav/WalletButton"
 
 export default function Nav() {
   const pathname = usePathname();
@@ -39,6 +40,8 @@ export default function Nav() {
   const prevIndexRef = useRef(imageOrder.indexOf(defaultImage));
   const { posts: recentPosts } = useRecentPosts();
   const MAX_SUMMARY_LENGTH = 71;
+
+
 
   const handlePreview = (img: string) => {
     const newIndex = imageOrder.indexOf(img);
@@ -243,41 +246,53 @@ export default function Nav() {
 
       {/* Right: Button */}
       <div className="justify-start mt-1 3xl:mt-1.5 hidden md:flex">
-        <Link
-          href={isLabPage ? "#" : "https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"}
-          target={isLabPage ? undefined : "_blank"}
-          rel={isLabPage ? undefined : "noopener noreferrer"}
-          className="group cursor-pointer relative overflow-hidden 3xl:px-8 3xl:py-3 py-3 px-8 gradient-border-top transition-all duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] opacity-100 translate-y-0 backdrop-blur-sm bg-black/20"
-          style={{
-            borderStyle: "solid",
-            borderWidth: "0 1px 1px 1px",
-            borderImage: "linear-gradient(to top, #534C3F, #B4906C) 1",
-          }}
-        >
-          {/* Top Left Corner */}
-          <div className="absolute top-0 left-0 z-10 scale-x-[-1] group-hover:opacity-30 transition-opacity duration-600 ease-[var(--ease-in-out-quad)]">
-            <SvgComponent className="w-18 h-18 group-hover:w-18 group-hover:h-18" />
-          </div>
-          {/* Top Right Corner */}
-          <div className="absolute top-0 right-0 z-10 opacity-30 group-hover:opacity-100 transition-opacity duration-600 ease-[var(--ease-in-out-quad)]">
-            <SvgComponent className="w-18 h-18 group-hover:w-18 group-hover:h-18" />
-          </div>
-          {/* Bottom Left Corner */}
-          <div className="absolute bottom-0 left-0 z-10 scale-x-[-1] opacity-30 scale-y-[-1] group-hover:opacity-600 transition-opacity duration-300 ease-[var(--ease-in-out-quad)]">
-            <SvgComponent className="w-18 h-18 group-hover:w-18 group-hover:h-18" />
-          </div>
-          {/* Bottom Right Corner */}
-          <div className="absolute bottom-0 right-0 z-10 scale-y-[-1] group-hover:opacity-30 transition-opacity duration-600 ease-[var(--ease-in-out-quad)]">
-            <SvgComponent className="w-18 h-18 group-hover:w-18 group-hover:h-18" />
-          </div>
-          
-          <div className="relative">
-            <p className="uppercase font-quattrocento text-base tracking-wide font-semibold text-[#fbcea0] group-hover:text-white text-center">
-              {isLabPage ? "CONNECT" : "BUY NOW"}
-            </p>
-
-          </div>
-        </Link>
+        {isLabPage ? (
+          // Custom Wallet Button for Lab Page
+          <WalletButton 
+            className="!group !cursor-pointer !relative !overflow-hidden !3xl:px-8 !3xl:py-3 !py-3 !px-8 !gradient-border-top !transition-all !duration-200 !ease-[var(--ease-in-out-quad)] !hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] !opacity-100 !translate-y-0 !backdrop-blur-sm !bg-black/20 !border-none !font-quattrocento !text-base !tracking-wide !font-semibold !text-[#fbcea0] !hover:text-white"
+            style={{
+              borderStyle: "solid",
+              borderWidth: "0 1px 1px 1px",
+              borderImage: "linear-gradient(to top, #534C3F, #B4906C) 1",
+            }}
+          />
+        ) : (
+          // Buy Now Button for Other Pages
+          <Link
+            href="https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group cursor-pointer relative overflow-hidden 3xl:px-8 3xl:py-3 py-3 px-8 gradient-border-top transition-all duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] opacity-100 translate-y-0 backdrop-blur-sm bg-black/20"
+            style={{
+              borderStyle: "solid",
+              borderWidth: "0 1px 1px 1px",
+              borderImage: "linear-gradient(to top, #534C3F, #B4906C) 1",
+            }}
+          >
+            {/* Top Left Corner */}
+            <div className="absolute top-0 left-0 z-10 scale-x-[-1] group-hover:opacity-30 transition-opacity duration-600 ease-[var(--ease-in-out-quad)]">
+              <SvgComponent className="w-18 h-18 group-hover:w-18 group-hover:h-18" />
+            </div>
+            {/* Top Right Corner */}
+            <div className="absolute top-0 right-0 z-10 opacity-30 group-hover:opacity-100 transition-opacity duration-600 ease-[var(--ease-in-out-quad)]">
+              <SvgComponent className="w-18 h-18 group-hover:w-18 group-hover:h-18" />
+            </div>
+            {/* Bottom Left Corner */}
+            <div className="absolute bottom-0 left-0 z-10 scale-x-[-1] opacity-30 scale-y-[-1] group-hover:opacity-600 transition-opacity duration-300 ease-[var(--ease-in-out-quad)]">
+              <SvgComponent className="w-18 h-18 group-hover:w-18 group-hover:h-18" />
+            </div>
+            {/* Bottom Right Corner */}
+            <div className="absolute bottom-0 right-0 z-10 scale-y-[-1] group-hover:opacity-30 transition-opacity duration-600 ease-[var(--ease-in-out-quad)]">
+              <SvgComponent className="w-18 h-18 group-hover:w-18 group-hover:h-18" />
+            </div>
+            
+            <div className="relative">
+              <p className="uppercase font-quattrocento text-base tracking-wide font-semibold text-[#fbcea0] group-hover:text-white text-center">
+                BUY NOW
+              </p>
+            </div>
+          </Link>
+        )}
       </div>
 
       {/* Mobile: Hamburger */}
