@@ -6,6 +6,7 @@ import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { VersionedTransaction, PublicKey, LAMPORTS_PER_SOL, Connection } from "@solana/web3.js";
 // import { TOKEN_PROGRAM_ID, getAssociatedTokenAddress, getAccount } from "@solana/spl-token";
 import axios from "axios";
+import { getBalanceData, getMarketData } from '../../../lib/actions';
 import { Button } from "@/components/ui/button";
 import {
   CommandDialog,
@@ -19,7 +20,7 @@ import CheckIcon from "@/components/ui/icons/Check";
 import WalletIcon from "@/components/ui/icons/Wallet";
 import { CandlestickChart, SlidersHorizontal, Settings } from "lucide-react";
 import JupiterLogo from '@/components/logos/partners/Jupiter';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Area } from 'recharts';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import type { TooltipProps } from 'recharts';
 
@@ -200,27 +201,20 @@ function SwapComponent() {
           }
         }
         
-        // Fetch balance via server-side API (no CORS issues)
+        // Fetch balance via Server Action (no CORS issues)
         try {
-          console.log('Fetching balance via API proxy for', sellingToken.label);
+          console.log('Fetching balance via Server Action for', sellingToken.label);
           
-          const response = await fetch('/api/balance', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              walletAddress: publicKey.toBase58(),
-              tokenAddress: sellingToken.address,
-              decimals: sellingToken.decimals
-            })
-          });
+          const data = await getBalanceData(
+            publicKey.toBase58(),
+            sellingToken.address,
+            sellingToken.decimals
+          );
           
-          if (response.ok) {
-            const data = await response.json();
+          if (data.success) {
             const sellingBal = data.balance;
             
-            console.log(`${sellingToken.label} balance from API:`, sellingBal);
+            console.log(`${sellingToken.label} balance from Server Action:`, sellingBal);
             
             // Cache the successful result
             sessionStorage.setItem(cacheKey, JSON.stringify({
@@ -229,15 +223,15 @@ function SwapComponent() {
             }));
             
             setSellingBalance(sellingBal);
-            console.log(`Successfully fetched ${sellingToken.label} balance via API`);
+            console.log(`Successfully fetched ${sellingToken.label} balance via Server Action`);
             
           } else {
-            console.error('API error:', response.status, response.statusText);
+            console.error('Server Action error:', data.error);
             setSellingBalance(0);
           }
           
         } catch (error: any) {
-          console.error('Error fetching balance via API:', error.message);
+          console.error('Error fetching balance via Server Action:', error.message);
           setSellingBalance(0);
         }
 
@@ -255,27 +249,20 @@ function SwapComponent() {
           }
         }
         
-        // Fetch buying token balance via API
+        // Fetch buying token balance via Server Action
         try {
-          console.log('Fetching buying balance via API proxy for', buyingToken.label);
+          console.log('Fetching buying balance via Server Action for', buyingToken.label);
           
-          const response = await fetch('/api/balance', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              walletAddress: publicKey.toBase58(),
-              tokenAddress: buyingToken.address,
-              decimals: buyingToken.decimals
-            })
-          });
+          const data = await getBalanceData(
+            publicKey.toBase58(),
+            buyingToken.address,
+            buyingToken.decimals
+          );
           
-          if (response.ok) {
-            const data = await response.json();
+          if (data.success) {
             const buyingBal = data.balance;
             
-            console.log(`${buyingToken.label} balance from API:`, buyingBal);
+            console.log(`${buyingToken.label} balance from Server Action:`, buyingBal);
             
             // Cache the successful result
             sessionStorage.setItem(buyingCacheKey, JSON.stringify({
@@ -284,15 +271,15 @@ function SwapComponent() {
             }));
             
             setBuyingBalance(buyingBal);
-            console.log(`Successfully fetched ${buyingToken.label} balance via API`);
+            console.log(`Successfully fetched ${buyingToken.label} balance via Server Action`);
             
           } else {
-            console.error('API error for buying token:', response.status, response.statusText);
+            console.error('Server Action error for buying token:', data.error);
             setBuyingBalance(0);
           }
           
         } catch (error: any) {
-          console.error('Error fetching buying balance via API:', error.message);
+          console.error('Error fetching buying balance via Server Action:', error.message);
           setBuyingBalance(0);
         }
 
@@ -439,23 +426,78 @@ function SwapComponent() {
     }
   };
 
-  const solPriceData = React.useMemo(
-    () =>
-      Array.from({ length: 40 }).map((_, i) => ({
-        time: `${i}`,
-        price: 3246.27 + Math.sin(i / 4) * 3 + Math.random() * 2,
-      })),
-    []
-  );
+  // Market data state
+  const [marketData, setMarketData] = React.useState<{
+    [key: string]: {
+      price: number;
+      change24h: number;
+      chartData: Array<{ time: string; price: number }>;
+    }
+  }>({});
 
-  const ggemPriceData = React.useMemo(
-    () =>
-      Array.from({ length: 40 }).map((_, i) => ({
-        time: `${i}`,
-        price: 12 + Math.sin(i / 4) * 0.1 + Math.random() * 0.05,
-      })),
-    []
-  );
+  // Fetch market data for selected tokens
+  const fetchMarketData = React.useCallback(async (tokenAddress: string, tokenSymbol: string) => {
+    try {
+      console.log(`Fetching market data for ${tokenSymbol} (${tokenAddress})`);
+      
+      // Use Server Action to avoid CORS issues
+      const data = await getMarketData(tokenAddress);
+      
+      if (data.success) {
+        const price = data.price;
+        const change24h = data.change24h;
+        const chartData = data.chartData || [];
+        
+        setMarketData(prev => ({
+          ...prev,
+          [tokenAddress]: {
+            price,
+            change24h,
+            chartData
+          }
+        }));
+        
+        console.log(`${tokenSymbol} market data:`, { price, change24h, chartDataPoints: chartData.length });
+        console.log(`${tokenSymbol} chart data sample:`, chartData.slice(0, 3));
+        console.log(`${tokenSymbol} full chart data received:`, chartData.length);
+      } else {
+        console.error(`Market data Server Action error: ${data.error}`);
+      }
+    } catch (error) {
+      console.error(`Error fetching market data for ${tokenSymbol}:`, error);
+    }
+  }, []);
+
+  // Fetch market data when tokens change
+  React.useEffect(() => {
+    if (sellingToken && buyingToken) {
+      fetchMarketData(sellingToken.address, sellingToken.label);
+      fetchMarketData(buyingToken.address, buyingToken.label);
+    }
+  }, [sellingToken, buyingToken, fetchMarketData]);
+
+  // Debug market data changes
+  React.useEffect(() => {
+    if (sellingToken && marketData[sellingToken.address]) {
+      console.log('Market data updated for selling token:', {
+        token: sellingToken.label,
+        chartDataLength: marketData[sellingToken.address]?.chartData?.length || 0,
+        chartDataSample: marketData[sellingToken.address]?.chartData?.slice(0, 3)
+      });
+    }
+    if (buyingToken && marketData[buyingToken.address]) {
+      console.log('Market data updated for buying token:', {
+        token: buyingToken.label,
+        chartDataLength: marketData[buyingToken.address]?.chartData?.length || 0,
+        chartDataSample: marketData[buyingToken.address]?.chartData?.slice(0, 3)
+      });
+    }
+  }, [marketData, sellingToken, buyingToken]);
+
+  // Get Jupiter URL for token
+  const getJupiterUrl = (tokenAddress: string) => {
+    return `https://jup.ag/tokens/${tokenAddress}`;
+  };
 
   // Helper to format time for tooltip
   function formatTooltipTime(label: string) {
@@ -906,58 +948,105 @@ function SwapComponent() {
         {chartsVisible && (
           <div className="mx-auto">
             <div className="flex flex-row gap-4 mt-4 max-w-2xl md:mx-8">
-              {/* 1st Chart Card */}
-              <Card className="flex-1 bg-stone-900/0 border-stone-700">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <img src="/png/sol.png" alt="SOL" className="w-6 h-6 rounded-full" />
-                    SOL
-                  </CardTitle>
-                  <CardDescription className="flex items-center gap-2">
-                    <span className="font-bold">$3,246.27</span>
-                    <span className="text-xs text-[#00e1c0]">+4.61%</span>
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="h-20">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={solPriceData} margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
-                      <XAxis dataKey="time" hide />
-                      <YAxis hide domain={['dataMin - 1', 'dataMax + 1']} />
-                      <Tooltip content={<ChartTooltip />} />
-                      <Line type="linear" dataKey="price" stroke="#00e1c0" strokeWidth={2} dot={false} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </CardContent>
-                <CardFooter className="flex-col items-start gap-1 text-xs">
-                  <span className="text-muted-foreground cursor-pointer hover:text-white transition-all duration-200 ease-[var(--ease-in-out-quad)]">Open Page ↗</span>
-                </CardFooter>
-              </Card>
-              {/* 2nd Chart Card */}
-              <Card className="flex-1 bg-stone-900/0 border-stone-700">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <img src="/png/ggem.png" alt="GGEM" className="w-6 h-6 rounded-full" />
-                    GGEM
-                  </CardTitle>
-                  <CardDescription className="flex items-center gap-2">
-                    <span className="font-bold">$12.47</span>
-                    <span className="text-xs text-[#00e1c0]">+1.23%</span>
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="h-20">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={ggemPriceData} margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
-                      <XAxis dataKey="time" hide />
-                      <YAxis hide domain={['dataMin - 0.001', 'dataMax + 0.001']} />
-                      <Tooltip content={<ChartTooltip />} />
-                      <Line type="linear" dataKey="price" stroke="#00e1c0" strokeWidth={2} dot={false} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </CardContent>
-                <CardFooter className="flex-col items-start gap-1 text-xs">
-                  <span className="text-muted-foreground cursor-pointer hover:text-white transition-all duration-200 ease-[var(--ease-in-out-quad)]">Open Page ↗</span>
-                </CardFooter>
-              </Card>
+              {/* Selling Token Chart Card */}
+              {sellingToken && marketData[sellingToken.address] && (
+                <Card className="flex-1 bg-stone-900/0 border-stone-700">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <img src={sellingToken.icon} alt={sellingToken.label} className="w-6 h-6 rounded-full" />
+                      {sellingToken.label}
+                    </CardTitle>
+                    <CardDescription className="flex items-center gap-2">
+                      <span className="font-bold">${marketData[sellingToken.address].price >= 1 ? marketData[sellingToken.address].price.toFixed(2) : marketData[sellingToken.address].price.toFixed(4)}</span>
+                      <span className={`text-xs ${marketData[sellingToken.address].change24h >= 0 ? 'text-[#00e1c0]' : 'text-red-400'}`}>
+                        {marketData[sellingToken.address].change24h >= 0 ? '+' : ''}{marketData[sellingToken.address].change24h.toFixed(2)}%
+                      </span>
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="h-32">
+                    {marketData[sellingToken.address]?.chartData?.length > 0 ? (
+                      <ResponsiveContainer width="100%" height="100%">
+                                                <LineChart data={marketData[sellingToken.address].chartData} margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
+                          {/* Debug: Chart data length: {marketData[sellingToken.address].chartData.length} */}
+                          <XAxis dataKey="time" hide />
+                          <YAxis hide />
+                          <Tooltip content={<ChartTooltip />} />
+                          <Line 
+                            type="monotone" 
+                            dataKey="price" 
+                            stroke={marketData[sellingToken.address].change24h >= 0 ? "#2CB394" : "#ef4444"} 
+                            strokeWidth={2}
+                            dot={false}
+                          />
+                      </LineChart>
+                    </ResponsiveContainer>
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
+                        Loading chart...
+                      </div>
+                    )}
+                  </CardContent>
+                  <CardFooter className="flex-col items-start gap-1 text-xs">
+                    <a 
+                      href={getJupiterUrl(sellingToken.address)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground cursor-pointer hover:text-white transition-all duration-200 ease-[var(--ease-in-out-quad)]"
+                    >
+                      Open Page ↗
+                    </a>
+                  </CardFooter>
+                </Card>
+              )}
+              {/* Buying Token Chart Card */}
+              {buyingToken && marketData[buyingToken.address] && (
+                <Card className="flex-1 bg-stone-900/0 border-stone-700">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <img src={buyingToken.icon} alt={buyingToken.label} className="w-6 h-6 rounded-full" />
+                      {buyingToken.label}
+                    </CardTitle>
+                    <CardDescription className="flex items-center gap-2">
+                      <span className="font-bold">${marketData[buyingToken.address].price >= 1 ? marketData[buyingToken.address].price.toFixed(2) : marketData[buyingToken.address].price.toFixed(4)}</span>
+                      <span className={`text-xs ${marketData[buyingToken.address].change24h >= 0 ? 'text-[#00e1c0]' : 'text-red-400'}`}>
+                        {marketData[buyingToken.address].change24h >= 0 ? '+' : ''}{marketData[buyingToken.address].change24h.toFixed(2)}%
+                      </span>
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="h-32">
+                    {marketData[buyingToken.address]?.chartData?.length > 0 ? (
+                      <ResponsiveContainer width="100%" height="100%">
+                                                <LineChart data={marketData[buyingToken.address].chartData} margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
+                          <XAxis dataKey="time" hide />
+                          <YAxis hide />
+                          <Tooltip content={<ChartTooltip />} />
+                          <Line 
+                            type="monotone" 
+                            dataKey="price" 
+                            stroke={marketData[buyingToken.address].change24h >= 0 ? "#2CB394" : "#ef4444"} 
+                            strokeWidth={2}
+                            dot={false}
+                          />
+                      </LineChart>
+                    </ResponsiveContainer>
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
+                        Loading chart...
+                      </div>
+                    )}
+                  </CardContent>
+                  <CardFooter className="flex-col items-start gap-1 text-xs">
+                    <a 
+                      href={getJupiterUrl(buyingToken.address)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground cursor-pointer hover:text-white transition-all duration-200 ease-[var(--ease-in-out-quad)]"
+                    >
+                      Open Page ↗
+                    </a>
+                  </CardFooter>
+                </Card>
+              )}
             </div>
           </div>
         )}
