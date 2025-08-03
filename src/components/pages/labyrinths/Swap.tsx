@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { WalletMultiButton, useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { VersionedTransaction, PublicKey, LAMPORTS_PER_SOL, Connection } from "@solana/web3.js";
 // import { TOKEN_PROGRAM_ID, getAssociatedTokenAddress, getAccount } from "@solana/spl-token";
 import axios from "axios";
@@ -18,10 +18,9 @@ import {
 } from "@/components/ui/command"
 import CheckIcon from "@/components/ui/icons/Check";
 import WalletIcon from "@/components/ui/icons/Wallet";
-import { CandlestickChart, SlidersHorizontal, Settings } from "lucide-react";
+import { Sparkles, RefreshCw } from "lucide-react";
 import JupiterLogo from '@/components/logos/partners/Jupiter';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Area } from 'recharts';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { Card,  CardContent } from '@/components/ui/card';
 import type { TooltipProps } from 'recharts';
 
 // Jupiter API endpoint - using the current Lite API
@@ -101,8 +100,9 @@ interface SwapResponse {
 
 function SwapComponent() {
   // Wallet integration
-  const { publicKey, sendTransaction, connected, connecting } = useWallet();
+  const { publicKey, sendTransaction, connected, connecting, select } = useWallet();
   const { connection } = useConnection();
+  const { setVisible } = useWalletModal();
 
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [dialogType, setDialogType] = React.useState<'selling' | 'buying'>('selling');
@@ -115,8 +115,7 @@ function SwapComponent() {
   const [sellingFocused, setSellingFocused] = React.useState(false);
   const [buyingFocused, setBuyingFocused] = React.useState(false);
   const [arrowRotated, setArrowRotated] = React.useState(true);
-  const [showCharts, setShowCharts] = React.useState(false);
-  const [chartsVisible, setChartsVisible] = React.useState(false);
+
 
   // Jupiter integration states
   const [quote, setQuote] = React.useState<JupiterQuote | null>(null);
@@ -129,15 +128,7 @@ function SwapComponent() {
   const [balanceRefreshTrigger, setBalanceRefreshTrigger] = React.useState(0);
 
   // Handle smooth collapse animation
-  React.useEffect(() => {
-    if (showCharts) {
-      setChartsVisible(true);
-    } else {
-      // Wait for transition to finish before unmounting
-      const timeout = setTimeout(() => setChartsVisible(false), 500);
-      return () => clearTimeout(timeout);
-    }
-  }, [showCharts]);
+
 
   // Balance fetching with proper error handling and demo mode
   React.useEffect(() => {
@@ -435,44 +426,46 @@ function SwapComponent() {
     }
   }>({});
 
-  // Fetch market data for selected tokens
+  // Fetch market data for selected tokens using Server Actions
   const fetchMarketData = React.useCallback(async (tokenAddress: string, tokenSymbol: string) => {
     try {
-      console.log(`Fetching market data for ${tokenSymbol} (${tokenAddress})`);
-      
-      // Use Server Action to avoid CORS issues
+      console.log(`Fetching market data for ${tokenSymbol} (${tokenAddress}) via Server Action`);
       const data = await getMarketData(tokenAddress);
       
       if (data.success) {
+        console.log(`${tokenSymbol} market data raw response:`, data);
         const price = data.price;
         const change24h = data.change24h;
         const chartData = data.chartData || [];
-        
-        setMarketData(prev => ({
+        const source = data.source || 'unknown';
+        setMarketData((prev) => ({
           ...prev,
-          [tokenAddress]: {
-            price,
-            change24h,
-            chartData
-          }
+          [tokenAddress]: { price, change24h, chartData },
         }));
-        
-        console.log(`${tokenSymbol} market data:`, { price, change24h, chartDataPoints: chartData.length });
-        console.log(`${tokenSymbol} chart data sample:`, chartData.slice(0, 3));
-        console.log(`${tokenSymbol} full chart data received:`, chartData.length);
+        console.log(`${tokenSymbol} market data:`, {
+          price,
+          change24h,
+          chartDataPoints: chartData.length,
+          source,
+        });
       } else {
-        console.error(`Market data Server Action error: ${data.error}`);
+        console.error(`Market data error for ${tokenSymbol}:`, data.error);
       }
     } catch (error) {
       console.error(`Error fetching market data for ${tokenSymbol}:`, error);
     }
   }, []);
 
-  // Fetch market data when tokens change
+  // Fetch market data when tokens change (skip USDC since we use hardcoded value)
   React.useEffect(() => {
     if (sellingToken && buyingToken) {
-      fetchMarketData(sellingToken.address, sellingToken.label);
-      fetchMarketData(buyingToken.address, buyingToken.label);
+      // Skip USDC since we use hardcoded $0.9999
+      if (sellingToken.label !== 'USDC') {
+        fetchMarketData(sellingToken.address, sellingToken.label);
+      }
+      if (buyingToken.label !== 'USDC') {
+        fetchMarketData(buyingToken.address, buyingToken.label);
+      }
     }
   }, [sellingToken, buyingToken, fetchMarketData]);
 
@@ -644,6 +637,12 @@ function SwapComponent() {
     setArrowRotated(!arrowRotated);
   }
 
+
+
+
+
+
+
   return (
     <section className='max-w-2xl mx-auto px-6 mt-30 sm:mt-44 pb-8'>
 
@@ -655,37 +654,14 @@ function SwapComponent() {
       {/* Settings */}
         <div className="flex justify-end items-center md:px-6 mb-3 mr-2">
             <div className="flex gap-2">
-              {/* Market Button */}
-              <Button
-                type="button"
-                variant="market"
-                className={`group font-semibold text-xs cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)] rounded-full flex items-center ${showCharts ? '!border-[#2CB394] !text-[#2CB394]' : ''}`}
-                data-selected={showCharts ? "true" : "false"}
-                onClick={() => setShowCharts((prev) => !prev)}
-              >
-                <CandlestickChart size={15} className={`text-stone-400 group-hover:text-accent-foreground group-focus-visible:text-accent-foreground transition-colors duration-200 ${showCharts ? '!border-[#2CB394] !text-[#2CB394]' : ''}`} />
-                <span className="ml-1">Market</span>
-                <svg
-                  className={`w-3 h-3 transition-transform duration-300
-                    ${showCharts ? 'rotate-180 text-[#2CB394] ' : 'rotate-0 text-stone-400 group-hover:text-accent-foreground'}
-                    group-focus-visible:text-accent-foreground
-                  `}
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M6 8l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </Button>
-              {/* Slippage Button */}
+              {/* Ultra V2 Button */}
               <Button variant="outline"  className="group font-semibold text-xs text-stone-500 cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)] rounded-full">
-                <SlidersHorizontal size={15} className="text-stone-400 group-hover:text-stone-200" />
-                <span>0.5%</span>
+                <Sparkles size={15} className="text-stone-400 group-hover:text-stone-200" />
+                <span>Ultra V2</span>
               </Button>
-              {/* Settings Button */}
+              {/* Refresh Button */}
               <Button variant="outline"  className="group font-semibold text-xs text-stone-500 cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)] rounded-full">
-                <Settings size={15} className="text-stone-400 group-hover:text-stone-200" />
+                <RefreshCw size={15} className="text-stone-400 group-hover:text-stone-200" />
               </Button>
               
             </div>
@@ -863,16 +839,26 @@ function SwapComponent() {
           </form>
         </div>
         <div className="flex items-center md:px-6">
-          <Button 
-            variant="outline" 
-            onClick={handleSwap}
-            disabled={!connected || !quote || swapping || loading || !sellingValue || !buyingValue}
-            className="w-full h-18 font-semibold text-xl cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)] disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <span className="">
-              {!connected ? "Connect Wallet to Swap" : swapping ? "Swapping..." : loading ? "Getting Quote..." : "Swap"}
-            </span>
-          </Button>
+          {!connected ? (
+            <Button 
+              variant="outline" 
+              onClick={() => setVisible(true)}
+              className="w-full h-18 font-semibold text-xl cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Connect
+            </Button>
+          ) : (
+            <Button 
+              variant="outline" 
+              onClick={handleSwap}
+              disabled={!quote || swapping || loading || !sellingValue || !buyingValue}
+              className="w-full h-18 font-semibold text-xl cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <span className="">
+                {swapping ? "Swapping..." : loading ? "Getting Quote..." : "Swap"}
+              </span>
+            </Button>
+          )}
         </div>
       </div>
       <CommandDialog
@@ -931,125 +917,93 @@ function SwapComponent() {
         </CommandList>
       </CommandDialog>
 
+      {/* Token Information Cards */}
+      <div className="mx-auto mt-6">
+        <div className="flex flex-row gap-4 max-w-2xl md:mx-8">
+          {/* Selling Token Card */}
+          {sellingToken && (
+            <Card className="flex-1 bg-stone-900/0 border-stone-700">
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <img src={sellingToken.icon} alt={sellingToken.label} className="w-8 h-8 rounded-full" />
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-white text-base">{sellingToken.label}</span>
+                      <span className="text-xs text-stone-500">
+                        {sellingToken.address.slice(0, 4)}...{sellingToken.address.slice(-4)}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <div className="text-sm font-medium text-stone-300">
+                      {sellingToken.label === 'USDC' ? '$0.9999' : 
+                       marketData[sellingToken.address]?.price ? 
+                       `$${marketData[sellingToken.address].price >= 1 ? marketData[sellingToken.address].price.toFixed(2) : marketData[sellingToken.address].price.toFixed(4)}` : 
+                       '$0.00'}
+                    </div>
+                    {sellingToken.label !== 'USDC' && marketData[sellingToken.address]?.change24h !== undefined && (
+                      <div className={`text-xs font-medium ${marketData[sellingToken.address].change24h >= 0 ? 'text-[#2CB394]' : 'text-red-400'}`}>
+                        {marketData[sellingToken.address].change24h >= 0 ? '+' : ''}{marketData[sellingToken.address].change24h.toFixed(2)}%
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+          
+          {/* Buying Token Card */}
+          {buyingToken && (
+            <Card className="flex-1 bg-stone-900/0 border-stone-700">
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <img src={buyingToken.icon} alt={buyingToken.label} className="w-8 h-8 rounded-full" />
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-white text-base">{buyingToken.label}</span>
+                      <span className="text-xs text-stone-500">
+                        {buyingToken.address.slice(0, 4)}...{buyingToken.address.slice(-4)}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <div className="text-sm font-medium text-stone-300">
+                      {buyingToken.label === 'USDC' ? '$0.9999' : 
+                       marketData[buyingToken.address]?.price ? 
+                       `$${marketData[buyingToken.address].price >= 1 ? marketData[buyingToken.address].price.toFixed(2) : marketData[buyingToken.address].price.toFixed(4)}` : 
+                       '$0.00'}
+                    </div>
+                    {buyingToken.label !== 'USDC' && marketData[buyingToken.address]?.change24h !== undefined && (
+                      <div className={`text-xs font-medium ${marketData[buyingToken.address].change24h >= 0 ? 'text-[#2CB394]' : 'text-red-400'}`}>
+                        {marketData[buyingToken.address].change24h >= 0 ? '+' : ''}{marketData[buyingToken.address].change24h.toFixed(2)}%
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+        
+        {/* Open Swap Page Link */}
+        <div className="px-8 mt-4">
+          <a 
+            href="https://jup.ag"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between px-4 py-3 bg-stone-800/50 border-stone-700 rounded-md text-neutral-200/40 hover:text-neutral-200 transition-all duration-200 ease-[var(--ease-in-out-quad)] text-sm"
+          >
+            <span>Open Swap page</span>
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+              <path d="M6 8l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" transform="rotate(-90 10 10)" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
       {/* Jupiter Logo */}
       <div className="flex items-center md:px-6 opacity-40 mt-3 ml-3">
             <span className='font-inter text-[12px] text-neutral-400 -mr-2'>powered by:</span><JupiterLogo className="w-[33px] h-8 shrink-0 scale-30 -mr-2" /><span className="font-inter font-bold text-[12px] text-neutral-200">Jupiter</span>
-      </div>
-
-      {/* Animated Charts Section */}
-      <div
-        className="transition-all duration-500 overflow-hidden"
-        style={{
-          maxHeight: showCharts ? 1000 : 0,
-          opacity: showCharts ? 1 : 0,
-          marginTop: showCharts ? 0 : 0,
-        }}
-      >
-        {chartsVisible && (
-          <div className="mx-auto">
-            <div className="flex flex-row gap-4 mt-4 max-w-2xl md:mx-8">
-              {/* Selling Token Chart Card */}
-              {sellingToken && marketData[sellingToken.address] && (
-                <Card className="flex-1 bg-stone-900/0 border-stone-700">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <img src={sellingToken.icon} alt={sellingToken.label} className="w-6 h-6 rounded-full" />
-                      {sellingToken.label}
-                    </CardTitle>
-                    <CardDescription className="flex items-center gap-2">
-                      <span className="font-bold">${marketData[sellingToken.address].price >= 1 ? marketData[sellingToken.address].price.toFixed(2) : marketData[sellingToken.address].price.toFixed(4)}</span>
-                      <span className={`text-xs ${marketData[sellingToken.address].change24h >= 0 ? 'text-[#00e1c0]' : 'text-red-400'}`}>
-                        {marketData[sellingToken.address].change24h >= 0 ? '+' : ''}{marketData[sellingToken.address].change24h.toFixed(2)}%
-                      </span>
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="h-32">
-                    {marketData[sellingToken.address]?.chartData?.length > 0 ? (
-                      <ResponsiveContainer width="100%" height="100%">
-                                                <LineChart data={marketData[sellingToken.address].chartData} margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
-                          {/* Debug: Chart data length: {marketData[sellingToken.address].chartData.length} */}
-                          <XAxis dataKey="time" hide />
-                          <YAxis hide />
-                          <Tooltip content={<ChartTooltip />} />
-                          <Line 
-                            type="monotone" 
-                            dataKey="price" 
-                            stroke={marketData[sellingToken.address].change24h >= 0 ? "#2CB394" : "#ef4444"} 
-                            strokeWidth={2}
-                            dot={false}
-                          />
-                      </LineChart>
-                    </ResponsiveContainer>
-                    ) : (
-                      <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
-                        Loading chart...
-                      </div>
-                    )}
-                  </CardContent>
-                  <CardFooter className="flex-col items-start gap-1 text-xs">
-                    <a 
-                      href={getJupiterUrl(sellingToken.address)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-muted-foreground cursor-pointer hover:text-white transition-all duration-200 ease-[var(--ease-in-out-quad)]"
-                    >
-                      Open Page ↗
-                    </a>
-                  </CardFooter>
-                </Card>
-              )}
-              {/* Buying Token Chart Card */}
-              {buyingToken && marketData[buyingToken.address] && (
-                <Card className="flex-1 bg-stone-900/0 border-stone-700">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <img src={buyingToken.icon} alt={buyingToken.label} className="w-6 h-6 rounded-full" />
-                      {buyingToken.label}
-                    </CardTitle>
-                    <CardDescription className="flex items-center gap-2">
-                      <span className="font-bold">${marketData[buyingToken.address].price >= 1 ? marketData[buyingToken.address].price.toFixed(2) : marketData[buyingToken.address].price.toFixed(4)}</span>
-                      <span className={`text-xs ${marketData[buyingToken.address].change24h >= 0 ? 'text-[#00e1c0]' : 'text-red-400'}`}>
-                        {marketData[buyingToken.address].change24h >= 0 ? '+' : ''}{marketData[buyingToken.address].change24h.toFixed(2)}%
-                      </span>
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="h-32">
-                    {marketData[buyingToken.address]?.chartData?.length > 0 ? (
-                      <ResponsiveContainer width="100%" height="100%">
-                                                <LineChart data={marketData[buyingToken.address].chartData} margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
-                          <XAxis dataKey="time" hide />
-                          <YAxis hide />
-                          <Tooltip content={<ChartTooltip />} />
-                          <Line 
-                            type="monotone" 
-                            dataKey="price" 
-                            stroke={marketData[buyingToken.address].change24h >= 0 ? "#2CB394" : "#ef4444"} 
-                            strokeWidth={2}
-                            dot={false}
-                          />
-                      </LineChart>
-                    </ResponsiveContainer>
-                    ) : (
-                      <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
-                        Loading chart...
-                      </div>
-                    )}
-                  </CardContent>
-                  <CardFooter className="flex-col items-start gap-1 text-xs">
-                    <a 
-                      href={getJupiterUrl(buyingToken.address)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-muted-foreground cursor-pointer hover:text-white transition-all duration-200 ease-[var(--ease-in-out-quad)]"
-                    >
-                      Open Page ↗
-                    </a>
-                  </CardFooter>
-                </Card>
-              )}
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );
@@ -1066,7 +1020,7 @@ export default function Swap() {
   if (!mounted) {
     return (
       <section className='max-w-2xl mx-auto px-6 mt-30 sm:mt-44 pb-8'>
-        <p className="text-xl sm:text-2xl font-medium tracking-widest font-oldFenris uppercase md:mx-8 mb-6 text-transparent bg-clip-text drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]"
+        <p className="text-xl sm:text-2xl font-medium tracking-widest font-oldFenris uppercase md:mx-8 text-transparent bg-clip-text drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]"
         style={{ backgroundImage: 'linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)' }}>
           Chaos Is Coming...  
         </p>

@@ -212,226 +212,210 @@ export async function getBalanceData(walletAddress: string, tokenAddress: string
   }
 }
 
-export async function getMarketData(tokenAddress: string) {
-  try {
-    console.log(`Fetching market data for token: ${tokenAddress}`);
-    
-    // Map token addresses to different API identifiers
-    const tokenMap: { [key: string]: { 
-      coinGeckoId: string; 
-      pythSymbol: string; 
-      jupiterId: string;
-    } } = {
-      'So11111111111111111111111111111111111111112': { 
-        coinGeckoId: 'solana', 
-        pythSymbol: 'SOL/USD',
-        jupiterId: 'So11111111111111111111111111111111111111112'
-      },
-      'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': { 
-        coinGeckoId: 'usd-coin', 
-        pythSymbol: 'USDC/USD',
-        jupiterId: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
-      },
-      'JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN': { 
-        coinGeckoId: 'jupiter', 
-        pythSymbol: 'JUP/USD',
-        jupiterId: 'JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN'
-      },
-      'GGEMxCsqM74URiXdY46VcaSW73a4yfHfJKrJrUmDVpEF': { 
-        coinGeckoId: 'ggem', 
-        pythSymbol: 'GGEM/USD',
-        jupiterId: 'GGEMxCsqM74URiXdY46VcaSW73a4yfHfJKrJrUmDVpEF'
-      },
-      'J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn': { 
-        coinGeckoId: 'jito-solana', 
-        pythSymbol: 'JITOSOL/USD',
-        jupiterId: 'J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn'
-      },
-    };
-    
-    const tokenInfo = tokenMap[tokenAddress];
-    
-    if (!tokenInfo) {
-      console.log(`Token not supported: ${tokenAddress}`);
-      return { 
-        error: 'Token not supported',
-        price: 0,
-        change24h: 0 
-      };
-    }
-    
-    let price = 0;
-    let change24h = 0;
-    let chartData: Array<{ time: string; price: number }> = [];
-    
-    // 1. Try Jupiter for live price first (most reliable for Solana tokens)
+// In-flight dedupe so concurrent callers share the same promise
+const inFlightMarketFetches: Map<string, Promise<any>> = new Map();
+
+// Cache for market data
+const marketCache: Map<string, { expires: number; data: any }> = new Map();
+
+// Fetch with exponential backoff
+async function fetchWithBackoff(url: string, options: RequestInit, retries: number): Promise<Response> {
+  for (let attempt = 0; attempt < retries; attempt++) {
     try {
-      console.log('Trying Jupiter Price API for live price...');
-      const jupiterResponse = await fetch(`https://price.jup.ag/v4/price?ids=${tokenInfo.jupiterId}`, {
-        next: { revalidate: 30 }, // Cache for 30 seconds
+      const res = await fetch(url, {
+        ...options,
+        next: { revalidate: 60 }, // Cache for 60 seconds
       });
       
-      if (jupiterResponse.ok) {
-        const jupiterData = await jupiterResponse.json();
-        const tokenData = jupiterData.data[tokenInfo.jupiterId];
-        
-        if (tokenData) {
-          price = tokenData.price;
-          console.log(`Jupiter live price for ${tokenAddress}: ${price}`);
-        }
-      }
-    } catch (error) {
-      console.log('Jupiter price failed, will try alternatives...');
-    }
-    
-    // 2. Try CoinGecko for 24h stats and % change
-    try {
-      console.log('Trying CoinGecko API for 24h stats...');
-      const coinGeckoResponse = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${tokenInfo.coinGeckoId}&vs_currencies=usd&include_24hr_change=true`, {
-        next: { revalidate: 60 }, // Cache for 1 minute
-      });
-      
-      if (coinGeckoResponse.ok) {
-        const coinGeckoData = await coinGeckoResponse.json();
-        const tokenData = coinGeckoData[tokenInfo.coinGeckoId];
-        
-        if (tokenData) {
-          // If we don't have price from Jupiter, use CoinGecko price
-          if (price === 0) {
-            price = tokenData.usd;
-          }
-          change24h = tokenData.usd_24h_change;
-          
-          // Get 24h chart data from CoinGecko - try multiple approaches
-          try {
-            console.log(`Fetching chart data for ${tokenAddress} from CoinGecko...`);
-            
-            // Try the hourly endpoint first
-            let chartResponse = await fetch(`https://api.coingecko.com/api/v3/coins/${tokenInfo.coinGeckoId}/market_chart?vs_currency=usd&days=1&interval=hourly`, {
-              next: { revalidate: 300 }, // Cache for 5 minutes
-            });
-            
-            // If that fails, try without interval parameter
-            if (!chartResponse.ok) {
-              console.log(`Hourly endpoint failed, trying daily endpoint for ${tokenAddress}`);
-              chartResponse = await fetch(`https://api.coingecko.com/api/v3/coins/${tokenInfo.coinGeckoId}/market_chart?vs_currency=usd&days=1`, {
-                next: { revalidate: 300 },
-              });
-            }
-            
-            if (chartResponse.ok) {
-              const chartDataRaw = await chartResponse.json();
-              console.log(`CoinGecko chart response for ${tokenAddress}:`, chartDataRaw);
-              console.log(`Response status: ${chartResponse.status}, Data length: ${chartDataRaw.prices ? chartDataRaw.prices.length : 'no prices array'}`);
-              
-              if (chartDataRaw.prices && Array.isArray(chartDataRaw.prices) && chartDataRaw.prices.length > 0) {
-                chartData = chartDataRaw.prices.map((point: [number, number], index: number) => {
-                  // Convert timestamp to local time
-                  const timestamp = new Date(point[0]);
-                  const timeString = timestamp.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-                  
-                  return {
-                    time: timeString,
-                    price: point[1]
-                  };
-                });
-                console.log(`Successfully parsed ${chartData.length} chart data points for ${tokenAddress}`);
-                console.log(`Sample data points:`, chartData.slice(0, 3));
-              } else {
-                console.log(`No valid chart data in CoinGecko response for ${tokenAddress}`);
-                console.log(`Response structure:`, Object.keys(chartDataRaw));
-              }
-            } else {
-              console.log(`CoinGecko chart API failed for ${tokenAddress}:`, chartResponse.status, chartResponse.statusText);
-              const errorText = await chartResponse.text();
-              console.log(`Error response:`, errorText);
-            }
-          } catch (error) {
-            console.log(`CoinGecko chart API error for ${tokenAddress}:`, error);
-          }
-          
-          // Jupiter price history endpoint doesn't exist - removed to prevent fake data
-          
-          // NEVER generate fallback data - only use real data from APIs
-          if (chartData.length === 0) {
-            console.log('No real chart data available from CoinGecko for', tokenAddress);
-          }
-          
-          console.log(`CoinGecko 24h stats for ${tokenAddress}:`, { price, change24h, chartDataPoints: chartData.length });
-        }
-      }
-    } catch (error) {
-      console.log('CoinGecko failed, trying Pyth...');
-    }
-    
-    // 3. Try Pyth for real-time on-chain data as fallback
-    if (price === 0 || change24h === 0) {
-      try {
-        console.log('Trying Pyth Network for real-time on-chain data...');
-        const pythResponse = await fetch(`https://api.pyth.network/api/price_feeds?symbols[]=${tokenInfo.pythSymbol}`, {
-          next: { revalidate: 15 }, // Cache for 15 seconds
-        });
-        
-        if (pythResponse.ok) {
-          const pythData = await pythResponse.json();
-          const priceFeed = pythData[tokenInfo.pythSymbol];
-          
-          if (priceFeed && priceFeed.price) {
-            if (price === 0) {
-              price = priceFeed.price;
-            }
-            
-            // Pyth doesn't provide 24h change, so we'll use a small variation
-            if (change24h === 0) {
-              change24h = (Math.random() - 0.5) * 2; // -1% to +1%
-            }
-            
-            // NEVER generate fallback data - only use real data from APIs
-            if (chartData.length === 0) {
-              console.log('No real chart data available from Pyth for', tokenAddress);
-            }
-            
-            console.log(`Pyth real-time data for ${tokenAddress}:`, { price, change24h, chartDataPoints: chartData.length });
-          }
-        }
-      } catch (error) {
-        console.log('Pyth failed...');
-      }
-    }
-    
-    // If we have data, return it
-    if (price > 0) {
-      // NEVER generate fallback data - only use real data from APIs
-      if (chartData.length === 0) {
-        console.log('No real chart data available for', tokenAddress, '- returning empty array');
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`Fetch failed ${res.status}: ${text}`);
       }
       
-      console.log(`Final market data for ${tokenAddress}:`, { price, change24h, chartDataPoints: chartData.length });
-      console.log(`Chart data sample being returned:`, chartData.slice(0, 3));
-      console.log(`Full chart data length being returned:`, chartData.length);
+      return res;
+    } catch (e) {
+      if (attempt === retries - 1) throw e;
       
-      return { 
-        price,
-        change24h,
-        chartData,
-        success: true 
-      };
+      // Exponential backoff with jitter
+      const delay = 300 * 2 ** attempt + Math.floor(Math.random() * 100);
+      await new Promise(resolve => setTimeout(resolve, delay));
     }
-    
-    // If all APIs fail, return error
-    console.error(`All APIs failed for token: ${tokenAddress}`);
-    return { 
-      error: 'All data sources failed',
-      price: 0,
-      change24h: 0 
-    };
-    
-  } catch (error: any) {
-    console.error('Market data API error:', error);
-    return { 
-      error: 'Internal server error',
-      price: 0,
-      change24h: 0 
-    };
   }
+  throw new Error('All retries failed');
+}
+
+export async function getMarketData(tokenAddress: string) {
+  const key = tokenAddress;
+  if (inFlightMarketFetches.has(key)) {
+    return inFlightMarketFetches.get(key);
+  }
+  const promise = (async () => {
+    try {
+      const now = Date.now();
+      const cacheKey = tokenAddress;
+      const cached = marketCache.get(cacheKey);
+      if (cached && cached.expires > now) {
+        return { ...cached.data, success: true, source: 'cache' };
+      }
+
+      // Map token addresses to identifiers
+      const tokenMap: { [key: string]: { coinGeckoId: string; binanceSymbol?: string; isStable?: boolean; coinMarketCapId?: string } } = {
+        'So11111111111111111111111111111111111111112': { coinGeckoId: 'solana', binanceSymbol: 'SOLUSDT', coinMarketCapId: '485' },
+        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': { coinGeckoId: 'usd-coin', isStable: true, coinMarketCapId: '3408' },
+        'JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN': { coinGeckoId: 'jupiter', coinMarketCapId: '23095' },
+        'GGEMxCsqM74URiXdY46VcaSW73a4yfHfJKrJrUmDVpEF': { coinGeckoId: 'ggem' },
+        'J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn': { coinGeckoId: 'jito-solana' },
+      };
+
+      const info = tokenMap[tokenAddress];
+      if (!info) {
+        return { error: 'Token not supported', price: 0, change24h: 0 };
+      }
+
+      let price = 0;
+      let change24h = 0;
+      let chartData: Array<{ time: string; price: number }> = [];
+      let source: string = 'unknown';
+
+      // Primary: CoinGecko hourly chart
+      try {
+        const chartUrl = `https://api.coingecko.com/api/v3/coins/${info.coinGeckoId}/market_chart?vs_currency=usd&days=1&interval=hourly`;
+        console.log(`🔍 Trying CoinGecko chart API for ${tokenAddress} (${info.coinGeckoId}): ${chartUrl}`);
+        const chartRes = await fetchWithBackoff(chartUrl, { headers: { Accept: 'application/json' } }, 3);
+        if (chartRes.ok) {
+          const chartJson = await chartRes.json();
+          console.log(`📊 CoinGecko chart response for ${tokenAddress}:`, chartJson);
+          if (Array.isArray(chartJson.prices) && chartJson.prices.length > 0) {
+            chartData = chartJson.prices.slice(-24).map((p: [number, number]) => ({
+              time: new Date(p[0]).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }),
+              price: p[1],
+            }));
+            const first = chartData[0].price;
+            const last = chartData[chartData.length - 1].price;
+            price = last;
+            change24h = first > 0 ? ((last - first) / first) * 100 : 0;
+            source = 'coingecko';
+            console.log(`✅ CoinGecko data for ${tokenAddress}: price=${price}, change24h=${change24h}, chartData.length=${chartData.length}`);
+          } else {
+            console.log(`❌ CoinGecko chart data empty for ${tokenAddress}: prices array length = ${chartJson.prices?.length || 0}`);
+          }
+        } else {
+          console.log(`❌ CoinGecko chart API failed for ${tokenAddress}: ${chartRes.status} ${chartRes.statusText}`);
+        }
+      } catch (e) {
+        console.warn('CoinGecko chart fetch failed', e);
+      }
+
+      // Try CoinGecko simple price API as fallback for price and 24h change
+      if ((!chartData.length || price === 0) && info.coinGeckoId) {
+        try {
+          const simpleUrl = `https://api.coingecko.com/api/v3/simple/price?ids=${info.coinGeckoId}&vs_currencies=usd&include_24hr_change=true`;
+          console.log(`🔍 Trying CoinGecko simple API for ${tokenAddress} (${info.coinGeckoId}): ${simpleUrl}`);
+          const simpleRes = await fetchWithBackoff(simpleUrl, { headers: { Accept: 'application/json' } }, 3);
+          if (simpleRes.ok) {
+            const simpleJson = await simpleRes.json();
+            console.log(`📊 CoinGecko simple response for ${tokenAddress}:`, simpleJson);
+            const tokenData = simpleJson[info.coinGeckoId];
+            if (tokenData && tokenData.usd) {
+              if (price === 0) price = tokenData.usd;
+              if (change24h === 0) change24h = tokenData.usd_24h_change || 0;
+              source = 'coingecko-simple';
+              console.log(`✅ CoinGecko simple API for ${tokenAddress}: price=${price}, change24h=${change24h}`);
+            } else {
+              console.log(`❌ CoinGecko simple API no data for ${tokenAddress}: tokenData =`, tokenData);
+            }
+          } else {
+            console.log(`❌ CoinGecko simple API failed for ${tokenAddress}: ${simpleRes.status} ${simpleRes.statusText}`);
+          }
+        } catch (e) {
+          console.warn('CoinGecko simple API failed', e);
+        }
+      }
+
+      // Try CoinMarketCap as another fallback (especially good for USDC)
+      if ((!chartData.length || price === 0) && info.coinMarketCapId) {
+        try {
+          const cmcUrl = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?id=${info.coinMarketCapId}`;
+          console.log(`🔍 Trying CoinMarketCap API for ${tokenAddress} (${info.coinMarketCapId}): ${cmcUrl}`);
+          
+          // Note: CoinMarketCap requires an API key, but we can try without one first
+          const cmcRes = await fetchWithBackoff(cmcUrl, { 
+            headers: { 
+              'Accept': 'application/json',
+              'X-CMC_PRO_API_KEY': process.env.COINMARKETCAP_API_KEY || 'demo' // Use demo key if no API key
+            } 
+          }, 3);
+          
+          if (cmcRes.ok) {
+            const cmcJson = await cmcRes.json();
+            console.log(`📊 CoinMarketCap response for ${tokenAddress}:`, cmcJson);
+            const tokenData = cmcJson.data?.[info.coinMarketCapId];
+            if (tokenData && tokenData.quote?.USD) {
+              const usdQuote = tokenData.quote.USD;
+              if (price === 0) price = usdQuote.price;
+              if (change24h === 0) change24h = usdQuote.percent_change_24h || 0;
+              source = 'coinmarketcap';
+              console.log(`✅ CoinMarketCap API for ${tokenAddress}: price=${price}, change24h=${change24h}`);
+            } else {
+              console.log(`❌ CoinMarketCap API no data for ${tokenAddress}: tokenData =`, tokenData);
+            }
+          } else {
+            console.log(`❌ CoinMarketCap API failed for ${tokenAddress}: ${cmcRes.status} ${cmcRes.statusText}`);
+          }
+        } catch (e) {
+          console.warn('CoinMarketCap API failed', e);
+        }
+      }
+
+      // Fallback to Binance if needed and if symbol exists (e.g., SOL)
+      if ((!chartData.length || price === 0) && info.binanceSymbol) {
+        try {
+          const binanceUrl = `https://api.binance.com/api/v3/klines?symbol=${info.binanceSymbol}&interval=1h&limit=24`;
+          const binanceRes = await fetchWithBackoff(binanceUrl, { headers: { Accept: 'application/json' } }, 3);
+          if (binanceRes.ok) {
+            const klines = await binanceRes.json();
+            chartData = klines.map((k: any[]) => ({
+              time: new Date(k[0]).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }),
+              price: parseFloat(k[4]),
+            }));
+            const first = chartData[0].price;
+            const last = chartData[chartData.length - 1].price;
+            price = last;
+            change24h = first > 0 ? ((last - first) / first) * 100 : 0;
+            source = 'binance';
+            console.log(`✅ Binance data for ${tokenAddress}: price=${price}, change24h=${change24h}, chartData.length=${chartData.length}`);
+          }
+        } catch (e) {
+          console.warn('Binance fallback failed', e);
+        }
+      }
+
+      // NO SYNTHETIC DATA - ONLY REAL DATA
+      // If we still don't have data, return error instead of fake data
+      if (!chartData.length || price === 0) {
+        console.error(`❌ No real data available for ${tokenAddress} - returning error`);
+        return { 
+          error: 'No real market data available', 
+          price: 0, 
+          change24h: 0,
+          chartData: [],
+          source: 'none'
+        };
+      }
+
+      if (price === 0) {
+        return { error: 'Failed to fetch price data', price: 0, change24h: 0 };
+      }
+
+      const result = { price, change24h, chartData, source };
+      // Cache for 60 seconds
+      marketCache.set(cacheKey, { expires: now + 60_000, data: { price, change24h, chartData } });
+      return { ...result, success: true };
+    } catch (error: any) {
+      console.error('Market data API error:', error);
+      return { error: 'Internal server error', price: 0, change24h: 0 };
+    }
+  })();
+  inFlightMarketFetches.set(key, promise);
+  return promise;
 }
