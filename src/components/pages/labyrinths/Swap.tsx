@@ -2,7 +2,8 @@
 
 import * as React from "react"
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
-import { WalletMultiButton, useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { WalletModal } from "@/components/ui/wallet-modal";
 import { VersionedTransaction, PublicKey, LAMPORTS_PER_SOL, Connection } from "@solana/web3.js";
 // import { TOKEN_PROGRAM_ID, getAssociatedTokenAddress, getAccount } from "@solana/spl-token";
 import axios from "axios";
@@ -102,7 +103,7 @@ function SwapComponent() {
   // Wallet integration
   const { publicKey, sendTransaction, connected, connecting, select } = useWallet();
   const { connection } = useConnection();
-  const { setVisible } = useWalletModal();
+  const [showWalletModal, setShowWalletModal] = React.useState(false);
 
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [dialogType, setDialogType] = React.useState<'selling' | 'buying'>('selling');
@@ -300,6 +301,7 @@ function SwapComponent() {
 
     const fetchQuote = async () => {
       setLoading(true);
+      setBuyingValue(""); // Clear buying value to show skeleton
       try {
         const inputAmount = Math.floor(numericValue * 10 ** sellingToken.decimals);
         
@@ -574,15 +576,50 @@ function SwapComponent() {
     return balance.toFixed(0); // Show no decimals for large amounts
   }
 
+  // Calculate USD value for a given amount and token
+  function calculateUSDValue(amount: string, token: any): string {
+    if (!amount) return "$0";
+    
+    const numericAmount = parseFloat(amount.replace(/,/g, ''));
+    if (isNaN(numericAmount)) return "$0";
+    
+    let price: number;
+    
+    // Handle USDC hardcoded price
+    if (token.label === 'USDC') {
+      price = 0.9999;
+    } else if (marketData[token.address]?.price) {
+      price = marketData[token.address].price;
+    } else {
+      return "$0";
+    }
+    
+    const usdValue = numericAmount * price;
+    
+    // Format USD value with appropriate decimals
+    if (usdValue >= 1) {
+      return `$${usdValue.toFixed(2)}`;
+    } else if (usdValue >= 0.01) {
+      return `$${usdValue.toFixed(4)}`;
+    } else {
+      return `$${usdValue.toFixed(6)}`;
+    }
+  }
+
   function handleSellingInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     let value = e.target.value.replace(/,/g, "");
     // Limit to 17 chars (excluding commas)
     if (value.length > 17) value = value.slice(0, 17);
     setSellingValue(formatNumberWithCommas(value));
     setIsQuoteMode('selling');
-    // Clear buying value when selling changes
+    // Clear buying value when selling changes to show skeleton while loading
+    setBuyingValue("");
+    // Set loading immediately to show skeleton
+    if (value !== "") {
+      console.log('Setting loading to true for value:', value);
+      setLoading(true);
+    }
     if (value === "") {
-      setBuyingValue("");
       setQuote(null);
     }
   }
@@ -611,6 +648,8 @@ function SwapComponent() {
     
     setSellingValue(formatNumberWithCommas(maxAmount.toString()));
     setIsQuoteMode('selling');
+    setBuyingValue(""); // Clear buying value to show skeleton
+    setLoading(true); // Set loading to show skeleton
   }
 
   // Handle Half button click
@@ -620,6 +659,8 @@ function SwapComponent() {
     const halfAmount = sellingBalance / 2;
     setSellingValue(formatNumberWithCommas(halfAmount.toString()));
     setIsQuoteMode('selling');
+    setBuyingValue(""); // Clear buying value to show skeleton
+    setLoading(true); // Set loading to show skeleton
   }
 
   function handleSwapTokens() {
@@ -724,7 +765,7 @@ function SwapComponent() {
                   </div>
 
                   {/* Amount */}
-                  <div className="flex flex-col flex-1 items-end gap-1">
+                  <div className="flex flex-col flex-1 items-end gap-1 min-h-[64px]">
                     <input
                       id="selling"
                       type="text"
@@ -741,7 +782,9 @@ function SwapComponent() {
                     />
 
                     {/* Price */}
-                    <div className="text-xs text-stone-500 font-medium mt-1 text-left">$0</div>
+                    <div className="text-xs text-stone-500 font-medium mt-1 text-left">
+                      {calculateUSDValue(sellingValue, sellingToken)}
+                    </div>
                   </div>
 
                 </div>
@@ -813,25 +856,36 @@ function SwapComponent() {
                   </div>
 
                   {/* Amount */}
-                  <div className="flex flex-col flex-1 items-end gap-1">
+                  <div className="flex flex-col flex-1 items-end gap-1 min-h-[64px]">
 
-                    <input
-                      id="buying"
-                      type="text"
-                      inputMode="decimal"
-                      placeholder="0.00"
-                      required
-                      autoComplete="off"
-                      value={buyingValue}
-                      onChange={handleBuyingInputChange}
-                      onFocus={() => setBuyingFocused(true)}
-                      onBlur={() => setBuyingFocused(false)}
-                      maxLength={23} // allow for commas
-                      className={`[&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-right w-full appearance-none border-none outline-none bg-transparent p-0 m-0 font-semibold text-white placeholder:text-stone-500 focus:border-transparent ${buyingValue.replace(/,/g, '').length > 6 ? 'text-3xl' : 'text-4xl'}`}
-                    />
-
-                    {/* Price */}
-                    <div className="text-xs text-stone-500 font-medium mt-1 text-left">$0</div>
+                    {(() => {
+                      console.log('Skeleton condition check:', { sellingValue, loading, buyingValue });
+                      return sellingValue && loading && !buyingValue;
+                    })() ? (
+                      <>
+                        <div className="h-7 w-28 bg-stone-700/50 rounded-md  animate-pulse mt-1"></div>
+                        <div className="h-4 w-8 bg-stone-700/50 rounded-full animate-pulse mt-1"></div>
+                      </>
+                    ) : (
+                      <>
+                        <input
+                          id="buying"
+                          type="text"
+                          inputMode="decimal"
+                          readOnly
+                          autoComplete="off"
+                          value={buyingValue}
+                          onFocus={() => setBuyingFocused(false)}
+                          onBlur={() => setBuyingFocused(false)}
+                          maxLength={23} // allow for commas
+                          className={`[&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-right w-full appearance-none border-none outline-none bg-transparent p-0 m-0 font-semibold text-white focus:border-transparent cursor-not-allowed ${buyingValue.replace(/,/g, '').length > 6 ? 'text-3xl' : 'text-4xl'}`}
+                        />
+                                                 {/* Price */}
+                         <div className={`text-xs text-stone-500 font-medium text-left ${!buyingValue ? '-mt-1' : ''}`}>
+                           {calculateUSDValue(buyingValue, buyingToken)}
+                         </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -842,22 +896,32 @@ function SwapComponent() {
           {!connected ? (
             <Button 
               variant="outline" 
-              onClick={() => setVisible(true)}
+              onClick={() => setShowWalletModal(true)}
               className="w-full h-18 font-semibold text-xl cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Connect
             </Button>
           ) : (
-            <Button 
-              variant="outline" 
+            <button 
               onClick={handleSwap}
-              disabled={!quote || swapping || loading || !sellingValue || !buyingValue}
-              className="w-full h-18 font-semibold text-xl cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)] disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!quote || swapping || loading || !sellingValue || !buyingValue || parseFloat(sellingValue.replace(/,/g, '')) > sellingBalance}
+              className={`w-full h-18 font-semibold text-xl transition-all duration-200 ease-[var(--ease-in-out-quad)] disabled:opacity-50 border bg-background shadow-xs dark:bg-input/30 dark:border-input rounded-md ${
+                (!sellingValue || !buyingValue || parseFloat(sellingValue.replace(/,/g, '')) > sellingBalance) 
+                  ? '' 
+                  : 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-input/50'
+              }`}
+              style={{
+                cursor: (!sellingValue || !buyingValue || parseFloat(sellingValue.replace(/,/g, '')) > sellingBalance) ? 'not-allowed' : 'pointer'
+              }}
             >
               <span className="">
-                {swapping ? "Swapping..." : loading ? "Getting Quote..." : "Swap"}
+                {swapping ? "Swapping..." : 
+                 loading ? "Getting Quote..." : 
+                 !sellingValue || !buyingValue ? "Enter an amount" :
+                 parseFloat(sellingValue.replace(/,/g, '')) > sellingBalance ? `Insufficient ${sellingToken.label}` :
+                 "Swap"}
               </span>
-            </Button>
+            </button>
           )}
         </div>
       </div>
@@ -916,6 +980,12 @@ function SwapComponent() {
           </CommandGroup>
         </CommandList>
       </CommandDialog>
+
+      {/* Custom Wallet Modal */}
+      <WalletModal 
+        open={showWalletModal} 
+        onOpenChange={setShowWalletModal} 
+      />
 
       {/* Token Information Cards */}
       <div className="mx-auto mt-6">
@@ -988,7 +1058,7 @@ function SwapComponent() {
         {/* Open Swap Page Link */}
         <div className="px-8 mt-4">
           <a 
-            href="https://jup.ag"
+            href={`https://jup.ag/swap?sell=${sellingToken.address}&buy=${buyingToken.address}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-between px-4 py-3 bg-stone-800/50 border-stone-700 rounded-md text-neutral-200/40 hover:text-neutral-200 transition-all duration-200 ease-[var(--ease-in-out-quad)] text-sm"
