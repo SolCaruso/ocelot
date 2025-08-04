@@ -4,7 +4,7 @@ import { montserrat, inter } from '@/fonts'
 import Nav from "@/components/nav/Nav"  
 import Footer from '@/components/footer/Footer';
 import { Toaster } from '@/components/ui/sonner'
-import SolanaWalletProvider from '@/components/pages/labyrinths/SolanaWalletProvider';
+
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
@@ -25,16 +25,14 @@ export default function RootLayout({
       `}
     >
       <body className="antialiased bg-gs-bg h-screen font-sans">
-        <SolanaWalletProvider>
-          <header>
-            <Nav />
-          </header>
-          <main>
-            {children}
-          </main>  
-          <Toaster position="bottom-right" />
-          <Footer/>
-        </SolanaWalletProvider>
+        <header>
+          <Nav />
+        </header>
+        <main>
+          {children}
+        </main>  
+        <Toaster position="bottom-right" />
+        <Footer/>
       </body>
       <SpeedInsights />
     </html>

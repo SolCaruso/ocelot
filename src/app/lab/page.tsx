@@ -2,7 +2,6 @@ import Hero from "@/components/header/Hero";
 import { SmokeContainer } from "@/components/sections/SmokeContainer";
 import { Container } from "@/components/ui/container";
 import Screenshots from "@/components/sections/Screenshots";
-import Swap from "@/components/pages/labyrinths/Swap";
 
 const heroConfig = {
   videoSrc: "/video/lab-hero.webm",
@@ -53,7 +52,6 @@ export default function Home() {
     <SmokeContainer>
       <Hero className='h-[600px] md:h-[800px] lg:h-[900px]' config={heroConfig}/>
       <Container>
-        <Swap/>
         <Screenshots images={labScreenshots} />
       </Container>
     </SmokeContainer>
