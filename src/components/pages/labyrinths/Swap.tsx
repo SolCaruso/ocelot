@@ -547,8 +547,16 @@ function SwapComponent() {
   // Helper to format number with commas
   function formatNumberWithCommas(value: string): string {
     if (!value) return "";
+    
+    // Convert scientific notation to regular decimal
+    let numericValue = parseFloat(value);
+    if (isNaN(numericValue)) return "";
+    
+    // Convert to string with proper decimal representation
+    let decimalString = numericValue.toString();
+    
     // Remove all non-digit and non-dot chars
-    const cleaned = value.replace(/[^\d.]/g, "");
+    const cleaned = decimalString.replace(/[^\d.]/g, "");
     // Only allow one dot
     const parts = cleaned.split(".");
     let intPart = parts[0].slice(0, 17); // max 17 chars
@@ -639,13 +647,15 @@ function SwapComponent() {
 
   // Handle Max button click
   function handleMaxClick() {
-    if (!connected || sellingBalance === 0) return;
+    console.log('MAX button clicked - sellingBalance:', sellingBalance, 'sellingToken:', sellingToken.label);
+    if (!connected || sellingBalance === 0 || sellingBalance < 0.0000001) return;
     
     // Leave a small amount for transaction fees if selling SOL
     const maxAmount = sellingToken.address === "So11111111111111111111111111111111111111112" 
       ? Math.max(0, sellingBalance - 0.001) // Reserve 0.001 SOL for fees
       : sellingBalance;
     
+    console.log('MAX amount calculated:', maxAmount);
     setSellingValue(formatNumberWithCommas(maxAmount.toString()));
     setIsQuoteMode('selling');
     setBuyingValue(""); // Clear buying value to show skeleton
@@ -654,9 +664,11 @@ function SwapComponent() {
 
   // Handle Half button click
   function handleHalfClick() {
-    if (!connected || sellingBalance === 0) return;
+    console.log('HALF button clicked - sellingBalance:', sellingBalance, 'sellingToken:', sellingToken.label);
+    if (!connected || sellingBalance === 0 || sellingBalance < 0.0000001) return;
     
     const halfAmount = sellingBalance / 2;
+    console.log('HALF amount calculated:', halfAmount);
     setSellingValue(formatNumberWithCommas(halfAmount.toString()));
     setIsQuoteMode('selling');
     setBuyingValue(""); // Clear buying value to show skeleton
@@ -728,7 +740,7 @@ function SwapComponent() {
                     <button 
                       type="button" 
                       onClick={handleHalfClick}
-                      disabled={!connected || sellingBalance === 0}
+                      disabled={!connected || sellingBalance === 0 || sellingBalance < 0.0000001}
                       className="ml-2 px-1.5 py-1 rounded-[3.75px] bg-stone-700/60 text-[10px] font-semibold text-stone-400 border border-transparent hover:border-[#2CB394] cursor-pointer uppercase hover:text-[#2CB394] transition-all duration-200 ease-[var(--ease-in-out-quad)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-transparent disabled:hover:text-stone-400"
                     >
                       Half
@@ -736,7 +748,7 @@ function SwapComponent() {
                     <button 
                       type="button" 
                       onClick={handleMaxClick}
-                      disabled={!connected || sellingBalance === 0}
+                      disabled={!connected || sellingBalance === 0 || sellingBalance < 0.0000001}
                       className="px-1.5 py-1 rounded-[3.75px] bg-stone-700/60 text-[10px] font-semibold text-stone-400 border border-transparent hover:border-[#2CB394] cursor-pointer uppercase hover:text-[#2CB394] transition-all duration-200 ease-[var(--ease-in-out-quad)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-transparent disabled:hover:text-stone-400"
                     >
                       Max

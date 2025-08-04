@@ -262,12 +262,13 @@ export async function getMarketData(tokenAddress: string) {
       const tokenMap: { [key: string]: { coinGeckoId: string; binanceSymbol?: string; isStable?: boolean; coinMarketCapId?: string } } = {
         'So11111111111111111111111111111111111111112': { coinGeckoId: 'solana', binanceSymbol: 'SOLUSDT', coinMarketCapId: '485' },
         'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': { coinGeckoId: 'usd-coin', isStable: true, coinMarketCapId: '3408' },
-        'JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN': { coinGeckoId: 'jupiter', coinMarketCapId: '23095' },
+        'JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN': { coinGeckoId: 'jupiter-exchange-solana', binanceSymbol: 'JUPUSDT', coinMarketCapId: '23095' },
         'GGEMxCsqM74URiXdY46VcaSW73a4yfHfJKrJrUmDVpEF': { coinGeckoId: 'ggem' },
-        'J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn': { coinGeckoId: 'jito-solana' },
+        'J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn': { coinGeckoId: 'jito-staked-sol' },
       };
 
       const info = tokenMap[tokenAddress];
+      console.log(`🔍 Token mapping for ${tokenAddress}:`, info);
       if (!info) {
         return { error: 'Token not supported', price: 0, change24h: 0 };
       }
@@ -276,6 +277,32 @@ export async function getMarketData(tokenAddress: string) {
       let change24h = 0;
       let chartData: Array<{ time: string; price: number }> = [];
       let source: string = 'unknown';
+
+      // Special handling for JitoSOL - try full coin endpoint first due to rate limiting issues
+      if (info.coinGeckoId === 'jito-staked-sol') {
+        console.log(`🎯 JitoSOL detected, using special handling`);
+        try {
+          const fullCoinUrl = `https://api.coingecko.com/api/v3/coins/${info.coinGeckoId}`;
+          console.log(`🔍 Trying CoinGecko full coin API first for JitoSOL: ${fullCoinUrl}`);
+          const fullCoinRes = await fetchWithBackoff(fullCoinUrl, { headers: { Accept: 'application/json' } }, 3);
+          if (fullCoinRes.ok) {
+            const fullCoinJson = await fullCoinRes.json();
+            console.log(`📊 CoinGecko full coin response for JitoSOL:`, fullCoinJson);
+            if (fullCoinJson.market_data?.current_price?.usd) {
+              price = fullCoinJson.market_data.current_price.usd;
+              change24h = fullCoinJson.market_data.price_change_percentage_24h || 0;
+              source = 'coingecko-full-jito';
+              console.log(`✅ CoinGecko full coin API for JitoSOL: price=${price}, change24h=${change24h}`);
+            } else {
+              console.log(`❌ CoinGecko full coin API no price data for JitoSOL`);
+            }
+          } else {
+            console.log(`❌ CoinGecko full coin API failed for JitoSOL: ${fullCoinRes.status} ${fullCoinRes.statusText}`);
+          }
+        } catch (e) {
+          console.warn('CoinGecko full coin API failed for JitoSOL', e);
+        }
+      }
 
       // Primary: CoinGecko hourly chart
       try {
@@ -390,9 +417,34 @@ export async function getMarketData(tokenAddress: string) {
         }
       }
 
+      // Fallback to CoinGecko full coin endpoint for tokens that might have rate limit issues
+      if ((!chartData.length || price === 0 || change24h === 0) && info.coinGeckoId) {
+        try {
+          const fullCoinUrl = `https://api.coingecko.com/api/v3/coins/${info.coinGeckoId}`;
+          console.log(`🔍 Trying CoinGecko full coin API for ${tokenAddress} (${info.coinGeckoId}): ${fullCoinUrl}`);
+          const fullCoinRes = await fetchWithBackoff(fullCoinUrl, { headers: { Accept: 'application/json' } }, 3);
+          if (fullCoinRes.ok) {
+            const fullCoinJson = await fullCoinRes.json();
+            console.log(`📊 CoinGecko full coin response for ${tokenAddress}:`, fullCoinJson);
+            if (fullCoinJson.market_data?.current_price?.usd) {
+              price = fullCoinJson.market_data.current_price.usd;
+              change24h = fullCoinJson.market_data.price_change_percentage_24h || 0;
+              source = 'coingecko-full';
+              console.log(`✅ CoinGecko full coin API for ${tokenAddress}: price=${price}, change24h=${change24h}`);
+            } else {
+              console.log(`❌ CoinGecko full coin API no price data for ${tokenAddress}`);
+            }
+          } else {
+            console.log(`❌ CoinGecko full coin API failed for ${tokenAddress}: ${fullCoinRes.status} ${fullCoinRes.statusText}`);
+          }
+        } catch (e) {
+          console.warn('CoinGecko full coin API failed', e);
+        }
+      }
+
       // NO SYNTHETIC DATA - ONLY REAL DATA
-      // If we still don't have data, return error instead of fake data
-      if (!chartData.length || price === 0) {
+      // If we still don't have price data, return error instead of fake data
+      if (price === 0) {
         console.error(`❌ No real data available for ${tokenAddress} - returning error`);
         return { 
           error: 'No real market data available', 
@@ -403,9 +455,7 @@ export async function getMarketData(tokenAddress: string) {
         };
       }
 
-      if (price === 0) {
-        return { error: 'Failed to fetch price data', price: 0, change24h: 0 };
-      }
+
 
       const result = { price, change24h, chartData, source };
       // Cache for 60 seconds
