@@ -2,10 +2,8 @@
 
 import * as React from "react"
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { WalletModal } from "@/components/ui/wallet-modal";
-import { VersionedTransaction, PublicKey, LAMPORTS_PER_SOL, Connection } from "@solana/web3.js";
-// import { TOKEN_PROGRAM_ID, getAssociatedTokenAddress, getAccount } from "@solana/spl-token";
+import { VersionedTransaction, PublicKey } from "@solana/web3.js";
 import axios from "axios";
 import { getBalanceData, getMarketData } from '../../../lib/actions';
 import { Button } from "@/components/ui/button";
@@ -22,7 +20,6 @@ import WalletIcon from "@/components/ui/icons/Wallet";
 import { Sparkles, RefreshCw } from "lucide-react";
 import JupiterLogo from '@/components/logos/partners/Jupiter';
 import { Card,  CardContent } from '@/components/ui/card';
-import type { TooltipProps } from 'recharts';
 
 // Jupiter API endpoint - using the current Lite API
 const JUP_API = "https://lite-api.jup.ag";
@@ -43,20 +40,8 @@ const tokens = [
     address: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", // USDC - Jupiter compatible
     decimals: 6
   },
-  { 
-    value: "ggem", 
-    label: "GGEM", 
-    icon: "/png/ggem.png",
-    address: "GGEMxCsqM74URiXdY46VcaSW73a4yfHfJKrJrUmDVpEF", // GGEM
-    decimals: 9
-  },
-  // { 
-  //   value: "ggld", 
-  //   label: "GGLD", 
-  //   icon: "/png/ggld.png",
-  //   address: "GGLLLDDDDpppppaaaawwwwwwwBBBBBB111111122222", // Placeholder - replace with real GGLD address
-  //   decimals: 9
-  // },
+
+
   { 
     value: "jup", 
     label: "JUP", 
@@ -71,13 +56,7 @@ const tokens = [
     address: "J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn", // JitoSOL
     decimals: 9
   },
-  // { 
-  //   value: "rvr", 
-  //   label: "RVR", 
-  //   icon: "/png/rvr.png",
-  //   address: "RVRdHztFx8vXhzTvWGFCBAqPpn4eNFcpzMfVBMfhVzNs", // Placeholder - replace with real RVR address
-  //   decimals: 9
-  // },
+
 ];
 
 // Interface for Jupiter quote response
@@ -93,15 +72,9 @@ interface JupiterQuote {
   routePlan: any[];
 }
 
-// Interface for swap transaction response
-interface SwapResponse {
-  swapTransaction: string;
-  lastValidBlockHeight: number;
-}
-
 function SwapComponent() {
   // Wallet integration
-  const { publicKey, sendTransaction, connected, connecting, select } = useWallet();
+  const { publicKey, sendTransaction, connected } = useWallet();
   const { connection } = useConnection();
   const [showWalletModal, setShowWalletModal] = React.useState(false);
 
@@ -141,17 +114,13 @@ function SwapComponent() {
 
     const fetchBalances = async () => {
       try {
-        console.log('Fetching balances for:', {
-          wallet: publicKey.toBase58(),
-          selling: sellingToken.label,
-          buying: buyingToken.label
-        });
+
 
         // Production-ready balance fetching with caching and fallbacks
         const isDemoMode = false; // Set to true for testing with mock data
         
         if (isDemoMode) {
-          console.log('DEMO MODE: Using mock balances for testing');
+
           const mockSolBalance = 0.5247;
           const mockUsdcBalance = 15.0;
           
@@ -159,7 +128,7 @@ function SwapComponent() {
             setSellingBalance(mockSolBalance);
           } else if (sellingToken.address === "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v") {
             setSellingBalance(mockUsdcBalance);
-          } else {
+    } else {
             setSellingBalance(0);
           }
           
@@ -171,12 +140,12 @@ function SwapComponent() {
             setBuyingBalance(0);
           }
           
-          console.log('Demo balances set - Selling:', sellingToken.label, 'Buying:', buyingToken.label);
+
           return;
         }
 
         // Server-side balance fetching with caching
-        console.log('SERVER-SIDE MODE: Fetching balances via API proxy');
+
         
         // Client-side cache key for this wallet + token combination
         const cacheKey = `balance_${publicKey.toBase58()}_${sellingToken.address}`;
@@ -187,7 +156,7 @@ function SwapComponent() {
         if (cachedBalance) {
           const { balance, timestamp } = JSON.parse(cachedBalance);
           if (Date.now() - timestamp < cacheExpiry) {
-            console.log('Using cached balance for', sellingToken.label);
+
             setSellingBalance(balance);
             return;
           }
@@ -195,7 +164,7 @@ function SwapComponent() {
         
         // Fetch balance via Server Action (no CORS issues)
         try {
-          console.log('Fetching balance via Server Action for', sellingToken.label);
+
           
           const data = await getBalanceData(
             publicKey.toBase58(),
@@ -206,7 +175,7 @@ function SwapComponent() {
           if (data.success) {
             const sellingBal = data.balance;
             
-            console.log(`${sellingToken.label} balance from Server Action:`, sellingBal);
+
             
             // Cache the successful result
             sessionStorage.setItem(cacheKey, JSON.stringify({
@@ -215,7 +184,7 @@ function SwapComponent() {
             }));
             
             setSellingBalance(sellingBal);
-            console.log(`Successfully fetched ${sellingToken.label} balance via Server Action`);
+
             
           } else {
             console.error('Server Action error:', data.error);
@@ -235,7 +204,7 @@ function SwapComponent() {
         if (cachedBuyingBalance) {
           const { balance, timestamp } = JSON.parse(cachedBuyingBalance);
           if (Date.now() - timestamp < cacheExpiry) {
-            console.log('Using cached balance for', buyingToken.label);
+
             setBuyingBalance(balance);
             return;
           }
@@ -243,7 +212,7 @@ function SwapComponent() {
         
         // Fetch buying token balance via Server Action
         try {
-          console.log('Fetching buying balance via Server Action for', buyingToken.label);
+
           
           const data = await getBalanceData(
             publicKey.toBase58(),
@@ -254,7 +223,7 @@ function SwapComponent() {
           if (data.success) {
             const buyingBal = data.balance;
             
-            console.log(`${buyingToken.label} balance from Server Action:`, buyingBal);
+
             
             // Cache the successful result
             sessionStorage.setItem(buyingCacheKey, JSON.stringify({
@@ -263,7 +232,7 @@ function SwapComponent() {
             }));
             
             setBuyingBalance(buyingBal);
-            console.log(`Successfully fetched ${buyingToken.label} balance via Server Action`);
+
             
           } else {
             console.error('Server Action error for buying token:', data.error);
@@ -275,7 +244,7 @@ function SwapComponent() {
           setBuyingBalance(0);
         }
 
-        console.log('Balances fetched successfully via API proxy');
+
 
       } catch (error) {
         console.error('Error fetching balances:', error);
@@ -321,19 +290,10 @@ function SwapComponent() {
           slippageBps: slippage,
         };
         
-        console.log('Jupiter API Request:', { 
-          url: `${JUP_API}/swap/v1/quote`, 
-          params,
-          numericValue,
-          inputAmount,
-          sellingToken: { label: sellingToken.label, address: sellingToken.address },
-          buyingToken: { label: buyingToken.label, address: buyingToken.address },
-          sellingTokenDecimals: sellingToken.decimals
-        });
         
         const response = await axios.get(`${JUP_API}/swap/v1/quote`, { params });
 
-        console.log('Jupiter API Response:', response.data);
+
         setQuote(response.data);
         
         // Update buying value based on quote
@@ -370,8 +330,7 @@ function SwapComponent() {
 
     setSwapping(true);
     try {
-      console.log('Executing swap with quote:', quote);
-      console.log('User public key:', publicKey.toBase58());
+
       
       // Get swap transaction from Jupiter
       const swapPayload = {
@@ -380,19 +339,16 @@ function SwapComponent() {
         wrapAndUnwrapSol: true,
         feeAccount: null,
       };
-      
-      console.log('Sending swap request:', swapPayload);
+  
+
       const response = await axios.post(`${JUP_API}/swap/v1/swap`, swapPayload);
       
-      console.log('Jupiter swap response:', response.data);
 
       // Deserialize and send transaction
       const swapTransactionBuf = Buffer.from(response.data.swapTransaction, 'base64');
       const transaction = VersionedTransaction.deserialize(swapTransactionBuf);
       
-      console.log('Sending transaction...');
       const txid = await sendTransaction(transaction, connection);
-      console.log('Transaction successful:', txid);
       
       alert(`Swap successful! Transaction: ${txid}`);
       
@@ -431,25 +387,20 @@ function SwapComponent() {
   // Fetch market data for selected tokens using Server Actions
   const fetchMarketData = React.useCallback(async (tokenAddress: string, tokenSymbol: string) => {
     try {
-      console.log(`Fetching market data for ${tokenSymbol} (${tokenAddress}) via Server Action`);
+      
       const data = await getMarketData(tokenAddress);
       
       if (data.success) {
-        console.log(`${tokenSymbol} market data raw response:`, data);
+
         const price = data.price;
         const change24h = data.change24h;
         const chartData = data.chartData || [];
-        const source = data.source || 'unknown';
+       
         setMarketData((prev) => ({
           ...prev,
           [tokenAddress]: { price, change24h, chartData },
         }));
-        console.log(`${tokenSymbol} market data:`, {
-          price,
-          change24h,
-          chartDataPoints: chartData.length,
-          source,
-        });
+
       } else {
         console.error(`Market data error for ${tokenSymbol}:`, data.error);
       }
@@ -474,75 +425,15 @@ function SwapComponent() {
   // Debug market data changes
   React.useEffect(() => {
     if (sellingToken && marketData[sellingToken.address]) {
-      console.log('Market data updated for selling token:', {
-        token: sellingToken.label,
-        chartDataLength: marketData[sellingToken.address]?.chartData?.length || 0,
-        chartDataSample: marketData[sellingToken.address]?.chartData?.slice(0, 3)
-      });
+
     }
     if (buyingToken && marketData[buyingToken.address]) {
-      console.log('Market data updated for buying token:', {
-        token: buyingToken.label,
-        chartDataLength: marketData[buyingToken.address]?.chartData?.length || 0,
-        chartDataSample: marketData[buyingToken.address]?.chartData?.slice(0, 3)
-      });
+
     }
   }, [marketData, sellingToken, buyingToken]);
 
-  // Get Jupiter URL for token
-  const getJupiterUrl = (tokenAddress: string) => {
-    return `https://jup.ag/tokens/${tokenAddress}`;
-  };
 
-  // Helper to format time for tooltip
-  function formatTooltipTime(label: string) {
-    // If label is an ISO string
-    if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(label)) {
-      const date = new Date(label);
-      return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-    }
-    // If label is HH:mm
-    if (/^\d{1,2}:\d{2}$/.test(label)) {
-      const [h, m] = label.split(":");
-      const date = new Date();
-      date.setHours(Number(h), Number(m), 0, 0);
-      return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-    }
-    // If label is a number (index), treat as hour offset from midnight
-    if (/^\d+$/.test(label)) {
-      const hour = Number(label);
-      const date = new Date();
-      date.setHours(hour, 0, 0, 0);
-      return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-    }
-    return label;
-  }
 
-  // Custom tooltip for charts
-  const ChartTooltip = (props: TooltipProps<number, string>) => {
-    const payload = (props as unknown as { payload?: { value: number }[] }).payload;
-    const label = (props as unknown as { label?: string }).label;
-    if (!props.active || !payload || !payload.length || !label) return null;
-    const time = formatTooltipTime(label);
-    const price = payload[0].value;
-    return (
-      <div
-        style={{
-          background: "#111",
-          color: "#fff",
-          borderRadius: 8,
-          padding: "8px 12px",
-          fontSize: 15,
-          fontWeight: 600,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.25)",
-          lineHeight: 1.3,
-        }}
-      >
-        <div>{time}</div>
-        <div>${price.toFixed(2)}</div>
-      </div>
-    );
-  };
 
   // Helper to format number with commas
   function formatNumberWithCommas(value: string): string {
@@ -624,7 +515,7 @@ function SwapComponent() {
     setBuyingValue("");
     // Set loading immediately to show skeleton
     if (value !== "") {
-      console.log('Setting loading to true for value:', value);
+  
       setLoading(true);
     }
     if (value === "") {
@@ -632,22 +523,9 @@ function SwapComponent() {
     }
   }
 
-  function handleBuyingInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    let value = e.target.value.replace(/,/g, "");
-    // Limit to 17 chars (excluding commas)
-    if (value.length > 17) value = value.slice(0, 17);
-    setBuyingValue(formatNumberWithCommas(value));
-    setIsQuoteMode('buying');
-    // Clear selling value when buying changes
-    if (value === "") {
-      setSellingValue("");
-      setQuote(null);
-    }
-  }
 
   // Handle Max button click
   function handleMaxClick() {
-    console.log('MAX button clicked - sellingBalance:', sellingBalance, 'sellingToken:', sellingToken.label);
     if (!connected || sellingBalance === 0 || sellingBalance < 0.0000001) return;
     
     // Leave a small amount for transaction fees if selling SOL
@@ -655,7 +533,6 @@ function SwapComponent() {
       ? Math.max(0, sellingBalance - 0.001) // Reserve 0.001 SOL for fees
       : sellingBalance;
     
-    console.log('MAX amount calculated:', maxAmount);
     setSellingValue(formatNumberWithCommas(maxAmount.toString()));
     setIsQuoteMode('selling');
     setBuyingValue(""); // Clear buying value to show skeleton
@@ -664,11 +541,9 @@ function SwapComponent() {
 
   // Handle Half button click
   function handleHalfClick() {
-    console.log('HALF button clicked - sellingBalance:', sellingBalance, 'sellingToken:', sellingToken.label);
     if (!connected || sellingBalance === 0 || sellingBalance < 0.0000001) return;
     
     const halfAmount = sellingBalance / 2;
-    console.log('HALF amount calculated:', halfAmount);
     setSellingValue(formatNumberWithCommas(halfAmount.toString()));
     setIsQuoteMode('selling');
     setBuyingValue(""); // Clear buying value to show skeleton
@@ -689,12 +564,6 @@ function SwapComponent() {
     // Toggle arrow rotation
     setArrowRotated(!arrowRotated);
   }
-
-
-
-
-
-
 
   return (
     <section className='max-w-2xl mx-auto px-6 mt-30 sm:mt-44 pb-8'>
@@ -871,7 +740,6 @@ function SwapComponent() {
                   <div className="flex flex-col flex-1 items-end gap-1 min-h-[64px]">
 
                     {(() => {
-                      console.log('Skeleton condition check:', { sellingValue, loading, buyingValue });
                       return sellingValue && loading && !buyingValue;
                     })() ? (
                       <>
@@ -880,19 +748,19 @@ function SwapComponent() {
                       </>
                     ) : (
                       <>
-                        <input
-                          id="buying"
-                          type="text"
-                          inputMode="decimal"
+                    <input
+                      id="buying"
+                      type="text"
+                      inputMode="decimal"
                           readOnly
-                          autoComplete="off"
-                          value={buyingValue}
+                      autoComplete="off"
+                      value={buyingValue}
                           onFocus={() => setBuyingFocused(false)}
-                          onBlur={() => setBuyingFocused(false)}
-                          maxLength={23} // allow for commas
+                      onBlur={() => setBuyingFocused(false)}
+                      maxLength={23} // allow for commas
                           className={`[&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-right w-full appearance-none border-none outline-none bg-transparent p-0 m-0 font-semibold text-white focus:border-transparent cursor-not-allowed ${buyingValue.replace(/,/g, '').length > 6 ? 'text-3xl' : 'text-4xl'}`}
-                        />
-                                                 {/* Price */}
+                    />
+                    {/* Price */}
                          <div className={`text-xs text-stone-500 font-medium text-left ${!buyingValue ? '-mt-1' : ''}`}>
                            {calculateUSDValue(buyingValue, buyingToken)}
                          </div>
@@ -912,7 +780,7 @@ function SwapComponent() {
               className="w-full h-18 font-semibold text-xl cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Connect
-            </Button>
+          </Button>
           ) : (
             <button 
               onClick={handleSwap}
@@ -1004,7 +872,7 @@ function SwapComponent() {
         <div className="flex flex-row gap-4 max-w-2xl md:mx-8">
           {/* Selling Token Card */}
           {sellingToken && (
-            <Card className="flex-1 bg-stone-900/0 border-stone-700">
+              <Card className="flex-1 bg-stone-900/0 border-stone-700">
               <CardContent className="p-4">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
@@ -1030,13 +898,13 @@ function SwapComponent() {
                     )}
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
           )}
           
           {/* Buying Token Card */}
           {buyingToken && (
-            <Card className="flex-1 bg-stone-900/0 border-stone-700">
+              <Card className="flex-1 bg-stone-900/0 border-stone-700">
               <CardContent className="p-4">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
@@ -1062,10 +930,10 @@ function SwapComponent() {
                     )}
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
           )}
-        </div>
+            </div>
         
         {/* Open Swap Page Link */}
         <div className="px-8 mt-4">
@@ -1080,7 +948,7 @@ function SwapComponent() {
               <path d="M6 8l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" transform="rotate(-90 10 10)" />
             </svg>
           </a>
-        </div>
+          </div>
       </div>
 
       {/* Jupiter Logo */}

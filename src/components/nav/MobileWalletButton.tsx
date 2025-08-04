@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 interface MobileWalletButtonProps {
   className?: string;
@@ -10,7 +10,8 @@ interface MobileWalletButtonProps {
 
 export default function MobileWalletButton({ className }: MobileWalletButtonProps) {
   const [mounted, setMounted] = React.useState(false);
-  const { publicKey, connected } = useWallet();
+  const { publicKey, connected, disconnect } = useWallet();
+  const { setVisible } = useWalletModal();
 
   React.useEffect(() => {
     setMounted(true);
@@ -22,20 +23,31 @@ export default function MobileWalletButton({ className }: MobileWalletButtonProp
     return `${address.slice(0, 5)}...${address.slice(-4)}`;
   };
 
+  const handleConnect = () => {
+    setVisible(true);
+  };
+
+  const handleDisconnect = () => {
+    disconnect();
+  };
+
   if (!mounted) {
     // Return a placeholder that matches the expected styling
     return (
-      <div className={className}>
+      <button className={className} disabled>
         <span className="uppercase">CONNECT WALLET</span>
-      </div>
+      </button>
     );
   }
 
   return (
-    <WalletMultiButton className={className}>
+    <button 
+      className={className} 
+      onClick={connected ? handleDisconnect : handleConnect}
+    >
       <span className="uppercase">
         {connected && publicKey ? formatWalletAddress(publicKey.toString()) : "CONNECT WALLET"}
       </span>
-    </WalletMultiButton>
+    </button>
   );
 }

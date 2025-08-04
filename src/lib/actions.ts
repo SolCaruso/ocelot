@@ -259,11 +259,11 @@ export async function getMarketData(tokenAddress: string) {
       }
 
       // Map token addresses to identifiers
-      const tokenMap: { [key: string]: { coinGeckoId: string; binanceSymbol?: string; isStable?: boolean; coinMarketCapId?: string } } = {
+      const tokenMap: { [key: string]: { coinGeckoId: string; binanceSymbol?: string; isStable?: boolean; coinMarketCapId?: string; staticPrice?: number } } = {
         'So11111111111111111111111111111111111111112': { coinGeckoId: 'solana', binanceSymbol: 'SOLUSDT', coinMarketCapId: '485' },
         'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v': { coinGeckoId: 'usd-coin', isStable: true, coinMarketCapId: '3408' },
         'JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN': { coinGeckoId: 'jupiter-exchange-solana', binanceSymbol: 'JUPUSDT', coinMarketCapId: '23095' },
-        'GGEMxCsqM74URiXdY46VcaSW73a4yfHfJKrJrUmDVpEF': { coinGeckoId: 'ggem' },
+        'GGEMxCsqM74URiXdY46VcaSW73a4yfHfJKrJrUmDVpEF': { coinGeckoId: 'ggem', staticPrice: 0.012408 },
         'J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn': { coinGeckoId: 'jito-staked-sol' },
       };
 
@@ -277,6 +277,47 @@ export async function getMarketData(tokenAddress: string) {
       let change24h = 0;
       let chartData: Array<{ time: string; price: number }> = [];
       let source: string = 'unknown';
+
+      // Try Jupiter Price API V3 first for tokens with minimal liquidity (like GGEM)
+      if (info.staticPrice && info.staticPrice > 0) {
+        try {
+          const jupiterPriceUrl = `https://lite-api.jup.ag/price/v3?tokens=${tokenAddress}`;
+          console.log(`🔍 Trying Jupiter Price API V3 first for ${tokenAddress}: ${jupiterPriceUrl}`);
+          const jupiterPriceRes = await fetchWithBackoff(jupiterPriceUrl, { headers: { Accept: 'application/json' } }, 3);
+          
+          if (jupiterPriceRes.ok) {
+            const jupiterPriceJson = await jupiterPriceRes.json();
+            console.log(`📊 Jupiter Price API V3 response for ${tokenAddress}:`, jupiterPriceJson);
+            
+            if (jupiterPriceJson.data?.[tokenAddress]?.price) {
+              price = jupiterPriceJson.data[tokenAddress].price;
+              change24h = 0; // Jupiter price API might not provide 24h change
+              source = 'jupiter-price-v3';
+              console.log(`✅ Jupiter Price API V3 for ${tokenAddress}: price=${price}, change24h=${change24h}`);
+              
+              const result = { price, change24h, chartData: [], source };
+              marketCache.set(cacheKey, { data: result, expires: now + 60000 });
+              return { ...result, success: true };
+            } else {
+              console.log(`❌ Jupiter Price API V3 no price data for ${tokenAddress}: data =`, jupiterPriceJson.data);
+            }
+          } else {
+            console.log(`❌ Jupiter Price API V3 failed for ${tokenAddress}: ${jupiterPriceRes.status} ${jupiterPriceRes.statusText}`);
+          }
+        } catch (e) {
+          console.warn('Jupiter Price API V3 failed', e);
+        }
+        
+        // Fallback to static price if Jupiter Price API fails
+        price = info.staticPrice;
+        change24h = 0; // No change data for static prices
+        source = 'static';
+        console.log(`✅ Using static price fallback for ${tokenAddress}: price=${price}, change24h=${change24h}`);
+        
+        const result = { price, change24h, chartData: [], source };
+        marketCache.set(cacheKey, { data: result, expires: now + 60000 });
+        return { ...result, success: true };
+      }
 
       // Special handling for JitoSOL - try full coin endpoint first due to rate limiting issues
       if (info.coinGeckoId === 'jito-staked-sol') {
@@ -442,6 +483,81 @@ export async function getMarketData(tokenAddress: string) {
         }
       }
 
+
+
+      // If still no price, try Jupiter Quote API as fallback
+      if (price === 0) {
+        try {
+          // First try token -> SOL direction with different decimal assumptions
+          let quoteWorked = false;
+          const directions = [
+            { from: tokenAddress, to: 'So11111111111111111111111111111111111111112', amount: '1000000', decimals: 6, desc: 'token->SOL (6 decimals)' },
+            { from: tokenAddress, to: 'So11111111111111111111111111111111111111112', amount: '1000000000', decimals: 9, desc: 'token->SOL (9 decimals)' },
+            { from: 'So11111111111111111111111111111111111111112', to: tokenAddress, amount: '100000000', decimals: 9, desc: 'SOL->token (reverse)' },
+          ];
+
+          for (const direction of directions) {
+            if (quoteWorked) break;
+            
+            try {
+              const jupiterUrl = `https://lite-api.jup.ag/quote?inputMint=${direction.from}&outputMint=${direction.to}&amount=${direction.amount}&slippageBps=50`;
+              console.log(`🔍 Trying Jupiter Quote API for ${tokenAddress} (${direction.desc}): ${jupiterUrl}`);
+              const jupiterRes = await fetchWithBackoff(jupiterUrl, { headers: { Accept: 'application/json' } }, 2);
+              
+              if (jupiterRes.ok) {
+                const jupiterJson = await jupiterRes.json();
+                console.log(`📊 Jupiter Quote API response for ${tokenAddress} (${direction.desc}):`, jupiterJson);
+                
+                if (jupiterJson.outAmount && jupiterJson.inAmount) {
+                  // Get SOL price for conversion
+                  let solPrice = 163; // Fallback estimate
+                  const solMapping = tokenMap['So11111111111111111111111111111111111111112'];
+                  if (solMapping?.coinGeckoId) {
+                    try {
+                      const solPriceRes = await fetchWithBackoff(`https://api.coingecko.com/api/v3/simple/price?ids=${solMapping.coinGeckoId}&vs_currencies=usd`, { headers: { Accept: 'application/json' } }, 1);
+                      if (solPriceRes.ok) {
+                        const solPriceJson = await solPriceRes.json();
+                        if (solPriceJson[solMapping.coinGeckoId]?.usd) {
+                          solPrice = solPriceJson[solMapping.coinGeckoId].usd;
+                        }
+                      }
+                    } catch (e) {
+                      console.warn('Could not fetch SOL price for Jupiter quote calculation, using fallback');
+                    }
+                  }
+
+                  if (direction.from === tokenAddress) {
+                    // Token -> SOL direction
+                    const outAmountSOL = parseFloat(jupiterJson.outAmount) / 1e9; // SOL has 9 decimals
+                    const inAmountToken = parseFloat(jupiterJson.inAmount) / Math.pow(10, direction.decimals);
+                    price = (outAmountSOL / inAmountToken) * solPrice;
+                  } else {
+                    // SOL -> Token direction (reverse)
+                    const inAmountSOL = parseFloat(jupiterJson.inAmount) / 1e9; // SOL has 9 decimals
+                    const outAmountToken = parseFloat(jupiterJson.outAmount) / Math.pow(10, direction.decimals);
+                    price = (inAmountSOL / outAmountToken) * solPrice;
+                  }
+
+                  change24h = 0; // Jupiter quote doesn't provide 24h change
+                  source = `jupiter-quote-${direction.desc}`;
+                  quoteWorked = true;
+                  console.log(`✅ Jupiter Quote API for ${tokenAddress} (${direction.desc}): price=${price}, change24h=${change24h} (derived from SOL price: ${solPrice})`);
+                  break;
+                } else {
+                  console.log(`❌ Jupiter Quote API no valid amounts for ${tokenAddress} (${direction.desc}): inAmount=${jupiterJson.inAmount}, outAmount=${jupiterJson.outAmount}`);
+                }
+              } else {
+                console.log(`❌ Jupiter Quote API failed for ${tokenAddress} (${direction.desc}): ${jupiterRes.status} ${jupiterRes.statusText}`);
+              }
+            } catch (e) {
+              console.warn(`Jupiter Quote API failed for ${tokenAddress} (${direction.desc}):`, e);
+            }
+          }
+        } catch (e) {
+          console.warn('Jupiter Quote API fallback failed completely', e);
+        }
+      }
+
       // NO SYNTHETIC DATA - ONLY REAL DATA
       // If we still don't have price data, return error instead of fake data
       if (price === 0) {
@@ -449,9 +565,9 @@ export async function getMarketData(tokenAddress: string) {
         return { 
           error: 'No real market data available', 
           price: 0, 
-          change24h: 0,
-          chartData: [],
-          source: 'none'
+          change24h: 0, 
+          chartData: [], 
+          source: 'none' 
         };
       }
 

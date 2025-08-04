@@ -49,6 +49,10 @@ export default function Nav() {
     setPreviewImage(img);
   };
 
+  const resetPreview = () => {
+    setPreviewImage(defaultImage);
+  };
+
   const handleSocialsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const target = document.getElementById("socials");
@@ -73,7 +77,14 @@ export default function Nav() {
 </Link>
 
       {/* Center: Navigation */}
-      <NavigationMenu className='hidden md:block absolute top-3 left-1/2 transform -translate-x-1/2'>
+      <NavigationMenu className='hidden md:block absolute top-3 left-1/2 transform -translate-x-1/2' onValueChange={(value) => {
+        if (!value) {
+          // Delay the reset until the menu is fully closed to prevent visual jumping
+          setTimeout(() => {
+            resetPreview();
+          }, 150);
+        }
+      }}>
         <NavigationMenuList className="flex justify-center space-x-2">
           <NavigationMenuItem>
             <NavigationMenuTrigger>GUILD SAGA</NavigationMenuTrigger>

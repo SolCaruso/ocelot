@@ -320,6 +320,7 @@ export default function Characters({ characters, backgroundClasses }: Characters
                 className="object-contain opacity-80 select-none"
                 priority
                 draggable={false}
+                sizes="(max-width: 768px) 600px, 900px"
                 style={{ userSelect: 'none' }}
               />
             </div>
@@ -343,6 +344,7 @@ export default function Characters({ characters, backgroundClasses }: Characters
                     className="object-contain rounded-lg select-none"
                     priority
                     draggable={false}
+                    sizes="(max-width: 768px) 350px, 520px"
                     style={{ userSelect: 'none' }}
                   />
                 </motion.div>
@@ -417,6 +419,7 @@ export default function Characters({ characters, backgroundClasses }: Characters
                                     fill
                                     className="object-cover w-full h-full select-none scale-[1.75]"
                                     draggable={false}
+                                    sizes="160px"
                                     style={{ userSelect: 'none' }}
                                   />
                                   <div
@@ -502,6 +505,7 @@ export default function Characters({ characters, backgroundClasses }: Characters
                                     fill
                                     className="object-cover w-full h-full select-none scale-[1.75]"
                                     draggable={false}
+                                    sizes="112px"
                                     style={{ userSelect: 'none' }}
                                   />
                                   <div

@@ -97,6 +97,7 @@ export default function BlogPreview() {
                 fill
                 className="object-cover w-full h-full select-none"
                 draggable={false}
+                sizes="100vw"
               />
               <div className="absolute inset-0 z-10 bg-gradient-to-l xl:from-black/50 sm:from-black/80 from-black/90 to-black/0 pointer-events-none" />
               <div className="absolute inset-0 bg-gradient-to-b xl:from-black/30 sm:from-black/50 from-black/70 to-black/0" />
@@ -206,6 +207,7 @@ export default function BlogPreview() {
                       fill
                       className="object-cover w-full h-full select-none scale-[1.75]"
                       draggable={false}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/10 group-hover:from-black/30 group-hover:to-black/0 transition-colors duration-200 ease-[var(--ease-in-out-quad)]" />
                   </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { PhantomWalletAdapter, SolflareWalletAdapter } from "@solana/wallet-adapter-wallets";
 import PhantomIcon from "@/components/logos/Phantom";
@@ -79,6 +79,9 @@ export function WalletModal({ open, onOpenChange }: WalletModalProps) {
               Connect a Solana wallet
             </DialogTitle>
           </DialogHeader>
+          <DialogDescription className="sr-only">
+            Choose a wallet to connect to your Solana account
+          </DialogDescription>
           
                     <div className=" mt-2 px-2 pb-2">
             {availableWallets.map((wallet) => {

@@ -142,7 +142,6 @@ export default function WalletButton({ className, style }: WalletButtonProps) {
       
                         {/* Dropdown menu for disconnect */}
                   {connected && showDropdown && (
-                    console.log('Dropdown rendering, connected:', connected, 'showDropdown:', showDropdown),
                     <div className="absolute top-full right-0 mt-2 w-48 bg-black/90 border border-stone-700 rounded-lg shadow-lg z-50">
                       <div className="p-2">
                         <div 
@@ -160,7 +159,6 @@ export default function WalletButton({ className, style }: WalletButtonProps) {
                         </div>
                         <button
                           onClick={() => {
-                            console.log('Disconnect clicked');
                             disconnect();
                             setShowDropdown(false);
                           }}

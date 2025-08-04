@@ -3,7 +3,6 @@ import Solana from "@/components/logos/partners-mobile/Solana";
 import Link from "next/link";
 import Back from "@/components/ui/icons/Back";
 import { usePathname } from "next/navigation";
-import MobileWalletButton from "@/components/nav/MobileWalletButton";
 
 import * as React from "react"
 import {
@@ -133,13 +132,6 @@ export function NavDrawer({ open, onOpenChange }: NavDrawerProps) {
             </nav>
           </div>
           <DrawerFooter>
-            {isLabPage && (
-              <div className="pb-4">
-                <MobileWalletButton 
-                  className="!w-full !py-3 !bg-black/20 !border !border-[#534C3F] !text-[#fbcea0] !font-semibold !transition-all !duration-200"
-                />
-              </div>
-            )}
             <DrawerClose asChild>
               <div></div>
             </DrawerClose>
