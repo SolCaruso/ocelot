@@ -158,7 +158,8 @@ const Faq: React.FC = () => {
             <p className="text-[#fbcea0] text-xs md:text-sm font-medium tracking-widest mb-4 font-oldFenris drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] uppercase">
               Labyrinths
             </p>
-            <h1 className="text-5xl md:text-6xl font-oldFenris text-white tracking-wider mb-6">
+            <h1 className="text-5xl md:text-6xl font-oldFenris tracking-wider mb-6 text-transparent bg-clip-text drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]"
+              style={{ backgroundImage: "linear-gradient(to right, #fff, #fbcea0 80%, #fbcfa0)" }}>
               FAQ
             </h1>
             <div className="w-46 h-[2px] rounded-full" style={{ background: "linear-gradient(to right, #8c6c52, transparent)" }}></div>
