@@ -6,12 +6,14 @@ import Ocelot from "@/components/logos/partners/Ocelot"
 import SteamMobile from "@/components/logos/partners-mobile/Steam"
 import SolanaMobile from "@/components/logos/partners-mobile/Solana"
 import OcelotMobile from "@/components/logos/partners-mobile/Ocelot"
-import Image from "next/image"
 import Divider from "@/components/ui/divider"
-import SmokeLogo from "@/components/ui/smoke-logo"
 import HeroClient from "./HeroClient"
 import HeroVideo from "./HeroVideo"
 import HeroVideoLab from "./HeroVideoLab"
+import HeroCharacter from "./HeroCharacter"
+import HeroCharacterLab from "./HeroCharacterLab"
+import HeroLogoMain from "./HeroLogoMain"
+import HeroLogoLab from "./HeroLogoLab"
 import "./SmokeFX.css"
 
 interface HeroProps {
@@ -25,14 +27,14 @@ interface HeroProps {
     videoSrc: string
     posterSrc?: string
     logo: {
-      src: string
+      src?: string
       mobileSrc?: string
-      alt: string
+      alt?: string
       widthClasses: string
     }
     title: string
     subtitle: string
-    characterIllustration: {
+    characterIllustration?: {
       src: string
       alt: string
     }
@@ -85,93 +87,16 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
           <div className={`absolute inset-0 z-15 ${config.shadows.overlay} pointer-events-none`} />
         </div>
 
-        <div className={`absolute inset-x-0 top-0 bottom-0 transform-gpu z-20 flex flex-col items-center justify-center md:justify-start text-center ${config.layout.logoPadding} ${config.logo.src.includes('lab.webp') || config.logo.src.includes('lab.webm') ? 'translate-y-8 md:translate-y-12' : ''}`}>
+        <div className={`absolute inset-x-0 top-0 bottom-0 transform-gpu z-20 flex flex-col items-center justify-center md:justify-start text-center ${config.layout.logoPadding} ${config.videoSrc.includes('lab-hero') ? 'translate-y-8 md:translate-y-12' : ''}`}>
           {/* Logo */}
-          {config.logo.src.includes('vw.webp') ? (
-            <SmokeLogo
-              src={config.logo.src}
-              alt={config.logo.alt}
-              widthClasses={config.logo.widthClasses}
-            />
-          ) : config.logo.src.includes('lab.webm') ? (
-            <div className={`mx-auto md:mb-2 ${config.logo.widthClasses} select-none relative flex flex-col items-center`}>
-              {/* Video logo */}
-              <video
-                className="w-full h-auto animate-glitch-main"
-                autoPlay
-                muted
-                playsInline
-                draggable={false}
-              >
-                <source src={config.logo.src} type="video/webm" />
-                <source src={config.logo.src.replace('.webm', '.mp4')} type="video/mp4" />
-              </video>
-              {/* Blue glitch layer */}
-              <video
-                className="w-full h-auto absolute top-0 left-0 animate-glitch-blue"
-                autoPlay
-                muted
-                playsInline
-                draggable={false}
-              >
-                <source src={config.logo.src} type="video/webm" />
-                <source src={config.logo.src.replace('.webm', '.mp4')} type="video/mp4" />
-              </video>
-              {/* Green glitch layer */}
-              <video
-                className="w-full h-auto absolute top-0 left-0 animate-glitch-green"
-                autoPlay
-                muted
-                playsInline
-                draggable={false}
-              >
-                <source src={config.logo.src} type="video/webm" />
-                <source src={config.logo.src.replace('.webm', '.mp4')} type="video/mp4" />
-              </video>
-            </div>
-          ) : config.logo.src.includes('lab.webp') ? (
-            <div className={`mx-auto md:mb-2 ${config.logo.widthClasses} select-none relative`}>
-              {/* Main logo */}
-              <Image
-                src={config.logo.mobileSrc || config.logo.src}
-                alt={config.logo.alt}
-                className="w-full h-auto animate-glitch-main"
-                width={1920}
-                height={1080}
-                draggable={false}
-              />
-              {/* Blue glitch layer */}
-              <Image
-                src={config.logo.mobileSrc || config.logo.src}
-                alt=""
-                className="w-full h-auto absolute top-0 left-0 animate-glitch-blue"
-                width={1920}
-                height={1080}
-                draggable={false}
-              />
-              {/* Green glitch layer */}
-              <Image
-                src={config.logo.mobileSrc || config.logo.src}
-                alt=""
-                className="w-full h-auto absolute top-0 left-0 animate-glitch-green"
-                width={1920}
-                height={1080}
-                draggable={false}
-              />
-            </div>
+          {config.videoSrc.includes('lab-hero') ? (
+            <HeroLogoLab widthClasses={config.logo.widthClasses} />
           ) : (
-            <Image
-              src={config.logo.mobileSrc || config.logo.src}
-              alt={config.logo.alt}
-              className={`mx-auto h-auto mb-2 ${config.logo.widthClasses} select-none animate-slide-up-gentle`}
-              width={1920}
-              height={1080}
-              draggable={false}
-            />
+            <HeroLogoMain widthClasses={config.logo.widthClasses} />
           )}
 
-          {/* Subtitle for lab.webm - positioned absolutely */}
-          {config.subtitle && config.logo.src.includes('lab.webm') && (
+          {/* Subtitle for lab page - positioned absolutely */}
+          {config.subtitle && config.videoSrc.includes('lab-hero') && (
             <h3
               className="my-0 py-0 leading-none lg:mt-6 font-bold text-[#B9B9B9] md:text-lg text-center filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] whitespace-nowrap absolute left-1/2 -translate-x-1/2 z-20 top-[calc(50%+8rem)] md:top-[calc(50%+10rem)]"
             >
@@ -180,9 +105,9 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
           )}
 
           {/* Text */}
-          {(config.title || config.subtitle) && !config.logo.src.includes('lab.webm') && (
+          {(config.title || config.subtitle) && !config.videoSrc.includes('lab-hero') && (
             config.title ? (
-              <div className={`${config.logo.src.includes('lab.webp') ? 'space-y-0' : 'space-y-4 md:space-y-6'} text-center ${config.logo.src.includes('lab.webp') ? 'h-8 md:h-10' : ''} ${config.logo.src.includes('lab.webp') ? 'mb-2 md:mb-2' : 'mb-8 md:mb-12'}`} style={{ contain: 'layout' }}>
+              <div className={`${config.videoSrc.includes('lab-hero') ? 'space-y-0' : 'space-y-4 md:space-y-6'} text-center ${config.videoSrc.includes('lab-hero') ? 'h-8 md:h-10' : ''} ${config.videoSrc.includes('lab-hero') ? 'mb-2 md:mb-2' : 'mb-8 md:mb-12'}`} style={{ contain: 'layout' }}>
                 <div className="relative inline-block animate-slide-up-gentle opacity-0 transform-gpu" style={{ animationDelay: "0.2s" }}>
                   {/* Beneath, stationary text */}
                   <h2 className="text-[#E0A970] text-3xl sm:text-4xl lg:text-5xl font-oldFenris layer-blur whitespace-pre-line">
@@ -196,10 +121,10 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
                 {config.subtitle && (
                   <h3
                     className={`font-bold text-[#B9B9B9] md:text-lg text-center filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] whitespace-nowrap
-                      ${config.logo.src.includes('lab.webp') ? 'absolute top-0 left-1/2 transform -translate-x-1/2' : ''}
-                      ${config.logo.src.includes('lab.webm') ? 'mt-0 mb-0 pt-0 pb-0 leading-none' : ''}
+                      ${config.videoSrc.includes('lab-hero') ? 'absolute top-0 left-1/2 transform -translate-x-1/2' : ''}
+                      ${config.videoSrc.includes('lab-hero') ? 'mt-0 mb-0 pt-0 pb-0 leading-none' : ''}
                     `}
-                    style={config.logo.src.includes('lab.webm') ? { marginTop: 0, marginBottom: 0, paddingTop: 0, paddingBottom: 0, lineHeight: 1 } : {}}
+                    style={config.videoSrc.includes('lab-hero') ? { marginTop: 0, marginBottom: 0, paddingTop: 0, paddingBottom: 0, lineHeight: 1 } : {}}
                   >
                     {config.subtitle}
                   </h3>
@@ -209,10 +134,10 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
               config.subtitle && (
                 <h3
                   className={`font-bold text-[#B9B9B9] md:text-lg text-center filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] whitespace-nowrap
-                    ${config.logo.src.includes('lab.webp') ? 'absolute top-0 left-1/2 transform -translate-x-1/2' : ''}
-                    ${config.logo.src.includes('lab.webm') ? 'mt-0 mb-0 pt-0 pb-0 leading-none' : ''}
+                    ${config.videoSrc.includes('lab-hero') ? 'absolute top-0 left-1/2 transform -translate-x-1/2' : ''}
+                    ${config.videoSrc.includes('lab-hero') ? 'mt-0 mb-0 pt-0 pb-0 leading-none' : ''}
                   `}
-                  style={config.logo.src.includes('lab.webm') ? { marginTop: 0, marginBottom: 0, paddingTop: 0, paddingBottom: 0, lineHeight: 1 } : {}}
+                  style={config.videoSrc.includes('lab-hero') ? { marginTop: 0, marginBottom: 0, paddingTop: 0, paddingBottom: 0, lineHeight: 1 } : {}}
                 >
                   {config.subtitle}
                 </h3>
@@ -247,7 +172,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
               <SteamMobile className="h-14 w-auto lg:hidden" />
             </div>
           )}
-          {config.logo.src.includes('lab.webm') ? (
+          {config.videoSrc.includes('lab-hero') ? (
             <>
               {config.partners.showSolana && (
                 <div>
@@ -277,17 +202,18 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
         </div>
       </div>
 
-      {/* Character illustration - moved to bottom of hero */}
-      <div className={`absolute bottom-0 z-50 2xl:block hidden select-none animate-slide-in-transform pointer-events-none ${config.layout.showTrailer === false ? '-right-6 3xl:-right-2' : '-right-12'} ${config.layout.showTrailer === false ? '' : 'opacity-30 3xl:opacity-100'}`}>
-        <Image
-          src={config.characterIllustration.src}
-          alt={config.characterIllustration.alt}
-          width={1506}
-          height={2000}
-          className={`object-contain ${config.layout.characterSize || `w-[500px] ${config.layout.showTrailer === false ? '4xl:w-[600px]' : '4xl:w-[700px]'}`}`}
-          draggable={false}
+      {/* Character illustration - server rendered with assets */}
+      {config.videoSrc.includes('lab-hero') ? (
+        <HeroCharacterLab 
+          characterSize={config.layout.characterSize}
+          showTrailer={config.layout.showTrailer}
         />
-      </div>
+      ) : (
+        <HeroCharacter 
+          characterSize={config.layout.characterSize}
+          showTrailer={config.layout.showTrailer}
+        />
+      )}
 
       {/* Divider - positioned based on trailer visibility */}
       {config.layout.showTrailer === false ? (

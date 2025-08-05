@@ -10,9 +10,6 @@ const heroConfig = {
   videoSrc: "/video/lab-hero.webm",
   posterSrc: "/assets/webp/lab-hero-thumb.webp",
   logo: {
-    src: "/video/lab.webm",
-    mobileSrc: "/webp/lab.webp",
-    alt: "Lab Logo",
     widthClasses: "w-[20rem] md:w-[30rem] lg:w-[36rem]"
   },
   title: "",

@@ -13,16 +13,10 @@ const heroConfig = {
   videoSrc: "/video/vw-hero.webm",
   posterSrc: "/assets/webp/hero-thumb.webp",
   logo: {
-    src: "/webp/vw.webp",
-    alt: "Vanished Worlds Logo",
     widthClasses: "w-[20rem] sm:w-[24rem] lg:w-[30rem]"
   },
   title: "",
   subtitle: "",
-  characterIllustration: {
-    src: "/webp/persephone.webp",
-    alt: "Persephone Character Illustration"
-  },
   partners: {
     showSolana: false
   },

@@ -449,6 +449,21 @@
   pointer-events: none;
 }
 
+/* Enhanced hologram effect for lab logo */
+.animate-glitch-blue-enhanced {
+  animation: glitch-blue 6s ease-out infinite;
+  filter: hue-rotate(20deg) saturate(200%) brightness(1.2);
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.animate-glitch-green-enhanced {
+  animation: glitch-green 4s ease-out infinite;
+  filter: hue-rotate(220deg) saturate(200%) brightness(1.2);
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
 /* Custom scrollbar for dark mode and all scrollbars */
 ::-webkit-scrollbar {
   width: 8px;

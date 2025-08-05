@@ -25,6 +25,8 @@ export default function HeroVideo({ videoSrc, posterSrc }: HeroVideoProps) {
     setVideoPlaying(false)
   }
 
+
+
   return (
     <div className="relative w-full h-full">
       {/* Priority-loaded poster image - shows until video starts playing */}
@@ -49,7 +51,6 @@ export default function HeroVideo({ videoSrc, posterSrc }: HeroVideoProps) {
           width: '100%',
           height: '100%',
           objectFit: 'cover',
-          visibility: videoPlaying ? 'visible' : 'hidden',
           position: 'absolute',
           top: 0,
           left: 0,
