@@ -1,6 +1,5 @@
 import React from "react"
 import clsx from "clsx"
-import Image from "next/image"
 import Steam from "@/components/logos/partners/Steam"
 import Solana from "@/components/logos/partners/Solana"
 import Ocelot from "@/components/logos/partners/Ocelot"

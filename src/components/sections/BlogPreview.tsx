@@ -80,11 +80,11 @@ export default function BlogPreview() {
           <div
             className="relative z-0 w-full h-full"
             style={{
-              maskImage: "url('/webp/smoke-mask-2.webp')",
+              maskImage: "url('/avif/smoke-mask-2.avif'), url('/webp/smoke-mask-2.webp')",
               maskSize: "cover",
               maskPosition: "bottom center",
               maskRepeat: "no-repeat",
-              WebkitMaskImage: "url('/webp/smoke-mask-2.webp')",
+              WebkitMaskImage: "url('/avif/smoke-mask-2.avif'), url('/webp/smoke-mask-2.webp')",
               WebkitMaskSize: "cover",
               WebkitMaskPosition: "bottom center",
               WebkitMaskRepeat: "no-repeat",
@@ -190,8 +190,8 @@ export default function BlogPreview() {
                 <div
                   className="relative w-full h-2/3 bg-black overflow-hidden"
                   style={{
-                    maskImage: "url('/webp/smoke-mask-2.webp')",
-                    WebkitMaskImage: "url('/webp/smoke-mask-2.webp')",
+                    maskImage: "url('/avif/smoke-mask-2.avif'), url('/webp/smoke-mask-2.webp')",
+                    WebkitMaskImage: "url('/avif/smoke-mask-2.avif'), url('/webp/smoke-mask-2.webp')",
                     maskPosition: "center top",
                     WebkitMaskPosition: "center top",
                     maskSize: "cover",

@@ -90,11 +90,11 @@ export default function BlogPageClient({ allPosts }: { allPosts: BlogPost[] }) {
             <div
               className="relative z-0 w-full h-full"
               style={{
-                maskImage: "url('/webp/smoke-mask-2.webp')",
+                maskImage: "url('/avif/smoke-mask-2.avif'), url('/webp/smoke-mask-2.webp')",
                 maskSize: "cover",
                 maskPosition: "bottom center",
                 maskRepeat: "no-repeat",
-                WebkitMaskImage: "url('/webp/smoke-mask-2.webp')",
+                WebkitMaskImage: "url('/avif/smoke-mask-2.avif'), url('/webp/smoke-mask-2.webp')",
                 WebkitMaskSize: "cover",
                 WebkitMaskPosition: "bottom center",
                 WebkitMaskRepeat: "no-repeat",
@@ -214,8 +214,8 @@ export default function BlogPageClient({ allPosts }: { allPosts: BlogPost[] }) {
                     <div
                       className="relative w-full h-2/3 bg-black overflow-hidden"
                       style={{
-                        maskImage: "url('/webp/smoke-mask-2.webp')",
-                        WebkitMaskImage: "url('/webp/smoke-mask-2.webp')",
+                        maskImage: "url('/avif/smoke-mask-2.avif'), url('/webp/smoke-mask-2.webp')",
+                        WebkitMaskImage: "url('/avif/smoke-mask-2.avif'), url('/webp/smoke-mask-2.webp')",
                         maskPosition: "center top",
                         WebkitMaskPosition: "center top",
                         maskSize: "cover",
@@ -326,11 +326,11 @@ export default function BlogPageClient({ allPosts }: { allPosts: BlogPost[] }) {
       <div
         className="absolute bottom inset-0 bg-[url('/webp/golem.webp')] bg-fixed bg-center bg-cover max-w-7xl min-w-7xl mx-auto"
         style={{
-          maskImage: "url('/webp/smoke-mask.webp')",
+          maskImage: "url('/avif/smoke-mask.avif'), url('/webp/smoke-mask.webp')",
           maskSize: "contain",
           maskPosition: "bottom center",
           maskRepeat: "no-repeat",
-          WebkitMaskImage: "url('/webp/smoke-mask.webp')",
+          WebkitMaskImage: "url('/avif/smoke-mask.avif'), url('/webp/smoke-mask.webp')",
           WebkitMaskSize: "contain",
         }}
       />

@@ -28,11 +28,11 @@ export default function PostHero({ post }: PostHeroProps) {
       <div
         className="relative w-full h-full"
         style={{
-          maskImage: "url('/webp/hero-mask.webp')",
+          maskImage: "url('/avif/hero-mask.avif'), url('/webp/hero-mask.webp')",
           maskSize: "cover",
           maskPosition: "bottom center",
           maskRepeat: "no-repeat",
-          WebkitMaskImage: "url('/webp/hero-mask.webp')",
+          WebkitMaskImage: "url('/avif/hero-mask.avif'), url('/webp/hero-mask.webp')",
           WebkitMaskSize: "cover",
           WebkitMaskPosition: "bottom center",
           WebkitMaskRepeat: "no-repeat",
