@@ -10,6 +10,7 @@ import {
 import Corner from "@/components/ui/corner";
 import Frame from "@/components/ui/frame";
 import Image from "next/image";
+import FaqVideo from "./FaqVideo";
 
 interface FaqItem {
   id: string;
@@ -103,50 +104,35 @@ const Faq: React.FC = () => {
   };
 
   return (
-    <section className="relative ">
-
-      {/* Main FAQ Banner */}
+    <section className="relative text-white">
+      {/* Hero Section */}
       <div className="relative h-[400px] overflow-hidden">
         {/* Background Video with Smoke Mask */}
         <div
           className="absolute inset-0 w-full h-full"
           style={{
-            maskImage: "url('/webp/smoke-mask-2.webp')",
+            maskImage: "url('/avif/smoke-mask-2.avif'), url('/webp/smoke-mask-2.webp')",
             maskSize: "cover",
             maskPosition: "bottom center",
             maskRepeat: "no-repeat",
-            WebkitMaskImage: "url('/webp/smoke-mask-2.webp')",
+            WebkitMaskImage: "url('/avif/smoke-mask-2.avif'), url('/webp/smoke-mask-2.webp')",
             WebkitMaskSize: "cover",
             WebkitMaskPosition: "bottom center",
             WebkitMaskRepeat: "no-repeat",
           }}
         >
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover scale-140"
-            style={{ 
-              width: "100%",
-              left: "20%",
-              objectPosition: "right center"
-            }}
-          >
-            <source src="/video/devil.webm" type="video/webm" />
-            <source src="/video/devil.mp4" type="video/mp4" />
-          </video>
+          <FaqVideo />
         </div>
         
         {/* Masked overlay */}
         <div
           className="absolute inset-0 w-full h-full bg-black/65 sm:bg-black/30"
           style={{
-            maskImage: "url('/webp/smoke-mask-2.webp')",
+            maskImage: "url('/avif/smoke-mask-2.avif'), url('/webp/smoke-mask-2.webp')",
             maskSize: "cover",
             maskPosition: "bottom center",
             maskRepeat: "no-repeat",
-            WebkitMaskImage: "url('/webp/smoke-mask-2.webp')",
+            WebkitMaskImage: "url('/avif/smoke-mask-2.avif'), url('/webp/smoke-mask-2.webp')",
             WebkitMaskSize: "cover",
             WebkitMaskPosition: "bottom center",
             WebkitMaskRepeat: "no-repeat",
@@ -207,7 +193,7 @@ const Faq: React.FC = () => {
                 </AccordionTrigger>
                 
                 <AccordionContent className="px-6 pb-5">
-                  <p className="text-stone-300 text-sm leading-relaxed">
+                  <p className="text-[#d4d4d4] text-sm leading-relaxed font-quattrocento">
                     {item.answer}
                   </p>
                 </AccordionContent>
@@ -220,7 +206,7 @@ const Faq: React.FC = () => {
               <AccordionItem
                 key={item.id}
                 value={item.id}
-                className={`relative border-t border-b border-l border-r border-[#8c6c52] bg-black/10 backdrop-blur-md hover:bg-white/5 transition-colors cursor-pointer group ${index < 3 ? 'mb-6' : ''} !border-b`}
+                className={`relative border-t border-b border-l border-r border-[#8c6c52] bg-black/40 backdrop-blur-sm hover:bg-white/5 transition-colors cursor-pointer group ${index < 3 ? 'mb-6' : ''} !border-b`}
                 onClick={() => handleToggle(item.id, 'right')}
               >
                 {/* Top Left Corner */}
@@ -248,7 +234,7 @@ const Faq: React.FC = () => {
                 </AccordionTrigger>
                 
                 <AccordionContent className="px-6 pb-5">
-                  <p className="text-stone-300 text-sm leading-relaxed">
+                  <p className="text-[#d4d4d4] text-sm leading-relaxed font-quattrocento">
                     {item.answer}
                   </p>
                 </AccordionContent>
@@ -257,12 +243,8 @@ const Faq: React.FC = () => {
           </Accordion>
         </div>
 
-        {/* Support Section - Full Width */}
+        {/* Support Section */}
         <div className="relative">
-          {/* Frame borders - positioned on top of borders */}
-          <div className="absolute left-1/2 top-0 z-10 pointer-events-none opacity-80" style={{ transform: 'translateX(-50%) translateY(-50%)' }}>
-            <Frame className="md:scale-50 scale-40" />
-          </div>
           <div className="absolute left-1/2 bottom-0 z-10 pointer-events-none opacity-80" style={{ transform: 'translateX(-50%) translateY(50%)' }}>
             <Frame className="md:scale-50 scale-40 rotate-180" />
           </div>
@@ -323,38 +305,41 @@ const Faq: React.FC = () => {
             <div 
               className="absolute inset-0 z-0"
               style={{
-                maskImage: "url('/webp/smoke-mask-2.webp')",
+                maskImage: "url('/avif/smoke-mask-2.avif'), url('/webp/smoke-mask-2.webp')",
                 maskSize: "cover",
                 maskPosition: "bottom center",
                 maskRepeat: "no-repeat",
-                WebkitMaskImage: "url('/webp/smoke-mask-2.webp')",
+                WebkitMaskImage: "url('/avif/smoke-mask-2.avif'), url('/webp/smoke-mask-2.webp')",
                 WebkitMaskSize: "cover",
                 WebkitMaskPosition: "bottom center",
                 WebkitMaskRepeat: "no-repeat",
               }}
             >
-              <Image
-                src="/webp/lab-screenshot7.webp"
-                alt="Support"
-                fill
-                className="object-cover scale-140"
-                style={{ 
-                  width: "100%",
-                  left: "20%",
-                  objectPosition: "center center" 
-                }}
-              />
+              <picture>
+                <source srcSet="/avif/lab-screenshot7.avif" type="image/avif" />
+                <Image
+                  src="/webp/lab-screenshot7.webp"
+                  alt="Support"
+                  fill
+                  className="object-cover scale-140"
+                  style={{ 
+                    width: "100%",
+                    left: "20%",
+                    objectPosition: "center center" 
+                  }}
+                />
+              </picture>
               
               {/* Overlay with same mask */}
               <div 
                 className="absolute inset-0"
                 style={{
                   background: "linear-gradient(to right, rgba(0,0,0,0.6), rgba(0,0,0,0.1))",
-                  maskImage: "url('/webp/smoke-mask-2.webp')",
+                  maskImage: "url('/avif/smoke-mask-2.avif'), url('/webp/smoke-mask-2.webp')",
                   maskSize: "cover",
                   maskPosition: "bottom center",
                   maskRepeat: "no-repeat",
-                  WebkitMaskImage: "url('/webp/smoke-mask-2.webp')",
+                  WebkitMaskImage: "url('/avif/smoke-mask-2.avif'), url('/webp/smoke-mask-2.webp')",
                   WebkitMaskSize: "cover",
                   WebkitMaskPosition: "bottom center",
                   WebkitMaskRepeat: "no-repeat",
@@ -365,11 +350,11 @@ const Faq: React.FC = () => {
                 className="absolute inset-0 sm:hidden"
                 style={{
                   background: "linear-gradient(to right, rgba(0,0,0,0.4), rgba(0,0,0,0.10))",
-                  maskImage: "url('/webp/smoke-mask-2.webp')",
+                  maskImage: "url('/avif/smoke-mask-2.avif'), url('/webp/smoke-mask-2.webp')",
                   maskSize: "cover",
                   maskPosition: "bottom center",
                   maskRepeat: "no-repeat",
-                  WebkitMaskImage: "url('/webp/smoke-mask-2.webp')",
+                  WebkitMaskImage: "url('/avif/smoke-mask-2.avif'), url('/webp/smoke-mask-2.webp')",
                   WebkitMaskSize: "cover",
                   WebkitMaskPosition: "bottom center",
                   WebkitMaskRepeat: "no-repeat",

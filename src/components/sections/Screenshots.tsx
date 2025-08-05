@@ -154,15 +154,18 @@ export default function Screenshots({ images }: { images?: string[] }) {
                           </div>
                         </>
                       )}
-                      <Image
-                        src={src}
-                        alt={`Screenshot ${index + 1}`}
-                        width={700}
-                        height={394}
-                        className="object-cover w-full h-full"
-                        draggable={false}
-                        priority={Math.abs(index - centerIndex) <= 1} // Priority load for visible images
-                      />
+                      <picture>
+                        <source srcSet={src.replace('/webp/', '/avif/').replace('.webp', '.avif')} type="image/avif" />
+                        <Image
+                          src={src}
+                          alt={`Screenshot ${index + 1}`}
+                          width={700}
+                          height={394}
+                          className="object-cover w-full h-full"
+                          draggable={false}
+                          priority={Math.abs(index - centerIndex) <= 1} // Priority load for visible images
+                        />
+                      </picture>
                     </div>
                   </CarouselItem>
                 )
@@ -226,14 +229,17 @@ function MobileScreenshots({ screenshots }: { screenshots: string[] }) {
                   className="w-full relative bg-black/20 border-t border-b border-r border-l border-[#B4906C]/40"
                 >
                   <span className="absolute top-0 left-0 h-[1.2px] w-full z-10 bg-gradient-to-r from-[#AC8B6A] via-[#AC8B6A]/20 to-[#AC8B6A]" />
-                  <Image
-                    src={src}
-                    alt={`Screenshot ${index + 1}`}
-                    width={400}
-                    height={225}
-                    className="object-cover w-full h-auto"
-                    draggable={false}
-                  />
+                  <picture>
+                    <source srcSet={src.replace('/webp/', '/avif/').replace('.webp', '.avif')} type="image/avif" />
+                    <Image
+                      src={src}
+                      alt={`Screenshot ${index + 1}`}
+                      width={400}
+                      height={225}
+                      className="object-cover w-full h-auto"
+                      draggable={false}
+                    />
+                  </picture>
                 </div>
               </div>
             </div>
@@ -363,15 +369,18 @@ function ModalCarousel({ screenshots, initialIndex, onClose }: {
                     
                     {/* Only render images that are visible or adjacent for performance */}
                     {getVisibleSlides.has(idx) && (
-                      <Image
-                        src={src}
-                        alt={`Screenshot ${idx + 1}`}
-                        fill
-                        className="object-cover"
-                        draggable={false}
-                        priority={idx === currentIndex}
-                        sizes="80vw"
-                      />
+                      <picture>
+                        <source srcSet={src.replace('/webp/', '/avif/').replace('.webp', '.avif')} type="image/avif" />
+                        <Image
+                          src={src}
+                          alt={`Screenshot ${idx + 1}`}
+                          fill
+                          className="object-cover"
+                          draggable={false}
+                          priority={idx === currentIndex}
+                          sizes="80vw"
+                        />
+                      </picture>
                     )}
                   </div>
                 </div>

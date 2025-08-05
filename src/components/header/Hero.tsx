@@ -1,5 +1,6 @@
-import type React from "react"
+import React from "react"
 import clsx from "clsx"
+import Image from "next/image"
 import Steam from "@/components/logos/partners/Steam"
 import Solana from "@/components/logos/partners/Solana"
 import Ocelot from "@/components/logos/partners/Ocelot"
@@ -15,6 +16,9 @@ import HeroCharacterLab from "./HeroCharacterLab"
 import HeroLogoMain from "./HeroLogoMain"
 import HeroLogoLab from "./HeroLogoLab"
 import "./SmokeFX.css"
+import leatherTextureAvif from '@/assets/avif/leather-texture.avif'
+import leatherTextureWebp from '@/assets/webp/leather-texture.webp'
+import smokeWebp from '@/assets/webp/smoke.webp'
 
 interface HeroProps {
   /** Tailwind classes for responsive sizing, e.g. "h-40 md:h-56 lg:h-72" */
@@ -63,7 +67,12 @@ interface HeroProps {
 const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
 
   return (
-    <div className="w-full relative bg-[url('/webp/smoke.webp')] bg-cover bg-center bg-fixed">
+    <div 
+      className="w-full relative bg-cover bg-center bg-fixed"
+      style={{
+        backgroundImage: `url("${smokeWebp.src}")`,
+      }}
+    >
       {/* Video Hero Section with circular mask */}
       <div
         className={clsx("w-full relative z-10 overflow-hidden max-w-8xl mx-auto", className)}
@@ -85,6 +94,22 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
           {/* Masks/Shaders */}
           <div className={`absolute inset-0 z-10 ${config.shadows.topGradient} pointer-events-none hidden md:block`} />
           <div className={`absolute inset-0 z-15 ${config.shadows.overlay} pointer-events-none`} />
+          
+          {/* Smoke mask overlay */}
+          <div 
+            className="absolute inset-0 z-5 pointer-events-none"
+            style={{
+              maskImage: "url('/avif/smoke-mask.avif'), url('/webp/smoke-mask.webp')",
+              maskSize: "cover",
+              maskPosition: "center",
+              maskRepeat: "no-repeat",
+              WebkitMaskImage: "url('/avif/smoke-mask.avif'), url('/webp/smoke-mask.webp')",
+              WebkitMaskSize: "cover",
+              WebkitMaskPosition: "center",
+              WebkitMaskRepeat: "no-repeat",
+              background: "linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.1))",
+            }}
+          />
         </div>
 
         <div className={`absolute inset-x-0 top-0 bottom-0 transform-gpu z-20 flex flex-col items-center justify-center md:justify-start text-center ${config.layout.logoPadding} ${config.videoSrc.includes('lab-hero') ? 'translate-y-8 md:translate-y-12' : ''}`}>
@@ -236,7 +261,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
               <div
                 className="absolute inset-0"
                 style={{
-                  backgroundImage: 'url("/webp/leather-texture.webp")',
+                  backgroundImage: `url("${leatherTextureAvif.src}"), url("${leatherTextureWebp.src}")`,
                   backgroundRepeat: "repeat",
                   boxShadow:
                     "inset 0px 1px 0px rgba(0,0,0,0.24), inset 0px 2px 0px rgba(255,255,255,0.06), inset 0px -1px 0px rgba(0,0,0,0.24), inset 0px -2px 0px rgba(255,255,255,0.06)",

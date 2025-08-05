@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Frame from "@/components/ui/frame";
 import { useState } from "react";
+import UsiorVideo from "./UsiorVideo";
 
 export default function Usor() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -13,26 +14,17 @@ export default function Usor() {
       <div
         className="absolute inset-0 w-full h-[800px] z-0"
         style={{
-          maskImage: "url('/webp/bg-golem.webp')",
+          maskImage: "url('/avif/bg-golem.avif')",
           maskSize: "cover",
           maskPosition: "center",
           maskRepeat: "no-repeat",
-          WebkitMaskImage: "url('/webp/bg-golem.webp')",
+          WebkitMaskImage: "url('/avif/bg-golem.avif')",
           WebkitMaskSize: "cover",
           WebkitMaskPosition: "center",
           WebkitMaskRepeat: "no-repeat",
         }}
       >
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover opacity-50"
-        >
-          <source src="/video/usior.webm" type="video/webm" />
-          <source src="/video/usior.mp4" type="video/mp4" />
-        </video>
+        <UsiorVideo className="w-full h-full object-cover opacity-50" />
       </div>
 
       {/* Main Content Container */}
@@ -42,13 +34,16 @@ export default function Usor() {
           
           {/* Usior Image - Absolute positioned on left (hidden on mobile) */}
           <div className="absolute left-0 -bottom-50 w-[900px] h-[1100px] -translate-x-48 translate-y-8 hidden lg:block">
-            <Image 
-              src="/webp/usior-char3.webp" 
-              alt="Usor" 
-              height={1000} 
-              width={1415} 
-              className="w-full h-full object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.8)] transform -scale-x-100" 
-            />
+            <picture>
+              <source srcSet="/avif/usior-char3.avif" type="image/avif" />
+              <Image 
+                src="/webp/usior-char3.webp" 
+                alt="Usor" 
+                height={1000} 
+                width={1415} 
+                className="w-full h-full object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.8)] transform -scale-x-100" 
+              />
+            </picture>
           </div>
           
           {/* Text Content - Responsive positioning */}
