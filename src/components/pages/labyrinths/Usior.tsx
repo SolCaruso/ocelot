@@ -25,17 +25,18 @@ export default function Usor() {
           playsInline
           className="w-full h-full object-cover opacity-50"
         >
-          <source src="/video/usor-3.mp4" type="video/mp4" />
+          <source src="/video/usior.webm" type="video/webm" />
+          <source src="/video/usior.mp4" type="video/mp4" />
         </video>
       </div>
 
       {/* Main Content Container */}
-      <div className="relative z-10 h-[800px] w-full">
+      <div className="relative z-10 mb-20 lg:mb-0 lg:h-[800px] w-full">
         {/* Full width container with max-w constraint */}
         <div className="max-w-7xl mx-auto h-full relative">
           
-          {/* Usior Image - Absolute positioned on left */}
-          <div className="absolute left-0 -bottom-50 w-[900px] h-[1100px] -translate-x-48 translate-y-8">
+          {/* Usior Image - Absolute positioned on left (hidden on mobile) */}
+          <div className="absolute left-0 -bottom-50 w-[900px] h-[1100px] -translate-x-48 translate-y-8 hidden lg:block">
             <Image 
               src="/webp/usior-char3.webp" 
               alt="Usor" 
@@ -45,8 +46,8 @@ export default function Usor() {
             />
           </div>
           
-          {/* Text Content - Positioned on right side */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3/5 pr-8">
+          {/* Text Content - Responsive positioning */}
+          <div className="lg:absolute lg:right-0 lg:top-1/2 lg:-translate-y-1/2 lg:w-3/5 lg:pr-8 w-full px-8 lg:px-0">
             <div className="relative backdrop-blur-xl border-t border-b border-l border-r border-[#B4906C]/40 p-8 bg-black/20">
               {/* Frame borders - positioned on top of borders */}
               <div className="absolute left-1/2 top-0 z-10 pointer-events-none opacity-80" style={{ transform: 'translateX(-50%) translateY(-50%)' }}>

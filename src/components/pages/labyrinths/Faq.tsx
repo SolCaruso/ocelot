@@ -134,6 +134,7 @@ const Faq: React.FC = () => {
             }}
           >
             <source src="/video/devil.webm" type="video/webm" />
+            <source src="/video/devil.mp4" type="video/mp4" />
           </video>
         </div>
         
@@ -310,7 +311,7 @@ const Faq: React.FC = () => {
                     
                     <div className="relative">
                       <p className="uppercase font-quattrocento text-sm tracking-wide font-semibold text-[#fbcea0] group-hover:text-white text-center">
-                        READ MORE
+                        LEARN MORE
                       </p>
                     </div>
                   </a>
