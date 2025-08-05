@@ -497,7 +497,7 @@ export default function Characters({ characters, backgroundClasses }: Characters
                                 }}
                               >
                                 <div
-                                  className={`w-full h-full transition-all duration-200 ease-[var(--ease-in-out-quad)] ${isSelected ? "scale-105" : "group-hover:scale-105"}`}
+                                  className={`w-full transition-all duration-200 ease-[var(--ease-in-out-quad)] h-[140px]`}
                                 >
                                   <Image
                                     src={character.thumbnail || "/placeholder.svg"}
