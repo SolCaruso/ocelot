@@ -1,7 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import Frame from "@/components/ui/frame";
+import { useState } from "react";
 
 export default function Usor() {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   return (
     <section className="relative w-full mt-30">
       {/* Background Video with Mask - Centered */}
@@ -66,9 +71,30 @@ export default function Usor() {
                Uncover ancient treasures                   
               </h1>
               <div className="w-32 md:w-[200px] h-px bg-gradient-to-r from-[#fbcea0] to-transparent mb-6 mt-6" />
-              <p className="text-white text-shadow-sm font-medium text-lg md:text-xl font-quattrocento leading-relaxed filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.9)]">
-                Descend into the shadowed depths of Usior&apos;s forgotten archives in this reimagined tactical RPG. Each procedurally-generated chamber tests your strategic wit: vanquish foes, gather relics and decide—bank your loot as Solana SFTs or press onward into ever-greater peril. Recruit bronze-ranked adventurers or unleash your collected heroes, master turn-based combat and experience lightning-fast blockchain integration—where every risk carries the promise of reward.
-              </p>
+              
+              {/* Description text with expand/collapse for mobile */}
+              <div className="space-y-4">
+                <p className="text-white text-shadow-sm font-medium text-lg md:text-xl font-quattrocento leading-relaxed filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.9)]">
+                  Descend into the shadowed depths of Usior&apos;s forgotten archives in this reimagined tactical RPG. Each procedurally-generated chamber tests your strategic wit: vanquish foes, gather relics and decide—bank your loot as Solana SFTs or press onward into ever-greater peril.
+                </p>
+                
+                {/* Expanded content - hidden on md+ screens, collapsible on smaller screens */}
+                <div className={`md:block ${isExpanded ? 'block' : 'hidden'}`}>
+                  <p className="text-white text-shadow-sm font-medium text-lg md:text-xl font-quattrocento leading-relaxed filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.9)]">
+                    Recruit bronze-ranked adventurers or unleash your collected heroes, master turn-based combat and experience lightning-fast blockchain integration—where every risk carries the promise of reward.
+                  </p>
+                </div>
+                
+                {/* More/Less button - only show on screens under md */}
+                <div className="md:hidden">
+                  <button
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="text-[#fbcea0] hover:text-white font-medium text-sm transition-colors duration-200 underline underline-offset-4"
+                  >
+                    {isExpanded ? 'Show less' : 'Show more'}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

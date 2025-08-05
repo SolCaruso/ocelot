@@ -1,6 +1,8 @@
-.smoke {
-  display: block;
-  letter-spacing: 0.0075em;
+@media (min-width: 1280px) {
+  .smoke {
+    display: block;
+    letter-spacing: 0.0075em;
+  }
 }
 
 .smoke span {
@@ -64,5 +66,24 @@
   }
   50.1% {
     transform: translateX(calc(var(--move) * -1));
+  }
+}
+
+/* Disable smoke effect on screens smaller than xl (1280px) */
+@media (max-width: 1279px) {
+  .smoke span {
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: unset !important;
+    background-clip: unset !important;
+    color: white !important;
+  }
+  
+  .smoke div {
+    display: block !important;
+  }
+  
+  .smoke.active span {
+    animation: none !important;
   }
 }

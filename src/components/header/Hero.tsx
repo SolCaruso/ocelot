@@ -26,6 +26,7 @@ interface HeroProps {
     videoSrc: string
     logo: {
       src: string
+      mobileSrc?: string
       alt: string
       widthClasses: string
     }
@@ -187,7 +188,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
             <div className={`mx-auto md:mb-2 ${config.logo.widthClasses} select-none relative`}>
               {/* Main logo */}
               <Image
-                src={config.logo.src}
+                src={config.logo.mobileSrc || config.logo.src}
                 alt={config.logo.alt}
                 className="w-full h-auto animate-glitch-main"
                 width={1920}
@@ -196,7 +197,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
               />
               {/* Blue glitch layer */}
               <Image
-                src={config.logo.src}
+                src={config.logo.mobileSrc || config.logo.src}
                 alt=""
                 className="w-full h-auto absolute top-0 left-0 animate-glitch-blue"
                 width={1920}
@@ -205,7 +206,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
               />
               {/* Green glitch layer */}
               <Image
-                src={config.logo.src}
+                src={config.logo.mobileSrc || config.logo.src}
                 alt=""
                 className="w-full h-auto absolute top-0 left-0 animate-glitch-green"
                 width={1920}
@@ -215,7 +216,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
             </div>
           ) : (
             <Image
-              src={config.logo.src}
+              src={config.logo.mobileSrc || config.logo.src}
               alt={config.logo.alt}
               className={`mx-auto h-auto mb-2 ${config.logo.widthClasses} select-none animate-slide-up-gentle`}
               width={1920}
@@ -436,19 +437,29 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
                   {/* Text block */}
                   <div className="md:ml-8 flex-1 text-center lg:text-left max-w-xl min-w-[20rem]">
                     {config.logo.src.includes('vw.webp') ? (
-                      // Smoke effect version for vw page
-                      <h3
-                        className="smoke text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4 tracking-[0.02em]"
-                        id="fantasy-tactics-smoke"
-                      >
-                        <div>
-                          <span>F</span><span>A</span><span>N</span><span>T</span><span>A</span><span>S</span><span>Y</span><span>&nbsp;</span><span>T</span><span>A</span><span>C</span><span>T</span><span>I</span><span>C</span><span>S</span>
-                        </div>
-                      </h3>
+                      <>
+                        {/* Simple text for screens under xl */}
+                        <h3 
+                          className="xl:hidden text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4 tracking-[0.02em] text-transparent bg-clip-text"
+                          style={{ backgroundImage: "linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)" }}
+                        >
+                          FANTASY TACTICS
+                        </h3>
+                        {/* Smoke effect for xl+ screens */}
+                        <h3
+                          className="max-xl:hidden smoke text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4 tracking-[0.02em]"
+                          id="fantasy-tactics-smoke"
+                        >
+                          <div>
+                            <span>F</span><span>A</span><span>N</span><span>T</span><span>A</span><span>S</span><span>Y</span><span>&nbsp;</span><span>T</span><span>A</span><span>C</span><span>T</span><span>I</span><span>C</span><span>S</span>
+                          </div>
+                        </h3>
+                      </>
                     ) : (
-                      // Static version for all other pages
+                      // Gradient version for other pages (responsive)
                       <h3
-                        className="bg-clip-text text-transparent text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4 tracking-[0.04em] whitespace-nowrap"
+                        className="text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4 tracking-[0.04em] 
+                        whitespace-nowrap xl:bg-clip-text xl:text-transparent"
                         style={{ backgroundImage: "linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)" }}
                       >
                         FANTASY TACTICS
