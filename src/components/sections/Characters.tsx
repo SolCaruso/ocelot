@@ -313,16 +313,19 @@ export default function Characters({ characters, backgroundClasses }: Characters
           <div className="flex-1 flex justify-center items-start relative w-full mb-8 lg:mb-0">
             {/* Background Accent Image */}
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[900px] md:h-[900px] z-0 pointer-events-none select-none" style={{ userSelect: 'none' }}>
-              <Image
-                src={currentCharacter.backgroundImage || "/placeholder.svg"}
-                alt="Background Accent"
-                fill
-                className="object-contain opacity-80 select-none"
-                priority
-                draggable={false}
-                sizes="(max-width: 768px) 600px, 900px"
-                style={{ userSelect: 'none' }}
-              />
+              <picture>
+                <source srcSet={currentCharacter.backgroundImage?.replace('/webp/', '/avif/').replace('.webp', '.avif') || "/placeholder.svg"} type="image/avif" />
+                <Image
+                  src={currentCharacter.backgroundImage || "/placeholder.svg"}
+                  alt="Background Accent"
+                  fill
+                  className="object-contain opacity-80 select-none"
+                  priority
+                  draggable={false}
+                  sizes="(max-width: 768px) 600px, 900px"
+                  style={{ userSelect: 'none' }}
+                />
+              </picture>
             </div>
 
             {/* Main Character Image */}
@@ -337,16 +340,19 @@ export default function Characters({ characters, backgroundClasses }: Characters
                   className="absolute inset-0 select-none"
                   style={{ userSelect: 'none' }}
                 >
-                  <Image
-                    src={currentCharacter.image || "/placeholder.svg"}
-                    alt={currentCharacter.name}
-                    fill
-                    className="object-contain rounded-lg select-none"
-                    priority
-                    draggable={false}
-                    sizes="(max-width: 768px) 350px, 520px"
-                    style={{ userSelect: 'none' }}
-                  />
+                  <picture>
+                    <source srcSet={currentCharacter.image?.replace('/webp/', '/avif/').replace('.webp', '.avif') || "/placeholder.svg"} type="image/avif" />
+                    <Image
+                      src={currentCharacter.image || "/placeholder.svg"}
+                      alt={currentCharacter.name}
+                      fill
+                      className="object-contain rounded-lg select-none"
+                      priority
+                      draggable={false}
+                      sizes="(max-width: 768px) 350px, 520px"
+                      style={{ userSelect: 'none' }}
+                    />
+                  </picture>
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -413,15 +419,18 @@ export default function Characters({ characters, backgroundClasses }: Characters
                                 <div
                                   className={`w-full h-full transition-all duration-200 ease-[var(--ease-in-out-quad)] ${isSelected ? "scale-105" : "group-hover:scale-105"}`}
                                 >
-                                  <Image
-                                    src={character.thumbnail || "/placeholder.svg"}
-                                    alt={character.name}
-                                    fill
-                                    className="object-cover w-full h-full select-none scale-[1.75]"
-                                    draggable={false}
-                                    sizes="160px"
-                                    style={{ userSelect: 'none' }}
-                                  />
+                                  <picture>
+                                    <source srcSet={character.thumbnail?.replace('/webp/', '/avif/').replace('.webp', '.avif') || "/placeholder.svg"} type="image/avif" />
+                                    <Image
+                                      src={character.thumbnail || "/placeholder.svg"}
+                                      alt={character.name}
+                                      fill
+                                      className="object-cover w-full h-full select-none scale-[1.75]"
+                                      draggable={false}
+                                      sizes="160px"
+                                      style={{ userSelect: 'none' }}
+                                    />
+                                  </picture>
                                   <div
                                     className={`absolute inset-0 transition-colors duration-200 ease-[var(--ease-in-out-quad)] ${isSelected ? "bg-gradient-to-t from-black/30 to-black/0" : "bg-gradient-to-t from-black/70 to-black/10 group-hover:from-black/30 group-hover:to-black/0"}`}
                                   />
@@ -499,15 +508,18 @@ export default function Characters({ characters, backgroundClasses }: Characters
                                 <div
                                   className={`w-full transition-all duration-200 ease-[var(--ease-in-out-quad)] h-[140px]`}
                                 >
-                                  <Image
-                                    src={character.thumbnail || "/placeholder.svg"}
-                                    alt={character.name}
-                                    fill
-                                    className="object-cover w-full h-full select-none scale-[1.75]"
-                                    draggable={false}
-                                    sizes="112px"
-                                    style={{ userSelect: 'none' }}
-                                  />
+                                  <picture>
+                                    <source srcSet={character.thumbnail?.replace('/webp/', '/avif/').replace('.webp', '.avif') || "/placeholder.svg"} type="image/avif" />
+                                    <Image
+                                      src={character.thumbnail || "/placeholder.svg"}
+                                      alt={character.name}
+                                      fill
+                                      className="object-cover w-full h-full select-none scale-[1.75]"
+                                      draggable={false}
+                                      sizes="112px"
+                                      style={{ userSelect: 'none' }}
+                                    />
+                                  </picture>
                                   <div
                                     className={`absolute inset-0 transition-colors duration-200 ease-[var(--ease-in-out-quad)] ${isSelected ? "bg-gradient-to-t from-black/30 to-black/0" : "bg-gradient-to-t from-black/70 to-black/10 group-hover:from-black/30 group-hover:to-black/0"}`}
                                   />

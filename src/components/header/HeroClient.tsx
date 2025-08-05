@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from 'react'
 import Play from "@/components/ui/icons/Play"
 import Image from "next/image"
+import thumbAvif from '@/assets/avif/thumb.avif'
+import thumbWebp from '@/assets/webp/thumb.webp'
 
 interface HeroClientProps {
   onPlay?: () => void
@@ -83,13 +85,19 @@ export default function HeroClient({ onPlay }: HeroClientProps) {
               >
                 {!playing ? (
                   <>
-                    <Image
-                      src="/webp/thumb.webp"
-                      alt="Video thumbnail"
-                      className="w-full h-full object-cover"
-                      fill
-                      draggable={false}
-                    />
+                    <picture>
+                      <source srcSet={thumbAvif.src} type="image/avif" />
+                      <Image
+                        src={thumbWebp}
+                        alt="Video thumbnail"
+                        className="w-full h-full object-cover"
+                        fill
+                        draggable={false}
+                        priority
+                        placeholder="blur"
+                        quality={90}
+                      />
+                    </picture>
                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-28 h-28">
                       <Play className="w-full h-full" />
                     </div>
