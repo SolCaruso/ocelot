@@ -8,6 +8,7 @@ import Usor from "@/components/pages/labyrinths/Usior";
 
 const heroConfig = {
   videoSrc: "/video/lab-hero.webm",
+  posterSrc: "/assets/webp/lab-hero-thumb.webp",
   logo: {
     src: "/video/lab.webm",
     mobileSrc: "/webp/lab.webp",

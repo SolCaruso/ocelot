@@ -11,6 +11,7 @@ const backgroundClasses = "min-h-[280px] sm:min-h-[350px] flex flex-col";
 
 const heroConfig = {
   videoSrc: "/video/vw-hero.webm",
+  posterSrc: "/assets/webp/hero-thumb.webp",
   logo: {
     src: "/webp/vw.webp",
     alt: "Vanished Worlds Logo",

@@ -1,7 +1,4 @@
-"use client"
-
 import type React from "react"
-import { useState, useEffect, useRef } from "react"
 import clsx from "clsx"
 import Steam from "@/components/logos/partners/Steam"
 import Solana from "@/components/logos/partners/Solana"
@@ -11,8 +8,10 @@ import SolanaMobile from "@/components/logos/partners-mobile/Solana"
 import OcelotMobile from "@/components/logos/partners-mobile/Ocelot"
 import Image from "next/image"
 import Divider from "@/components/ui/divider"
-import Play from "@/components/ui/icons/Play"
 import SmokeLogo from "@/components/ui/smoke-logo"
+import HeroClient from "./HeroClient"
+import HeroVideo from "./HeroVideo"
+import HeroVideoLab from "./HeroVideoLab"
 import "./SmokeFX.css"
 
 interface HeroProps {
@@ -24,6 +23,7 @@ interface HeroProps {
   /** Hero configuration object */
   config: {
     videoSrc: string
+    posterSrc?: string
     logo: {
       src: string
       mobileSrc?: string
@@ -58,71 +58,7 @@ interface HeroProps {
   }
 }
 
-declare global {
-  interface Window {
-    onYouTubeIframeAPIReady: () => void
-  }
-}
-
 const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
-  const [playing, setPlaying] = useState(false)
-  const playerRef = useRef<YT.Player | null>(null)
-
-  useEffect(() => {
-    const tag = document.createElement("script")
-    tag.src = "https://www.youtube.com/iframe_api"
-    document.body.appendChild(tag)
-
-    window.onYouTubeIframeAPIReady = () => {
-      playerRef.current = new window.YT.Player("yt-player", {
-        videoId: "feH6zZBT1g8",
-        playerVars: {
-          rel: 0,
-          modestbranding: 1,
-          controls: 0,
-          disablekb: 1,
-        },
-        events: {
-          onReady: (e: { target: YT.Player }) => {
-            if (playing) {
-              e.target.playVideo()
-            }
-          },
-        },
-      })
-    }
-  }, [playing])
-
-  useEffect(() => {
-    if (playing && playerRef.current?.playVideo) {
-      playerRef.current.playVideo()
-    }
-  }, [playing])
-
-  // Smoke effect for FANTASY TACTICS text
-  useEffect(() => {
-    const smokeElement = document.getElementById('fantasy-tactics-smoke')
-    if (smokeElement) {
-      // Trigger smoke effect when element comes into view
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('active')
-            observer.unobserve(entry.target)
-          }
-        })
-      }, { threshold: 0.5 })
-      
-      observer.observe(smokeElement)
-    }
-  }, [])
-
-  const handlePlay = () => {
-    setPlaying(true)
-    if (playerRef.current && playerRef.current.playVideo) {
-      playerRef.current.playVideo()
-    }
-  }
 
   return (
     <div className="w-full relative bg-[url('/webp/smoke.webp')] bg-cover bg-center bg-fixed">
@@ -132,14 +68,17 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
         style={height ? { height } : undefined}
       >
         <div className="[mask-image:radial-gradient(circle_at_center,_white_40%,_transparent_85%)] [mask-repeat:no-repeat] [mask-position:center] relative w-full h-full">
-          <video
-            src={config.videoSrc}
-            className="w-full h-full object-cover z-0 scale-x-[-1]"
-            autoPlay
-            loop
-            muted
-            playsInline
-          />
+          {config.videoSrc.includes('lab-hero') ? (
+            <HeroVideoLab 
+              videoSrc={config.videoSrc}
+              posterSrc={config.posterSrc}
+            />
+          ) : (
+            <HeroVideo 
+              videoSrc={config.videoSrc}
+              posterSrc={config.posterSrc}
+            />
+          )}
 
           {/* Masks/Shaders */}
           <div className={`absolute inset-0 z-10 ${config.shadows.topGradient} pointer-events-none hidden md:block`} />
@@ -158,31 +97,37 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
             <div className={`mx-auto md:mb-2 ${config.logo.widthClasses} select-none relative flex flex-col items-center`}>
               {/* Video logo */}
               <video
-                src={config.logo.src}
                 className="w-full h-auto animate-glitch-main"
                 autoPlay
                 muted
                 playsInline
                 draggable={false}
-              />
+              >
+                <source src={config.logo.src} type="video/webm" />
+                <source src={config.logo.src.replace('.webm', '.mp4')} type="video/mp4" />
+              </video>
               {/* Blue glitch layer */}
               <video
-                src={config.logo.src}
                 className="w-full h-auto absolute top-0 left-0 animate-glitch-blue"
                 autoPlay
                 muted
                 playsInline
                 draggable={false}
-              />
+              >
+                <source src={config.logo.src} type="video/webm" />
+                <source src={config.logo.src.replace('.webm', '.mp4')} type="video/mp4" />
+              </video>
               {/* Green glitch layer */}
               <video
-                src={config.logo.src}
                 className="w-full h-auto absolute top-0 left-0 animate-glitch-green"
                 autoPlay
                 muted
                 playsInline
                 draggable={false}
-              />
+              >
+                <source src={config.logo.src} type="video/webm" />
+                <source src={config.logo.src.replace('.webm', '.mp4')} type="video/mp4" />
+              </video>
             </div>
           ) : config.logo.src.includes('lab.webp') ? (
             <div className={`mx-auto md:mb-2 ${config.logo.widthClasses} select-none relative`}>
@@ -397,87 +342,8 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
             <div className="w-full h-px bg-[#232325]" />
           </div>
 
-          {/* Video and text block - moved outside mask */}
-          <div className="absolute inset-0 pointer-events-none z-50">
-            <div className="relative h-full flex items-end">
-              <div className="w-full sm:max-w-7xl mx-auto px-6 pb-24 pointer-events-auto">
-                <div className="flex flex-col-reverse lg:flex-row items-center justify-between gap-16">
-                  {/* Video placeholder */}
-                  <div
-                    className="aspect-[16/9] w-full max-w-[440px] sm:max-w-[540px] md:max-w-[640px] h-auto bg-gs-bg relative filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] border-[1.5px] border-[#282828] md:opacity-80 hover:opacity-100 transition-opacity duration-200 ease-[var(--ease-in-out-quad)] cursor-pointer"
-                    onClick={handlePlay}
-                  >
-                    {!playing ? (
-                      <>
-                        <Image
-                          src="/webp/thumb.webp"
-                          alt="Video thumbnail"
-                          className="w-full h-full object-cover"
-                          width={640}
-                          height={360}
-                          draggable={false}
-                        />
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-28 h-28">
-                          <Play className="w-full h-full" />
-                        </div>
-                      </>
-                    ) : (
-                      <iframe
-                        id="yt-player"
-                        className="w-full h-full"
-                        src="https://www.youtube-nocookie.com/embed/feH6zZBT1g8?enablejsapi=1&autoplay=1"
-                        title="YouTube video player"
-                        frameBorder="0"
-                        allow="autoplay; encrypted-media"
-                        allowFullScreen
-                      />
-                    )}
-                  </div>
-
-                  {/* Text block */}
-                  <div className="md:ml-8 flex-1 text-center lg:text-left max-w-xl min-w-[20rem]">
-                    {config.logo.src.includes('vw.webp') ? (
-                      <>
-                        {/* Simple text for screens under xl */}
-                        <h3 
-                          className="xl:hidden text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4 tracking-[0.02em] text-transparent bg-clip-text"
-                          style={{ backgroundImage: "linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)" }}
-                        >
-                          FANTASY TACTICS
-                        </h3>
-                        {/* Smoke effect for xl+ screens */}
-                        <h3
-                          className="max-xl:hidden smoke text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4 tracking-[0.02em]"
-                          id="fantasy-tactics-smoke"
-                        >
-                          <div>
-                            <span>F</span><span>A</span><span>N</span><span>T</span><span>A</span><span>S</span><span>Y</span><span>&nbsp;</span><span>T</span><span>A</span><span>C</span><span>T</span><span>I</span><span>C</span><span>S</span>
-                          </div>
-                        </h3>
-                      </>
-                    ) : (
-                      // Gradient version for other pages (responsive)
-                      <h3
-                        className="text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4 tracking-[0.04em] 
-                        whitespace-nowrap xl:bg-clip-text xl:text-transparent"
-                        style={{ backgroundImage: "linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)" }}
-                      >
-                        FANTASY TACTICS
-                      </h3>
-                    )}
-                    <p className="mt-4 text-stone-50 md:text-xl font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] ">
-                      Tactical, isometric turn-based combat draws inspiration from the classic RPGs of old, offering both
-                      depth and strategy.
-                    </p>
-                    <p className="mt-4 md:text-xl text-stone-50 font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)]">
-                      As you recruit and assemble a diverse party, each member&apos;s unique abilities become crucial to your
-                      success on the battlefield.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Client component for interactive elements */}
+          <HeroClient />
 
           {/* Divider - for pages with trailer */}
           <div className="relative z-40">
