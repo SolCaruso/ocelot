@@ -145,19 +145,19 @@ const characters: Character[] = [
     {
       id: 7,
       name: "THAL",
-      title: "Blade of Twilight",
+      title: "Blood God",
       backstory:
-        "Born between light and darkness, Thal walks the twilight path. With mastery over shadow and steel, Thal’s dual nature lends unparalleled flexibility in combat and espionage. Allies trust Thal’s blade, though few fully understand their intentions or loyalties.",
-      class: "Shadowblade",
-      race: "Half-Elf",
-      skills: ["Twilight Strike", "Cloak of Shadows"],
-      languages: ["Common", "Elvish"],
-      background: "Outlander",
-      image: "/webp/thal.webp",
+        "An ancient deity of blood and sacrifice, Thal demands tribute in crimson currency. With dominion over life and death, this blood god wields the power to drain vitality from enemies and channel it into devastating blood magic. Those who oppose Thal find their life force slowly siphoned away.",
+      class: "Necromancer",
+      race: "Blood Elf",
+      skills: ["Blood Drain", "Crimson Pact", "Life Siphon"],
+      languages: ["Ancient Blood Tongue"],
+      background: "Deity",
+      image: "/webp/thal3.webp",
       backgroundImage: "/webp/bg-thal.webp",
-      thumbnail: "/webp/thal-thumb.webp",
-      classIcon: "Moon",
-      raceIcon: "Leaf"
+      thumbnail: "/webp/thal-thumb3.webp",
+      classIcon: "Skull",
+      raceIcon: "Droplet"
     },
     {
       id: 8,
@@ -176,23 +176,6 @@ const characters: Character[] = [
       classIcon: "Zap",
       raceIcon: "Clock"
     },
-    // {
-    //   id: 9,
-    //   name: "USOR",
-    //   title: "Whimsical Auctioneer",
-    //   backstory:
-    //     "Eccentric and charismatic, Usor commands attention wherever he goes, hosting legendary auctions of rare artifacts and mystical curiosities. His silver tongue can charm the toughest crowd, but behind the whimsy lies a sharp mind, always bartering for secrets as valuable as his merchandise.",
-    //   class: "Bard",
-    //   race: "Halfling",
-    //   skills: ["Charm", "Bargain", "Appraisal"],
-    //   languages: ["Common", "Halfling", "Dwarvish"],
-    //   background: "Merchant",
-    //   image: "/webp/usor.webp",
-    //   backgroundImage: "/webp/bg-usor.webp",
-    //   thumbnail: "/webp/usor-thumb.webp",
-    //   classIcon: "Coins", 
-    //   raceIcon: "Flower2"
-    // },
     {
       id: 9,
       name: "UNDINE",
