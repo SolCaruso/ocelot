@@ -94,8 +94,6 @@ const Trailer: React.FC = () => {
                         <li><Link href='/vw' rel="noopener noreferrer" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Vanished Worlds</Link></li>
                         <li><a href="https://world.guildsaga.com/" target="_blank" rel="noopener noreferrer" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">World Mode</a></li>
                         <li><Link href='/updates' className="text-stone-50  hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Updates</Link></li>
-                        <li><a href="https://docs.guildsaga.com/" target="_blank" rel="noopener noreferrer" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 ">Docs</a></li>
-                        <li><a href="https://db.guildsaga.com/items" target="_blank" rel="noopener noreferrer" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Database</a></li>
                         <li><Link href="/" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Contact</Link></li>
                     </ul>
                     {/* <div className='mb-12 lg:mb-0 '>

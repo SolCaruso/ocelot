@@ -2,6 +2,7 @@ import Hero from "@/components/header/Hero";
 import { SmokeContainer } from "@/components/sections/SmokeContainer";
 import { Container } from "@/components/ui/container";
 import Screenshots from "@/components/sections/Screenshots";
+import Faq from "@/components/pages/labyrinths/Faq";
 
 const heroConfig = {
   videoSrc: "/video/lab-hero.webm",
@@ -52,6 +53,7 @@ export default function Home() {
     <SmokeContainer>
       <Hero className='h-[600px] md:h-[800px] lg:h-[900px]' config={heroConfig}/>
       <Container>
+        <Faq />
         <Screenshots images={labScreenshots} />
       </Container>
     </SmokeContainer>
