@@ -67,7 +67,7 @@ export default function Usor() {
               </h1>
               <div className="w-32 md:w-[200px] h-px bg-gradient-to-r from-[#fbcea0] to-transparent mb-6 mt-6" />
               <p className="text-white text-shadow-sm font-medium text-lg md:text-xl font-quattrocento leading-relaxed filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.9)]">
-                Descend into the shadowed depths of Usior's forgotten archives in this reimagined tactical RPG. Each procedurally-generated chamber tests your strategic wit: vanquish foes, gather relics and decide—bank your loot as Solana SFTs or press onward into ever-greater peril. Recruit bronze-ranked adventurers or unleash your collected heroes, master turn-based combat and experience lightning-fast blockchain integration—where every risk carries the promise of reward.
+                Descend into the shadowed depths of Usior&apos;s forgotten archives in this reimagined tactical RPG. Each procedurally-generated chamber tests your strategic wit: vanquish foes, gather relics and decide—bank your loot as Solana SFTs or press onward into ever-greater peril. Recruit bronze-ranked adventurers or unleash your collected heroes, master turn-based combat and experience lightning-fast blockchain integration—where every risk carries the promise of reward.
               </p>
             </div>
           </div>
