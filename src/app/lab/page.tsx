@@ -3,6 +3,7 @@ import { SmokeContainer } from "@/components/sections/SmokeContainer";
 import { Container } from "@/components/ui/container";
 import Screenshots from "@/components/sections/Screenshots";
 import Faq from "@/components/pages/labyrinths/Faq";
+import FaqDivider from "@/components/pages/labyrinths/FaqDivider";
 
 const heroConfig = {
   videoSrc: "/video/lab-hero.webm",
@@ -52,8 +53,10 @@ export default function Home() {
   return (
     <SmokeContainer>
       <Hero className='h-[600px] md:h-[800px] lg:h-[900px]' config={heroConfig}/>
-      <Container>
+      <Container> 
+        <FaqDivider className="mt-40"/>
         <Faq />
+        <FaqDivider className="mt-10 lg:hidden"/>
         <Screenshots images={labScreenshots} />
       </Container>
     </SmokeContainer>
