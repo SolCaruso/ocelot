@@ -38,7 +38,7 @@ const characters: Character[] = [
     {
       id: 1,
       name: "ZILLFRED",
-      title: "General",
+      title: "General", 
       backstory:
         "House Mazan general and Commander of the Respite Island Mazan detachment. Father of Persephone, this seasoned military leader commands with unyielding resolve and deep ties to the noble House Mazan. A master tactician who leads with honor.",
       class: "Warrior",
