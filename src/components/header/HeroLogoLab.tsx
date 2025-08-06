@@ -19,7 +19,6 @@ export default function HeroLogoLab({ widthClasses }: HeroLogoLabProps) {
         muted
         playsInline
         draggable={false}
-        loop
       >
         <source src="/video/lab.webm" type="video/webm" />
         <source src="/video/lab.mp4" type="video/mp4" />
@@ -31,7 +30,6 @@ export default function HeroLogoLab({ widthClasses }: HeroLogoLabProps) {
         muted
         playsInline
         draggable={false}
-        loop
       >
         <source src="/video/lab.webm" type="video/webm" />
         <source src="/video/lab.mp4" type="video/mp4" />
@@ -43,7 +41,6 @@ export default function HeroLogoLab({ widthClasses }: HeroLogoLabProps) {
         muted
         playsInline
         draggable={false}
-        loop
       >
         <source src="/video/lab.webm" type="video/webm" />
         <source src="/video/lab.mp4" type="video/mp4" />
