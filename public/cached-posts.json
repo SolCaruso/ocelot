@@ -6,7 +6,7 @@
       "title": "Looking Ahead: Roadmap for Future Updates",
       "summary": "A glimpse into the upcoming features and content planned.",
       "body": "Exciting developments are on the horizon, and try not to trip about that neitha, ya dig? We been bippin on it for a whole while now.\n\n# New Regions\n\n- Explore uncharted territories.\n- Dive deeper into the lore.\n- Improved systems and mechanics based on player feedback.\n\n## Enhanced Features\n\n- Explore uncharted territories.\n- Dive deeper into the lore.\n- Improved systems and mechanics based on player feedback.\n\n![Screenshot](https://ejktdpjnbhbgmavwltvb.supabase.co/storage/v1/object/public/blog-images//screenshot.webp)\n\nStay tuned for more adventures and enhancements in the world of *Guild Saga*.\n\nhttps://youtu.be/7FAwDzveszI",
-      "image": "/jpg/post.jpg"
+      "image": "https://ejktdpjnbhbgmavwltvb.supabase.co/storage/v1/object/public/blog-images/screenshot.webp"
     },
     {
       "id": 19,
@@ -14,7 +14,7 @@
       "title": "Witch’s Hut: Potion Crafting and Alchemy",
       "summary": "Master the art of brewing powerful potions.",
       "body": "Visit the **Witch's Hut** for these recipes:\n\n- **Health Potion**: Red herb + water.\n- **Mana Elixir**: Blue crystal + distilled essence.\n- **Stamina Draught**: Root blend + minor enchantment.\n\nBrewing is an art—experiment to find new effects.",
-      "image": "/jpg/post1.jpg"
+      "image": "/avif/post1.avif"
     },
     {
       "id": 18,
@@ -22,7 +22,7 @@
       "title": "Blacksmith’s Corner: Weapon Upgrade Tips",
       "summary": "How to get the most out of upgrades.",
       "body": "Use these tips at the **Blacksmith**:\n\n- **Salvage Materials**: Recycle unwanted gear for components.\n- **Upgrade Order**: Reinforce blade before hilt for best durability.\n- **Enhancement Runes**: Apply to add elemental damage.\n\nUpgrade smarter, fight stronger!",
-      "image": "/jpg/post2.jpg"
+      "image": "/avif/post2.avif"
     },
     {
       "id": 17,
@@ -30,7 +30,7 @@
       "title": "Player’s Keep Tour: Housing Your Heroes",
       "summary": "A walkthrough of customizing your Player’s Keep.",
       "body": "Your **Player's Keep** is more than storage:\n\n1. **Furniture**: Place trophies and banners.\n2. **Workshops**: Build a **Blacksmith** or **Alchemy Lab**.\n3. **Defense**: Add traps and guards to protect your assets.\n\nShow off your achievements in style.",
-      "image": "/jpg/post3.jpg"
+      "image": "/avif/post3.avif"
     },
     {
       "id": 16,
@@ -38,7 +38,7 @@
       "title": "Event Recap: Catacombs Raid Success",
       "summary": "Highlights from our latest community raid.",
       "body": "Last weekend's **Catacombs Raid** was a triumph:\n\n- **Participants**: Over 200 players joined.\n- **Boss Defeated**: The Undead King fell in under 15 minutes.\n- **Rewards**: Exclusive titles and loot drops for top contributors.\n\nThanks to everyone who took part!",
-      "image": "/jpg/post.jpg"
+      "image": "/avif/post.avif"
     },
     {
       "id": 15,
@@ -46,7 +46,7 @@
       "title": "World Mode Preview: The Heroes Guild",
       "summary": "Get ready for the upcoming World Mode features.",
       "body": "World Mode introduces:\n\n- **Open World**: Explore beyond the main campaign.\n- **Player Housing**: Customize your **Player's Keep**.\n- **Community Projects**: Collaborate on world events and builds.\n\nStay tuned for launch details!",
-      "image": "/jpg/post1.jpg"
+      "image": "/avif/post1.avif"
     },
     {
       "id": 14,
@@ -54,7 +54,7 @@
       "title": "Tokenomics: Understanding $GGLD and $GGEM",
       "summary": "A deep dive into in-game currencies.",
       "body": "Guild Saga uses two main tokens:\n\n- **$GGLD**: Earned through gameplay; used for basics like repairs.\n- **$GGEM**: Premium currency; used for cosmetic items and special quests.\n- **Exchange Rates**: 1 $GGEM = 100 $GGLD on the open market.\n\nManage your wallet to maximize your adventure.",
-      "image": "/jpg/post2.jpg"
+      "image": "/avif/post2.avif"
     },
     {
       "id": 13,
@@ -62,7 +62,7 @@
       "title": "Loot Drop Tables Demystified",
       "summary": "Understanding how loot is distributed.",
       "body": "Loot falls into three categories:\n\n1. **Common**: High drop rate, basic gear.\n2. **Uncommon**: Moderate drop rate, improved stats.\n3. **Rare/Epic**: Low drop rate, powerful effects.\n\nCheck *Loot Drop Tables* in the docs to plan your hunts.",
-      "image": "/jpg/post3.jpg"
+      "image": "/avif/post3.avif"
     },
     {
       "id": 12,
@@ -70,7 +70,7 @@
       "title": "Mercenary Guide: Class and Level Overview",
       "summary": "Learn how to hire and level mercenaries.",
       "body": "Mercenaries offer flexible support:\n\n- **Classes**: Swordsman, Archer, Mage, Healer.\n- **Level Cap**: Your account level determines max mercenary rank.\n- **Hiring Costs**: Pay 50 $GGLD per rank increase.\n\nRecruit mercenaries to adapt to any challenge.",
-      "image": "/jpg/post.jpg"
+      "image": "/avif/post.avif"
     },
     {
       "id": 11,
@@ -78,7 +78,7 @@
       "title": "NFT Heroes: Art and Attributes Explained",
       "summary": "Breakdown of hero rarity and stat bonuses.",
       "body": "Your NFT heroes come with unique perks:\n\n- **Rarity Tiers**: Common, Rare, Epic, Legendary.\n- **Attributes**: Each hero has strength, agility, intelligence.\n- **Art Styles**: Hand-drawn pixel sprites with exclusive skins for top-tier.\n\nDiscover your next champion today.",
-      "image": "/jpg/post1.jpg"
+      "image": "/avif/post1.avif"
     },
     {
       "id": 10,
@@ -86,7 +86,7 @@
       "title": "Lore Chronicles: The Battle of Silverpeak",
       "summary": "Dive into the history of the Silverpeak conflict.",
       "body": "> The armies clashed beneath moonlit skies, steel meeting steel in a symphony of war.\n\nKey events:\n- **King Aldric's Fall**: Betrayed by his closest advisor.\n- **The Mage's Sacrifice**: A last-ditch spell that turned the tide.\n- **Aftermath**: Rebuilding efforts that shaped the modern guild system.\n\nExplore this epic chapter in *Guild Saga* lore.",
-      "image": "/jpg/post2.jpg"
+      "image": "/avif/post2.avif"
     },
     {
       "id": 9,
@@ -94,7 +94,7 @@
       "title": "Level Up Fast: Stats and Progression",
       "summary": "Optimize your leveling path for rapid growth.",
       "body": "Speed through early levels with these strategies:\n\n1. **Quest Stacking**: Accept multiple quests in the same area.\n2. **Experience Boosts**: Consume **Arcane Scrolls** for +20% XP for 30 minutes.\n3. **Profession Attributes**: Focus on your chosen class tree first.\n\nFollow this guide to achieve max level efficiently.",
-      "image": "/jpg/post3.jpg"
+      "image": "/avif/post3.avif"
     },
     {
       "id": 8,
@@ -102,7 +102,7 @@
       "title": "Dialogue Deep Dive: Storytelling Tips",
       "summary": "How to write engaging NPC conversations.",
       "body": "Great dialogue can transform your world:\n\n- **Branching Choices**: Offer meaningful options that impact outcomes.\n- **Personality**: Use distinct voices—formal knights vs. streetwise rogues.\n- **Pacing**: Keep exchanges concise but flavorful.\n\nUse these techniques to craft memorable interactions in *Guild Saga*.",
-      "image": "/jpg/post.jpg"
+      "image": "/avif/post.avif"
     },
     {
       "id": 7,
@@ -110,7 +110,7 @@
       "title": "Tool Time: Crafting Essentials in Guild Saga",
       "summary": "All you need to know about crafting tools and materials.",
       "body": "Crafting is key to survival—here's what you need:\n\n- **Blacksmith Hammer**: Required for forging weapons.\n- **Alchemy Kit**: Mix potions and elixirs in the **Witch's Hut**.\n- **Enchanting Scrolls**: Enhance gear with elemental effects.\n\nGather these tools to master the art of creation.",
-      "image": "/jpg/post1.jpg"
+      "image": "/avif/post1.avif"
     },
     {
       "id": 6,
@@ -118,7 +118,7 @@
       "title": "Guilds 101: Finding Your Tribe",
       "summary": "Discover how to join and create guilds.",
       "body": "Guilds provide collaboration and bonuses:\n\n- **Joining**: Browse public guilds in the **Guild Hall** or request an invite.\n- **Creating**: Pay 100 $GGEM and recruit at least 3 members.\n- **Perks**: Guild quests grant exclusive gear and shared treasury.\n\nJoin a guild today and grow together in *Guild Saga*.",
-      "image": "/jpg/post2.jpg"
+      "image": "/avif/post2.avif"
     },
     {
       "id": 5,
@@ -126,7 +126,7 @@
       "title": "Keep Building: Strategies for Fortification",
       "summary": "Tips to design an impenetrable keep.",
       "body": "Your keep is your sanctuary—here's how to reinforce it:\n\n- **Stone Walls**: Upgrade from wood to withstand siege weapons.\n- **Watchtowers**: Place at corners for long-range archer support.\n- **Moat**: Surround with water to slow down invaders.\n\nImplement these defenses to keep your *Guild Saga* stronghold safe.",
-      "image": "/jpg/post3.jpg"
+      "image": "/avif/post3.avif"
     },
     {
       "id": 4,
@@ -134,7 +134,7 @@
       "title": "Mastering Skills: A Beginner's Guide",
       "summary": "Learn how to build and evolve your character's skill tree.",
       "body": "New players often ask how to allocate skill points efficiently:\n\n1. **Balance Offense & Defense**: Invest in both *Strike* and *Guard* early.\n2. **Specialization**: Focus on one branch—Magic or Melee—to unlock ultimate abilities.\n3. **Respec Option**: Visit the **Guild Hall** NPC to reassign points for 500 $GGLD.\n\nFollow these tips to master your hero's potential.",
-      "image": "/jpg/post.jpg"
+      "image": "/avif/post.avif"
     },
     {
       "id": 3,
@@ -142,7 +142,7 @@
       "title": "New Combat Mechanics Unveiled",
       "summary": "Get to know the latest improvements to turn-based combat.",
       "body": "Today we're rolling out two exciting combat updates:\n\n- **Flanking Bonus**: Units attacking from behind deal 15% extra damage.\n- **Stamina System**: Actions now consume stamina, requiring careful resource management.\n- **Terrain Effects**: High ground grants +10% defense, swamp tiles slow movement by 20%.\n\nSharpen your tactics and dominate the battlefield in *Guild Saga*.",
-      "image": "/jpg/post1.jpg"
+      "image": "/avif/post1.avif"
     },
     {
       "id": 2,
@@ -150,9 +150,9 @@
       "title": "Community Spotlight: Fan Art Showcase",
       "summary": "Explore the best fan-created artwork in our community.",
       "body": "Our community continues to impress with their artistic talents and innovations:\n\n- **Fan Art**: Stunning illustrations of characters and scenes.\n- **Mods**: Enhancements and custom content created by dedicated fans.\n- **Stories**: Original narratives expanding the game's universe.\n\nWe encourage all players to share their creations and contribute to the vibrant world of *Guild Saga*.",
-      "image": "/jpg/post2.jpg"
+      "image": "/avif/post2.avif"
     }
   ],
-  "lastUpdated": "2025-08-05T23:54:20.746Z",
+  "lastUpdated": "2025-08-07T20:25:44.550Z",
   "count": 19
 }

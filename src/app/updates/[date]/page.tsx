@@ -9,6 +9,9 @@ import post1Avif from "@/assets/avif/post1.avif"
 import post2Avif from "@/assets/avif/post2.avif"
 import post3Avif from "@/assets/avif/post3.avif"
 
+// Force dynamic rendering to prevent caching
+export const dynamic = 'force-dynamic'
+
 interface BlogPost {
   id: number
   date: string
@@ -125,6 +128,14 @@ export default async function Page({ params }: { params: { date: string } }) {
         image = FALLBACKS[0]
       }
     }
+
+    // Debug logging
+    console.log('Page passing to PostHero:', {
+      image,
+      title: post.title,
+      postImage: post.image,
+      postIndex: posts.findIndex((p: BlogPost) => p.date === date)
+    })
 
     return (
       <section className="relative mx-auto px-4 pb-64 bg-[url('/jpg/smoke.jpg')] bg-fixed bg-center bg-cover overflow-x-hidden">
