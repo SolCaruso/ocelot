@@ -7,12 +7,13 @@ export default function Divider() {
         alt="Divider"
         width={1780}
         height={65}
-        className="z-30 absolute -bottom-10 left-1/2 -translate-x-1/2 select-none w-[1300px] md:w-[1780px] max-w-none"
+        className="z-30 absolute -bottom-10 left-1/2 -translate-x-1/2 select-none max-w-none"
         draggable={false}
-        sizes="1780px"
+        sizes="(max-width: 768px) 1300px, 1780px"
         style={{
           maskImage: 'linear-gradient(to right, black 20%, transparent 100%)',
           WebkitMaskImage: 'linear-gradient(to right, black 90%, transparent 100%)',
+          width: 'clamp(1300px, 100vw, 1780px)',
           height: 'auto'
         }}
       />

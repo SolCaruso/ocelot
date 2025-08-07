@@ -238,6 +238,7 @@ export default function Nav() {
                   title={
                     <div className="flex items-center font-semibold opacity-80 group-hover:opacity-100 group-focus:opacity-100 group-active:opacity-100 transition-opacity">
                       <span>World Mode</span>
+                      <Solana className="ml-1 h-4 w-auto" />
                     </div>
                   }
                   className={cn(previewImage === '/gif/world.gif' && 'bg-accent/70')}

@@ -14,10 +14,15 @@ export function SafariImage({ avifSrc, webpSrc, alt, ...props }: SafariImageProp
   const { isSafari, safariSrc, modernSrc, fallbackSrc } = useSafariImage(avifSrc, webpSrc);
 
   // Remove placeholder="blur" if no blurDataURL is provided
-  const { placeholder, blurDataURL, ...otherProps } = props;
+  const { placeholder, blurDataURL, fill, sizes, ...otherProps } = props;
   const imageProps = placeholder === "blur" && !blurDataURL 
     ? { ...otherProps } 
     : { placeholder, blurDataURL, ...otherProps };
+
+  // Ensure sizes prop is provided when using fill
+  const finalProps = fill 
+    ? { ...imageProps, fill, sizes: sizes || "100vw" }
+    : { ...imageProps, fill, sizes };
 
   // For Safari, use WebP directly
   if (isSafari) {
@@ -26,7 +31,7 @@ export function SafariImage({ avifSrc, webpSrc, alt, ...props }: SafariImageProp
         src={safariSrc}
         alt={alt}
         quality={60}
-        {...imageProps}
+        {...finalProps}
       />
     );
   }
@@ -39,7 +44,7 @@ export function SafariImage({ avifSrc, webpSrc, alt, ...props }: SafariImageProp
         src={fallbackSrc}
         alt={alt}
         quality={60}
-        {...imageProps}
+        {...finalProps}
       />
     </picture>
   );

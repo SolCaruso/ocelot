@@ -29,7 +29,7 @@ export default function BlogImage({
   width = 800,
   height = 600,
   fill = false,
-  sizes = "(max-width: 1024px) 100vw, 33vw",
+  sizes,
   ...rest
 }: BlogImageProps & { sizes?: string }) {
   // If there's no src, render nothing
@@ -66,7 +66,7 @@ export default function BlogImage({
         webpSrc={_src}
         alt={alt}
         fill
-        sizes={sizes}
+        sizes={sizes || "100vw"}
         className={className}
         priority
         fetchPriority="high"
@@ -97,7 +97,7 @@ export default function BlogImage({
       webpSrc={webpSrc}
       alt={alt}
       fill
-      sizes={sizes || "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"}
+      sizes={sizes || "100vw"}
       className={className}
       priority
       fetchPriority="high"

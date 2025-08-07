@@ -417,7 +417,7 @@ export default function Characters({ characters, backgroundClasses }: Characters
                                 }}
                               >
                                 <div
-                                  className={`w-full h-full transition-all duration-200 ease-[var(--ease-in-out-quad)] ${isSelected ? "scale-105" : "group-hover:scale-105"}`}
+                                  className={`relative w-full h-full transition-all duration-200 ease-[var(--ease-in-out-quad)] ${isSelected ? "scale-105" : "group-hover:scale-105"}`}
                                 >
                                   <picture>
                                     <source srcSet={character.thumbnail?.replace('/webp/', '/avif/').replace('.webp', '.avif') || "/placeholder.svg"} type="image/avif" />
@@ -506,7 +506,7 @@ export default function Characters({ characters, backgroundClasses }: Characters
                                 }}
                               >
                                 <div
-                                  className={`w-full transition-all duration-200 ease-[var(--ease-in-out-quad)] h-[140px]`}
+                                  className={`relative w-full transition-all duration-200 ease-[var(--ease-in-out-quad)] h-[140px]`}
                                 >
                                   <picture>
                                     <source srcSet={character.thumbnail?.replace('/webp/', '/avif/').replace('.webp', '.avif') || "/placeholder.svg"} type="image/avif" />

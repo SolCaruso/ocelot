@@ -92,6 +92,7 @@ export default function HeroClient({ onPlay }: HeroClientProps) {
                         alt="Video thumbnail"
                         className="w-full h-full object-cover"
                         fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 540px, 640px"
                         draggable={false}
                         priority
                         fetchPriority="high"

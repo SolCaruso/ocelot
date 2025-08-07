@@ -107,7 +107,7 @@ export default function BlogPageClient({ allPosts }: { allPosts: BlogPost[] }) {
                   fill
                   className="object-cover w-full h-full select-none"
                   draggable={false}
-                  sizes="100vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1280px"
                 />
                 <div className="absolute inset-0 z-10 bg-gradient-to-l from-black/50 to-black/0 pointer-events-none" />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/0" />
@@ -224,7 +224,7 @@ export default function BlogPageClient({ allPosts }: { allPosts: BlogPost[] }) {
                         WebkitMaskRepeat: "no-repeat",
                       }}
                     >
-                      <div className="w-full h-full group-hover:scale-105 transition-all duration-200 ease-[var(--ease-in-out-quad)]">
+                      <div className="relative w-full h-full group-hover:scale-105 transition-all duration-200 ease-[var(--ease-in-out-quad)]">
                         <BlogImage
                           src={image}
                           alt={post.title ?? ""}

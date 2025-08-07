@@ -291,6 +291,7 @@ const Faq: React.FC = () => {
                   src="/webp/lab-screenshot7.webp"
                   alt="Support"
                   fill
+                  sizes="100vw"
                   className="object-cover scale-140"
                   style={{ 
                     width: "100%",

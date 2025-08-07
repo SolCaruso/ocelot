@@ -91,14 +91,14 @@ export default function BlogPreview() {
             }}
           >
             <div className="w-full h-full transition-opacity duration-200 ease-[var(--ease-in-out-quad)] opacity-100">
-              <BlogImage
-                src={hero.image ?? null}
-                alt={heroTitle}
-                fill
-                className="object-cover w-full h-full select-none"
-                draggable={false}
-                sizes="100vw"
-              />
+                              <BlogImage
+                  src={hero.image ?? null}
+                  alt={heroTitle}
+                  fill
+                  className="object-cover w-full h-full select-none"
+                  draggable={false}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1280px"
+                />
               <div className="absolute inset-0 z-10 bg-gradient-to-l xl:from-black/50 sm:from-black/80 from-black/90 to-black/0 pointer-events-none" />
               <div className="absolute inset-0 bg-gradient-to-b xl:from-black/30 sm:from-black/50 from-black/70 to-black/0" />
             </div>
@@ -200,7 +200,7 @@ export default function BlogPreview() {
                     WebkitMaskRepeat: "no-repeat",
                   }}
                 >
-                  <div className="w-full h-full group-hover:scale-105 transition-all duration-200 ease-[var(--ease-in-out-quad)]">
+                  <div className="relative w-full h-full group-hover:scale-105 transition-all duration-200 ease-[var(--ease-in-out-quad)]">
                     <BlogImage
                       src={image}
                       alt={post.title ?? ""}

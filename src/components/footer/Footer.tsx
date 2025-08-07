@@ -119,13 +119,12 @@ const Trailer: React.FC = () => {
                                 <p className="text-stone-400 text-center mt-10 lg:text-left text-sm font-semibold mb-1">
                                 © {new Date().getFullYear()} Ocelot Technologies
                                 </p>
-                                <p className='text-stone-400 text-sm font-semibold text-center lg:text-left lg:max-w-none max-w-lg'>All <a href="" className='underline rounded-sm text-stone-300 hover:text-white focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 transition-all duration-200 ease-[var(--ease-in-out-quad)]'>trademarks</a> referenced herein are the properties of their respective owners.</p>
+                                <p className='text-stone-400 text-sm font-semibold text-center lg:text-left lg:max-w-none max-w-lg'>All <Link href="/trademarks" className='underline rounded-sm text-stone-300 hover:text-white focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 transition-all duration-200 ease-[var(--ease-in-out-quad)]'>trademarks</Link> referenced herein are the properties of their respective owners.</p>
                             </div>
                             <div className='flex justify-center lg:justify-normal gap-1 mt-6 lg:mt-4 lg:text-sm text-xs font-bold transition-all duration-200 ease-[var(--ease-in-out-quad)]'>
-                                <a href="" className="text-stone-200 hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 ">Privacy</a>
-                                <a href="" className="text-stone-200 hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Terms</a>
-                                <a href="" className="text-stone-200 hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Cookie Policy</a>
-                                <a href="" className="text-stone-200 hidden lg:block hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Cookie Settings</a>
+                                <Link href="/privacy" className="text-stone-200 hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1 ">Privacy</Link>
+                                <Link href="/cookies" className="text-stone-200 hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Cookie Policy</Link>
+                                <Link href="/cookies?scrollTo=manage-cookies" className="text-stone-200 hidden lg:block hover:text-white hover:bg-white/5 p-2 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Cookie Settings</Link>
                             </div>
                         </div>
                     </div>

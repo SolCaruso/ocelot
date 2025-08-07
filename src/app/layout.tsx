@@ -4,6 +4,7 @@ import { montserrat, inter } from '@/fonts'
 import Nav from "@/components/nav/Nav"  
 import Footer from '@/components/footer/Footer';
 import { Toaster } from '@/components/ui/sonner'
+import { CookieConsent } from '@/components/ui/cookie-consent'
 
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
@@ -78,8 +79,8 @@ export default function RootLayout({
       `}
     >
       <head>
-        <link rel="preload" href="/video/vw-hero.webm" as="video" type="video/webm" />
-        <link rel="preload" href="/video/lab-hero.webm" as="video" type="video/webm" />
+        <link rel="preload" href="/video/vw-hero.webm" as="fetch" type="video/webm" crossOrigin="anonymous" />
+        <link rel="preload" href="/video/lab-hero.webm" as="fetch" type="video/webm" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="//ejktdpjnbhbgmavwltvb.supabase.co" />
       </head>
       <body className="antialiased bg-gs-bg h-screen font-sans">
@@ -90,6 +91,7 @@ export default function RootLayout({
           {children}
         </main>  
         <Toaster position="bottom-right" />
+        <CookieConsent />
         <Footer/>
       </body>
       <SpeedInsights />
