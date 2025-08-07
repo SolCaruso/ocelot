@@ -93,7 +93,7 @@ export default function CookiePolicyPage() {
 
             <h3 className="text-xl font-medium mb-3 mt-5 text-[#fbcea0] font-quattrocento">Browser Settings</h3>
             <p className="mb-4 leading-relaxed text-white">
-              Here's how to manage cookies in popular browsers:
+              Here&apos;s how to manage cookies in popular browsers:
             </p>
             
             <ul className="mb-12 space-y-2 list-disc list-inside custom-bullet-list">
