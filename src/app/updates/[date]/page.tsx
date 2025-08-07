@@ -4,6 +4,10 @@ import PostHero from "@/components/pages/updates/PostHero"
 import { ClientPost } from "@/components/pages/updates/ClientPost"
 import { readFileSync } from "fs"
 import { join } from "path"
+import postAvif from "@/assets/avif/post.avif"
+import post1Avif from "@/assets/avif/post1.avif"
+import post2Avif from "@/assets/avif/post2.avif"
+import post3Avif from "@/assets/avif/post3.avif"
 
 interface BlogPost {
   id: number
@@ -30,7 +34,7 @@ function formatDateUTC(dateString: string): string {
   }
 }
 
-const FALLBACKS = ["/avif/post.avif", "/avif/post1.avif", "/avif/post2.avif", "/avif/post3.avif"]
+const FALLBACKS = [postAvif.src, post1Avif.src, post2Avif.src, post3Avif.src]
 
 export async function generateMetadata({ params }: { params: { date: string } }): Promise<Metadata> {
   const { date } = params

@@ -5,6 +5,12 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import postAvif from '@/assets/avif/post.avif'
 import postWebp from '@/assets/webp/post.webp'
+import post1Avif from '@/assets/avif/post1.avif'
+import post1Webp from '@/assets/webp/post1.webp'
+import post2Avif from '@/assets/avif/post2.avif'
+import post2Webp from '@/assets/webp/post2.webp'
+import post3Avif from '@/assets/avif/post3.avif'
+import post3Webp from '@/assets/webp/post3.webp'
 
 interface PostHeroProps {
   post: {
@@ -22,7 +28,20 @@ export default function PostHero({ post }: PostHeroProps) {
     setLoaded(true)
   }, [])
 
-  const heroImage = post.image && post.image.trim() !== '' ? post.image : postWebp;
+  // Get the appropriate fallback based on the image path
+  const getFallbackImage = () => {
+    if (!post.image) return { avif: postAvif.src, webp: postWebp.src };
+    
+    // Check which fallback image is being used
+    if (post.image.includes('post1')) return { avif: post1Avif.src, webp: post1Webp.src };
+    if (post.image.includes('post2')) return { avif: post2Avif.src, webp: post2Webp.src };
+    if (post.image.includes('post3')) return { avif: post3Avif.src, webp: post3Webp.src };
+    
+    return { avif: postAvif.src, webp: postWebp.src };
+  };
+
+  const fallbackImages = getFallbackImage();
+  const heroImage = post.image || fallbackImages.webp;
 
   return (
     <article className="mb-12 max-w-7xl mx-auto relative h-[350px] md:h-[500px] overflow-hidden">
@@ -46,7 +65,7 @@ export default function PostHero({ post }: PostHeroProps) {
           }`}
         >
           <picture>
-            <source srcSet={postAvif.src} type="image/avif" />
+            <source srcSet={fallbackImages.avif} type="image/avif" />
             <Image
               src={heroImage}
               alt={post.title}
