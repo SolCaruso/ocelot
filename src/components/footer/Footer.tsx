@@ -91,10 +91,10 @@ const Trailer: React.FC = () => {
                 {/* Links */}
                 <div className='flex flex-col-reverse gap-4 lg:flex-row justify-between mt-12 lg:py-6 items-center mb-2'>
                     <ul className='w-full flex flex-wrap justify-center gap-x-1 gap-y-5 lg:gap-4 rounded-md uppercase font-bold transition-all duration-200 ease-[var(--ease-in-out-quad)] lg:w-auto lg:justify-start'>
-                        <li><Link href='/vw' rel="noopener noreferrer" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Vanished Worlds</Link></li>
+                        <li><Link href="/" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Vanished Worlds</Link></li>
+                        <li><Link href='/lab' className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Labyrinths</Link></li>
                         <li><a href="https://world.guildsaga.com/" target="_blank" rel="noopener noreferrer" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">World Mode</a></li>
                         <li><Link href='/updates' className="text-stone-50  hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Updates</Link></li>
-                        <li><Link href="/" className="text-stone-50 hover:bg-white/5 p-2.5 rounded-sm focus:bg-white/5 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:outline-1">Contact</Link></li>
                     </ul>
                     {/* <div className='mb-12 lg:mb-0 '>
                         <Language/>

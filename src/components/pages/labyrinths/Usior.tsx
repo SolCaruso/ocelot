@@ -70,13 +70,13 @@ export default function Usor() {
               {/* Description text with expand/collapse for mobile */}
               <div className="space-y-4">
                 <p className="text-white text-shadow-sm font-medium text-lg md:text-xl font-quattrocento leading-relaxed filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.9)]">
-                  Descend into the shadowed depths of Usior&apos;s forgotten archives in this reimagined tactical RPG. Each procedurally-generated chamber tests your strategic wit: vanquish foes, gather relics and decide—bank your loot as Solana SFTs or press onward into ever-greater peril.
+                  Descend into the shadowed depths of Usior&apos;s forgotten archives in this reimagined tactical RPG. Each procedurally-generated chamber tests your strategic wit: vanquish foes, gather relics and decide—convert your findings into blockchain assets or press onward into ever-greater peril.
                 </p>
                 
                 {/* Expanded content - hidden on md+ screens, collapsible on smaller screens */}
                 <div className={`md:block ${isExpanded ? 'block' : 'hidden'}`}>
                   <p className="text-white text-shadow-sm font-medium text-lg md:text-xl font-quattrocento leading-relaxed filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.9)]">
-                    Recruit bronze-ranked adventurers or unleash your collected heroes, master turn-based combat and experience lightning-fast blockchain integration—where every risk carries the promise of reward.
+                    Seamlessly integrating Solana blockchain technology into a compelling tactical RPG experience, you'll navigate through procedurally-generated chambers where each room presents new tactical challenges and opportunities for discovery. Whether you lead a company of bronze-ranked adventurers or your own collected heroes, every battle tests your strategic acumen in this unforgiving realm.
                   </p>
                 </div>
                 

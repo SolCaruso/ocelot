@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 })
   }
 
-  const FALLBACKS = ["/jpg/post.jpg", "/jpg/post1.jpg", "/jpg/post2.jpg", "/jpg/post3.jpg"]
+  const FALLBACKS = ["/avif/post.avif", "/avif/post1.avif", "/avif/post2.avif", "/avif/post3.avif"]
   const transformedPosts = (posts || []).map((post, idx) => ({
     id: post.id,
     date: post.date,

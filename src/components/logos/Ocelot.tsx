@@ -2,10 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 import OcelotFooter from './OcelotFooter';
+import { useSafari } from '@/hooks/useSafari';
 
 export default function Ocelot() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoFailed, setVideoFailed] = useState(false);
+  const isSafari = useSafari();
 
   useEffect(() => {
     const video = videoRef.current;
@@ -26,8 +28,9 @@ export default function Ocelot() {
     };
   }, []);
 
-  if (videoFailed) {
-    return <OcelotFooter className="w-full h-full" />;
+  // Use static logo for Safari or when video fails
+  if (isSafari || videoFailed) {
+    return <OcelotFooter className="w-4/5 h-full mx-auto" />;
   }
 
   return (
@@ -36,7 +39,7 @@ export default function Ocelot() {
       autoPlay
       muted
       playsInline
-      preload="auto"
+      preload="metadata"
       className="w-full h-full object-contain
           invert brightness-0 sepia
           hue-rotate-[55deg] saturate-[1250%] contrast-[20%]"

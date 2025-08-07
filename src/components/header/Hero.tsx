@@ -18,6 +18,7 @@ import "./SmokeFX.css"
 import leatherTextureAvif from '@/assets/avif/leather-texture.avif'
 import leatherTextureWebp from '@/assets/webp/leather-texture.webp'
 import smokeWebp from '@/assets/webp/smoke.webp'
+import { SafariBgWrapper } from "@/components/ui/safari-bg-wrapper"
 
 interface HeroProps {
   /** Tailwind classes for responsive sizing, e.g. "h-40 md:h-56 lg:h-72" */
@@ -64,10 +65,9 @@ interface HeroProps {
 }
 
 const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
-
   return (
-    <div 
-      className="w-full relative bg-cover bg-center bg-fixed"
+    <SafariBgWrapper 
+      className="w-full relative bg-cover bg-center"
       style={{
         backgroundImage: `url("${smokeWebp.src}")`,
       }}
@@ -303,7 +303,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
       )}
 
       {children}
-    </div>
+    </SafariBgWrapper>
   )
 }
 

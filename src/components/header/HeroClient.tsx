@@ -95,7 +95,7 @@ export default function HeroClient({ onPlay }: HeroClientProps) {
                         draggable={false}
                         priority
                         placeholder="blur"
-                        quality={90}
+                        quality={15}
                       />
                     </picture>
                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-28 h-28">

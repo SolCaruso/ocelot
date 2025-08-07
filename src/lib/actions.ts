@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabase"
 import { writeFileSync, readFileSync, existsSync } from 'fs'
 import { join } from 'path'
 
-const FALLBACKS = ["/jpg/post.jpg", "/jpg/post1.jpg", "/jpg/post2.jpg", "/jpg/post3.jpg"]
+const FALLBACKS = ["/avif/post.avif", "/avif/post1.avif", "/avif/post2.avif", "/avif/post3.avif"]
 
 export async function getPaginatedPosts(currentPage: number) {
   try {

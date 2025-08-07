@@ -1,7 +1,9 @@
 "use client"
 
-import { useRef } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import Image from 'next/image'
+import { SafariImage } from '@/components/ui/safari-image'
+import { useSafari } from '@/hooks/useSafari'
 
 interface HeroLogoLabProps {
   widthClasses: string
@@ -9,6 +11,41 @@ interface HeroLogoLabProps {
 
 export default function HeroLogoLab({ widthClasses }: HeroLogoLabProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const isSafari = useSafari()
+  const [videoFailed, setVideoFailed] = useState(false)
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    
+    const handleError = () => setVideoFailed(true);
+    const handleCanPlay = () => setVideoFailed(false);
+    
+    video.addEventListener('error', handleError);
+    video.addEventListener('canplay', handleCanPlay);
+    
+    return () => {
+      video.removeEventListener('error', handleError);
+      video.removeEventListener('canplay', handleCanPlay);
+    };
+  }, []);
+
+  // Use static logo for Safari, mobile, or when video fails
+  if (isSafari || videoFailed) {
+    return (
+      <div className={`mx-auto md:mb-2 ${widthClasses} select-none relative`}>
+        <SafariImage
+          avifSrc="/avif/lab.avif"
+          webpSrc="/webp/lab.webp"
+          alt="Lab Logo"
+          width={400}
+          height={200}
+          className="w-[86%] h-auto mx-auto mt-10"
+          priority
+        />
+      </div>
+    );
+  }
 
   return (
     <div className={`mx-auto md:mb-2 ${widthClasses} select-none relative`}>
@@ -33,9 +70,9 @@ export default function HeroLogoLab({ widthClasses }: HeroLogoLabProps) {
           muted
           playsInline
           draggable={false}
+          preload="metadata"
         >
           <source src="/video/lab.webm" type="video/webm" />
-          <source src="/video/lab.mp4" type="video/mp4" />
         </video>
         {/* Blue glitch layer */}
         <video
@@ -44,9 +81,9 @@ export default function HeroLogoLab({ widthClasses }: HeroLogoLabProps) {
           muted
           playsInline
           draggable={false}
+          preload="metadata"
         >
           <source src="/video/lab.webm" type="video/webm" />
-          <source src="/video/lab.mp4" type="video/mp4" />
         </video>
         {/* Green glitch layer */}
         <video
@@ -55,9 +92,9 @@ export default function HeroLogoLab({ widthClasses }: HeroLogoLabProps) {
           muted
           playsInline
           draggable={false}
+          preload="metadata"
         >
           <source src="/video/lab.webm" type="video/webm" />
-          <source src="/video/lab.mp4" type="video/mp4" />
         </video>
       </div>
     </div>

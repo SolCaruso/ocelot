@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import Image from 'next/image'
 import vwHeroThumb from '@/assets/webp/hero-thumb.webp'
+import { useSafari } from '@/hooks/useSafari'
 
 interface HeroVideoProps {
   videoSrc: string
@@ -12,6 +13,7 @@ interface HeroVideoProps {
 export default function HeroVideo({ videoSrc, posterSrc }: HeroVideoProps) {
   const [videoPlaying, setVideoPlaying] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const isSafari = useSafari()
 
   const handleVideoCanPlay = () => {
     // Video is ready to play
@@ -25,7 +27,23 @@ export default function HeroVideo({ videoSrc, posterSrc }: HeroVideoProps) {
     setVideoPlaying(false)
   }
 
-
+  // For Safari, just show the poster image
+  if (isSafari) {
+    return (
+      <div className="relative w-full h-full">
+        <Image
+          src={vwHeroThumb}
+          alt="Video poster"
+          fill
+          className="object-cover z-0"
+          priority
+          placeholder="blur"
+          quality={90}
+          sizes="100vw"
+        />
+      </div>
+    )
+  }
 
   return (
     <div className="relative w-full h-full">
@@ -61,7 +79,7 @@ export default function HeroVideo({ videoSrc, posterSrc }: HeroVideoProps) {
         loop
         muted
         playsInline
-        preload="auto"
+        preload="metadata"
         onCanPlay={handleVideoCanPlay}
         onPlay={handleVideoPlay}
         onPause={handleVideoPause}

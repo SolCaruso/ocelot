@@ -20,74 +20,44 @@ interface FaqItem {
 
 const faqData: FaqItem[] = [
   {
-    id: "what-is",
-    question: "WHAT IS GUILD SAGA: LABYRINTHS?",
-    answer: "Guild Saga: Labyrinths is a 2D tactical RPG where you command adventurers through ever-changing dungeon archives filled with strategic battles, risk-reward mechanics, and precious loot. You can play with standard heroes or use your NFT heroes for deeper progression."
+    id: "strategic-combat",
+    question: "STRATEGIC TURN-BASED COMBAT",
+    answer: "Experience tactical thinking and careful positioning in strategic turn-based combat that rewards thoughtful decision-making. Navigate through procedurally-generated chambers where each room presents new tactical challenges and opportunities for discovery."
   },
   {
-    id: "nft-required",
-    question: "DO I NEED AN NFT TO PLAY?",
-    answer: "No! You can play for free with a base roster of heroes. Owning a Guild Saga Heroes NFT or importing Solana SFT items enhances your experience, but they're not required."
+    id: "flexible-heroes",
+    question: "FLEXIBLE HERO SYSTEM",
+    answer: "Play with standard adventurers or bring in up to four heroes from your Guild Saga collection. Whether you lead a company of bronze-ranked adventurers or your own collected heroes, every battle tests your strategic acumen in this unforgiving realm."
   },
   {
-    id: "different",
-    question: "WHAT MAKES THIS GAME DIFFERENT FROM OTHER TACTICAL RPGS?",
-    answer: "The game reimagines classic tactical RPG mechanics with a modern design, featuring strategic battles, risk-reward mechanics, and precious loot in ever-changing dungeon archives."
+    id: "risk-reward",
+    question: "RISK-REWARD DECISIONS",
+    answer: "Convert your findings into blockchain assets or brave the deeper levels. Seamlessly integrating Solana blockchain technology into a compelling tactical RPG experience, where each decision carries weight and consequences."
   },
   {
-    id: "multiplayer",
-    question: "IS THE GAME MULTIPLAYER?",
-    answer: "Right now, Guild Saga: Labyrinths is a single-player experience, but future updates may introduce multiplayer or co-op elements."
+    id: "solana-integration",
+    question: "SOLANA INTEGRATION",
+    answer: "Lightning-fast transactions and seamless asset imports powered by Solana. The game is built on Solana, known for low fees and fast transactions, providing a smooth blockchain gaming experience."
   },
   {
-    id: "platforms",
-    question: "WHAT PLATFORMS IS THIS AVAILABLE ON?",
-    answer: "The game is launching on PC via the Epic Games Store. Future platform support depends on player interest."
+    id: "classic-mechanics",
+    question: "CLASSIC TACTICAL RPG MECHANICS",
+    answer: "Classic tactical RPG mechanics reimagined with modern design sensibilities. The game reimagines classic tactical RPG mechanics with a modern design, featuring strategic battles, risk-reward mechanics, and precious loot in ever-changing dungeon archives."
   },
   {
-    id: "blockchain",
-    question: "WHAT BLOCKCHAIN DOES THE GAME USE?",
-    answer: "The game is built on Solana, known for low fees and fast transactions."
+    id: "procedural-chambers",
+    question: "PROCEDURALLY-GENERATED CHAMBERS",
+    answer: "Navigate through procedurally-generated chambers in Usior's vast underground archive, where each room presents new tactical challenges and opportunities for discovery. Every expedition offers a unique experience."
   },
   {
-    id: "sft",
-    question: "WHAT IS AN SFT?",
-    answer: "SFT stands for Semi-Fungible Token, a blockchain asset that allows flexible item trading. In Guild Saga: Labyrinths, certain in-game items can be converted into SFTs and traded."
+    id: "blockchain-assets",
+    question: "BLOCKCHAIN ASSET INTEGRATION",
+    answer: "Certain in-game items can be converted into blockchain assets and traded on the Solana network. Experience seamless integration with the Solana blockchain for secure and efficient asset management."
   },
   {
-    id: "wallet",
-    question: "HOW DO I CONNECT MY WALLET?",
-    answer: "Players can connect a Solana-compatible wallet (like Phantom or Solflare) through the in-game interface."
-  },
-  {
-    id: "trade",
-    question: "CAN I TRADE OR SELL MY ITEMS AND HEROES?",
-    answer: "Yes, heroes and certain in-game items can be bought, sold, or traded on third-party Solana marketplaces. However, always be cautious and research platforms before making transactions."
-  },
-  {
-    id: "cryptocurrency",
-    question: "DO I NEED TO BUY CRYPTOCURRENCY TO PLAY?",
-    answer: "No! You can play 100% free without using cryptocurrency or NFTs. Blockchain features are optional."
-  },
-  {
-    id: "epic-games",
-    question: "IS EPIC GAMES RESPONSIBLE FOR BLOCKCHAIN TRANSACTIONS?",
-    answer: "No. All transactions, payments, and refunds are handled by the game publisher. Epic Games does not endorse or regulate cryptocurrency purchases."
-  },
-  {
-    id: "early-access",
-    question: "WHAT DOES EARLY ACCESS MEAN?",
-    answer: "The game is still in development, meaning content and mechanics may change over time. Players can join now to experience the game as it evolves."
-  },
-  {
-    id: "progress",
-    question: "WILL MY PROGRESS CARRY OVER AFTER EARLY ACCESS?",
-    answer: "We plan to maintain player progress as much as possible, but some resets may happen if needed for balance or new features."
-  },
-  {
-    id: "feedback",
-    question: "HOW CAN I REPORT BUGS OR GIVE FEEDBACK?",
-    answer: "Join our official Discord server to share feedback, report bugs, and stay up to date with development updates."
+    id: "modern-design",
+    question: "MODERN DESIGN SENSIBILITIES",
+    answer: "Experience a compelling tactical RPG experience with modern design sensibilities that enhance the classic genre. The game combines traditional tactical gameplay with contemporary visual and mechanical innovations."
   }
 ];
 
@@ -147,7 +117,7 @@ const Faq: React.FC = () => {
             </p>
             <h1 className="text-5xl md:text-6xl font-oldFenris tracking-wider mb-6 text-transparent bg-clip-text drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]"
               style={{ backgroundImage: "linear-gradient(to right, #fff, #fbcea0 80%, #fbcfa0)" }}>
-              FAQ
+              KEY FEATURES
             </h1>
             <div className="w-46 h-[2px] rounded-full" style={{ background: "linear-gradient(to right, #8c6c52, transparent)" }}></div>
           </div>

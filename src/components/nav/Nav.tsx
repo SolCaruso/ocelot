@@ -24,11 +24,17 @@ import {
 import SvgComponent from "@/components/ui/corner"
 import { useRecentPosts } from "@/hooks/useRecentPosts"
 
+// Import new navigation assets
+import vwNavAvif from '@/assets/avif/vw-nav.avif'
+import vwNavWebp from '@/assets/webp/vw-nav.webp'
+import labNavAvif from '@/assets/avif/lab-nav.avif'
+import labNavWebp from '@/assets/webp/lab-nav.webp'
 
 export default function Nav() {
   const defaultImage = '/gif/vw.gif';
   const [isOpen, setIsOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState<string>(defaultImage);
+  const [loadedGifs, setLoadedGifs] = useState<Set<string>>(new Set());
   const imageOrder = [
     '/gif/vw.gif',
     '/gif/lab-hero.gif',
@@ -38,7 +44,19 @@ export default function Nav() {
   const { posts: recentPosts } = useRecentPosts();
   const MAX_SUMMARY_LENGTH = 71;
 
+  // Thumbnail mapping
+  const thumbnailMap = {
+    '/gif/vw.gif': '/avif/vw-nav-thumbnail.avif',
+    '/gif/lab-hero.gif': '/avif/lab-nav-thumbnail.avif',
+    '/gif/world.gif': '/avif/wm-nav-thumbnail.avif',
+  };
 
+  // Logo mapping
+  const logoMap = {
+    '/gif/vw.gif': { avif: vwNavAvif, webp: vwNavWebp },
+    '/gif/lab-hero.gif': { avif: labNavAvif, webp: labNavWebp },
+    '/gif/world.gif': { avif: vwNavAvif, webp: vwNavWebp }, // Using VW logo for world mode
+  };
 
   const handlePreview = (img: string) => {
     const newIndex = imageOrder.indexOf(img);
@@ -48,6 +66,10 @@ export default function Nav() {
 
   const resetPreview = () => {
     setPreviewImage(defaultImage);
+  };
+
+  const handleGifLoad = (gifSrc: string) => {
+    setLoadedGifs(prev => new Set([...prev, gifSrc]));
   };
 
   const handleSocialsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -101,9 +123,8 @@ export default function Nav() {
                               key={previewImage}
                               className="absolute inset-0 h-full w-full rounded-md"
                               style={{
-                                backgroundImage: `url(${previewImage})`,
-                                // Increase height slightly for the Labyrinth GIF to hide its white top edge
-                                backgroundSize: previewImage === '/gif/lab-hero.gif' ? 'cover' : 'cover',
+                                backgroundImage: `url(${loadedGifs.has(previewImage) ? previewImage : thumbnailMap[previewImage as keyof typeof thumbnailMap]})`,
+                                backgroundSize: 'cover',
                                 backgroundPosition: 'center',
                               }}
                               initial={{ opacity: 0 }}
@@ -114,35 +135,63 @@ export default function Nav() {
                           </AnimatePresence>
                           {/* Shader overlay sits above GIF, below logos */}
                           <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+                          
+                          {/* Preload GIFs */}
+                          {imageOrder.map((gifSrc) => (
+                            <img
+                              key={gifSrc}
+                              src={gifSrc}
+                              alt=""
+                              style={{ display: 'none' }}
+                              onLoad={() => handleGifLoad(gifSrc)}
+                            />
+                          ))}
                         </>
                       ) : (
                         <div className="h-6 w-6" />
                       )}
                       <AnimatePresence>
                         {previewImage === '/gif/vw.gif' && (
-                          <motion.img
+                          <motion.div
                             key="logo-vw"
-                            src="/webp/vw.webp"
-                            alt="VW logo overlay"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.25, ease: [0.455, 0.03, 0.515, 0.955] }}
-                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none h-42 w-auto"
-                          />
+                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                            style={{ width: '150px', height: '150px' }}
+                          >
+                            <picture>
+                              <source srcSet={logoMap['/gif/vw.gif'].avif.src} type="image/avif" />
+                              <img
+                                src={logoMap['/gif/vw.gif'].webp.src}
+                                alt="VW logo overlay"
+                                className="w-full h-full object-contain"
+                              />
+                            </picture>
+                          </motion.div>
                         )}
                         {previewImage === '/gif/lab-hero.gif' && (
-                          <motion.img
+                          <motion.div
                             key="logo-lab"
-                            src="/webp/lab.webp"
-                            alt="Labyrinths logo overlay"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.25, ease: [0.455, 0.03, 0.515, 0.955] }}
-                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none h-42 w-auto"
-                          />
+                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                            style={{ width: '150px', height: '150px' }}
+                          >
+                            <picture>
+                              <source srcSet={logoMap['/gif/lab-hero.gif'].avif.src} type="image/avif" />
+                              <img
+                                src={logoMap['/gif/lab-hero.gif'].webp.src}
+                                alt="Labyrinths logo overlay"
+                                className="w-full h-full object-contain"
+                              />
+                            </picture>
+                          </motion.div>
                         )}
+
                       </AnimatePresence>
                     </Link>
                   </NavigationMenuLink>
@@ -182,7 +231,6 @@ export default function Nav() {
                   title={
                     <div className="flex items-center font-semibold opacity-80 group-hover:opacity-100 group-focus:opacity-100 group-active:opacity-100 transition-opacity">
                       <span>World Mode</span>
-                      <Solana className="ml-1 h-4 w-auto" />
                     </div>
                   }
                   className={cn(previewImage === '/gif/world.gif' && 'bg-accent/70')}
@@ -248,11 +296,9 @@ export default function Nav() {
               </a>
             </NavigationMenuLink>
           </NavigationMenuItem>
-
         </NavigationMenuList>
       </NavigationMenu>
 
-      {/* Right: Button */}
       <div className="justify-start mt-1 3xl:mt-1.5 hidden md:flex">
         <Link
           href="https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"
@@ -299,7 +345,7 @@ export default function Nav() {
         >
           <div className="relative w-6 h-6 ">
             <span className={`rounded-full absolute block h-[2.5px] bg-[#FEE8D1] transition-all duration-300 ${isOpen ? "top-[8px] w-0 left-[50%]" : "top-0 w-full left-0"}`}></span>
-            <span className={`rounded-full absolute block h-[2.5px] bg-[#FEE8D1] transition-all duration-300 origin-center top-[8px] w-full right-0 ${isOpen ? "rotate-45" : ""}`}></span>
+            <span className={`rounded-full absolute block h-[2.5px] bg-[#FEE8D1] transition-all-300 origin-center top-[8px] w-full right-0 ${isOpen ? "rotate-45" : ""}`}></span>
             <span className={`rounded-full absolute block h-[2.5px] bg-[#FEE8D1] transition-all duration-300 origin-center top-[8px] w-full right-0 ${isOpen ? "-rotate-45" : ""}`}></span>
             <span className={`rounded-full absolute block h-[2.5px] bg-[#FEE8D1] transition-all duration-300 ${isOpen ? "top-[8px] w-0 left-[50%]" : "top-[16px] w-1/2 right-0"}`}></span>
           </div>

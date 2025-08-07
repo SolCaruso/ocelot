@@ -160,7 +160,7 @@ export default function BlogPreview() {
       {/* CARDS GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8 pb-12 px-8">
         {cards.map((post, index) => {
-          const image = post.image && post.image.trim() !== "" ? post.image : "/jpg/post.jpg"
+          const image = post.image && post.image.trim() !== "" ? post.image : "/avif/post.avif"
           return (
             <Link key={post.date} href={`/updates/${post.date}`} className={`${
               index === 0 ? "block" : // First card always visible
