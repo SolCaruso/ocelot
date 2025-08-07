@@ -42,7 +42,7 @@ export default function Screenshots({ images }: { images?: string[] }) {
   const [isInView, setIsInView] = React.useState(false)
 
 
-  const timeoutRef = React.useRef<NodeJS.Timeout>()
+  const timeoutRef = React.useRef<NodeJS.Timeout | undefined>(undefined)
   const sectionRef = React.useRef<HTMLDivElement>(null)
 
   // Debounce zoom state to prevent rapid toggling
