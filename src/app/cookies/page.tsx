@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Container } from "@/components/ui/container"
 import CookiePolicyClient from "./CookiePolicyClient"
+import { Suspense } from "react"
 
 export const metadata: Metadata = {
   title: "Cookie Policy",
@@ -43,7 +44,9 @@ export default function CookiePolicyPage() {
             Cookie Policy
           </h1>
           
-          <CookiePolicyClient />
+          <Suspense fallback={null}>
+            <CookiePolicyClient />
+          </Suspense>
           <div className="prose prose-lg max-w-none text-white">
             <p className="mb-4 leading-relaxed text-white">
               This Cookie Policy explains how cookies and similar technologies are used in Guild Saga games, websites and related services.
