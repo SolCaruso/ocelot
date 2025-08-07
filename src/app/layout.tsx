@@ -9,7 +9,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   title: {
-    default: "Guild Saga - Tactical RPG Games",
+    default: "Guild Saga - Fantasy Tactics RPG",
     template: "%s | Guild Saga"
   },
   description: "Experience tactical turn-based combat in Guild Saga's fantasy RPG games. Vanished Worlds and Labyrinths offer strategic gameplay with Solana blockchain integration.",

@@ -51,7 +51,9 @@ const labScreenshots = [
 ];
 
 export const metadata: Metadata = {
-  title: "Guild Saga: Labyrinths",
+  title: {
+    absolute: "Guild Saga: Labyrinths"
+  },
   description: "Guild Saga: Labyrinths combines tactical RPG gameplay with Solana blockchain technology. Experience procedurally generated chambers and blockchain asset integration.",
   keywords: ["Labyrinths", "Solana blockchain", "tactical RPG", "blockchain gaming", "procedural generation", "cryptocurrency gaming", "NFT gaming"],
   openGraph: {

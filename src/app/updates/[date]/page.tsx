@@ -87,7 +87,7 @@ export async function generateMetadata({ params }: { params: { date: string } })
         canonical: `/updates/${date}`,
       },
     }
-  } catch (error) {
+  } catch {
     return {
       title: "Post Not Found",
       description: "The requested blog post could not be found.",
@@ -137,8 +137,8 @@ export default async function Page({ params }: { params: { date: string } }) {
         </div>
       </section>
     )
-  } catch (error) {
-    console.error("Error reading cached post:", error)
+  } catch {
+    console.error("Error reading cached post")
     return notFound()
   }
 }

@@ -40,8 +40,8 @@ export default function Screenshots({ images }: { images?: string[] }) {
   const [zoomedIndex, setZoomedIndex] = React.useState<number | null>(null)
   const [isAnimating, setIsAnimating] = React.useState(false)
   const [isInView, setIsInView] = React.useState(false)
-  const [loadedImages, setLoadedImages] = React.useState<Set<number>>(new Set())
-  const [modalImagesLoaded, setModalImagesLoaded] = React.useState<Set<number>>(new Set())
+
+
   const timeoutRef = React.useRef<NodeJS.Timeout>()
   const sectionRef = React.useRef<HTMLDivElement>(null)
 
@@ -101,15 +101,9 @@ export default function Screenshots({ images }: { images?: string[] }) {
     return () => observer.disconnect()
   }, [])
 
-  // Handle image load
-  const handleImageLoad = React.useCallback((index: number) => {
-    setLoadedImages(prev => new Set([...prev, index]))
-  }, [])
 
-  // Handle modal image load (high-res versions)
-  const handleModalImageLoad = React.useCallback((index: number) => {
-    setModalImagesLoaded(prev => new Set([...prev, index]))
-  }, [])
+
+
 
   return (
     <div ref={sectionRef} className="lg:mb-42 mb-24 lg:mt-34 sm:mt-24 mt-12 relative">
@@ -194,7 +188,7 @@ export default function Screenshots({ images }: { images?: string[] }) {
                             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                             className="object-cover"
                             draggable={false}
-                            onLoad={() => handleImageLoad(index)}
+
                           />
                         </picture>
                       ) : (
@@ -214,8 +208,6 @@ export default function Screenshots({ images }: { images?: string[] }) {
         <MobileScreenshots 
           screenshots={screenshots} 
           isInView={isInView}
-          loadedImages={loadedImages}
-          onImageLoad={handleImageLoad}
         />
       </div>
 
@@ -231,7 +223,7 @@ export default function Screenshots({ images }: { images?: string[] }) {
                 width={1920}
                 height={1080}
                 className="object-cover"
-                onLoad={() => handleModalImageLoad(index)}
+
               />
             </picture>
           ))}
@@ -258,14 +250,10 @@ export default function Screenshots({ images }: { images?: string[] }) {
 // Mobile Screenshots component
 function MobileScreenshots({ 
   screenshots, 
-  isInView, 
-  loadedImages, 
-  onImageLoad 
+  isInView
 }: { 
   screenshots: string[]
   isInView: boolean
-  loadedImages: Set<number>
-  onImageLoad: (index: number) => void
 }) {
   const [emblaRef] = useEmblaCarousel({
     align: "center",
@@ -307,7 +295,7 @@ function MobileScreenshots({
                         sizes="100vw"
                         className="object-cover"
                         draggable={false}
-                        onLoad={() => onImageLoad(index)}
+
                       />
                     </picture>
                   ) : (
@@ -371,18 +359,7 @@ function ModalCarousel({ screenshots, initialIndex, onClose }: {
     }
   }, [onClose, emblaApi])
 
-  // Only render visible slides + buffer for performance
-  const getVisibleSlides = React.useMemo(() => {
-    const buffer = 1
-    const visibleSlides = new Set()
-    
-    for (let i = -buffer; i <= buffer; i++) {
-      const index = (currentIndex + i + screenshots.length) % screenshots.length
-      visibleSlides.add(index)
-    }
-    
-    return visibleSlides
-  }, [currentIndex, screenshots.length])
+
   return (
     <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-sm"

@@ -140,6 +140,7 @@ export default function Nav() {
                           
                           {/* Preload GIFs */}
                           {imageOrder.map((gifSrc) => (
+                            // eslint-disable-next-line @next/next/no-img-element
                             <img
                               key={gifSrc}
                               src={gifSrc}
