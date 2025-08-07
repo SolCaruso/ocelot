@@ -7,6 +7,7 @@ import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { NavDrawer } from "@/components/nav/Mobile"
 import Link from "next/link"
+import Image from "next/image"
 import Ocelot from "@/components/logos/Ocelot";
 import OcelotLogo from "@/components/logos/OcelotLogo";
 import Steam from "@/components/logos/partners-mobile/Steam";
@@ -163,9 +164,11 @@ export default function Nav() {
                           >
                             <picture>
                               <source srcSet={logoMap['/gif/vw.gif'].avif.src} type="image/avif" />
-                              <img
+                              <Image
                                 src={logoMap['/gif/vw.gif'].webp.src}
                                 alt="VW logo overlay"
+                                width={150}
+                                height={150}
                                 className="w-full h-full object-contain"
                               />
                             </picture>
@@ -183,9 +186,11 @@ export default function Nav() {
                           >
                             <picture>
                               <source srcSet={logoMap['/gif/lab-hero.gif'].avif.src} type="image/avif" />
-                              <img
+                              <Image
                                 src={logoMap['/gif/lab-hero.gif'].webp.src}
                                 alt="Labyrinths logo overlay"
+                                width={150}
+                                height={150}
                                 className="w-full h-full object-contain"
                               />
                             </picture>

@@ -70,6 +70,7 @@ export default function BlogImage({
         className={className}
         priority
         placeholder="blur"
+        quality={60}
         {...rest}
       />
     ) : (
@@ -82,6 +83,7 @@ export default function BlogImage({
         className={className}
         priority
         placeholder="blur"
+        quality={60}
         {...rest}
       />
     )
@@ -93,10 +95,11 @@ export default function BlogImage({
       webpSrc={webpSrc}
       alt={alt}
       fill
-      sizes={sizes}
+      sizes={sizes || "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"}
       className={className}
       priority
       placeholder="blur"
+      quality={60}
       {...rest}
     />
   ) : (
@@ -109,6 +112,7 @@ export default function BlogImage({
       className={className}
       priority
       placeholder="blur"
+      quality={60}
       {...rest}
     />
   )

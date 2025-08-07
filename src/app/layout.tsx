@@ -10,6 +10,9 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 export const metadata: Metadata = {
   title: "Guild Saga",
   description: "Guild Saga Official Website, Ocelot Technologies .Ltd",
+  other: {
+    'viewport': 'width=device-width, initial-scale=1',
+  },
 }
 
 export default function RootLayout({
@@ -24,6 +27,11 @@ export default function RootLayout({
       ${montserrat.className} ${montserrat.variable} ${inter.variable}
       `}
     >
+      <head>
+        <link rel="preload" href="/video/vw-hero.webm" as="video" type="video/webm" />
+        <link rel="preload" href="/video/lab-hero.webm" as="video" type="video/webm" />
+        <link rel="dns-prefetch" href="//ejktdpjnbhbgmavwltvb.supabase.co" />
+      </head>
       <body className="antialiased bg-gs-bg h-screen font-sans">
         <header>
           <Nav />

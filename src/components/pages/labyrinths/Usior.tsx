@@ -76,7 +76,7 @@ export default function Usor() {
                 {/* Expanded content - hidden on md+ screens, collapsible on smaller screens */}
                 <div className={`md:block ${isExpanded ? 'block' : 'hidden'}`}>
                   <p className="text-white text-shadow-sm font-medium text-lg md:text-xl font-quattrocento leading-relaxed filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.9)]">
-                    Seamlessly integrating Solana blockchain technology into a compelling tactical RPG experience, you'll navigate through procedurally-generated chambers where each room presents new tactical challenges and opportunities for discovery. Whether you lead a company of bronze-ranked adventurers or your own collected heroes, every battle tests your strategic acumen in this unforgiving realm.
+                    Seamlessly integrating Solana blockchain technology into a compelling tactical RPG experience, you&apos;ll navigate through procedurally-generated chambers where each room presents new tactical challenges and opportunities for discovery. Whether you lead a company of bronze-ranked adventurers or your own collected heroes, every battle tests your strategic acumen in this unforgiving realm.
                   </p>
                 </div>
                 

@@ -39,18 +39,15 @@ export default function Screenshots({ images }: { images?: string[] }) {
   const [zoomed, setZoomed] = React.useState(false)
   const [zoomedIndex, setZoomedIndex] = React.useState<number | null>(null)
   const [isAnimating, setIsAnimating] = React.useState(false)
+  const timeoutRef = React.useRef<NodeJS.Timeout>()
 
   // Debounce zoom state to prevent rapid toggling
-  const debouncedSetZoomed = React.useCallback(
-    React.useMemo(() => {
-      let timeout: NodeJS.Timeout
-      return (value: boolean) => {
-        if (timeout) clearTimeout(timeout)
-        timeout = setTimeout(() => setZoomed(value), 50)
-      }
-    }, []),
-    []
-  )
+  const debouncedSetZoomed = React.useCallback((value: boolean) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    timeoutRef.current = setTimeout(() => setZoomed(value), 50)
+  }, [])
 
   React.useEffect(() => {
     if (!api) return
@@ -141,7 +138,7 @@ export default function Screenshots({ images }: { images?: string[] }) {
                 
                 return (
                   <CarouselItem key={index} className="pl-4 basis-[700px]">
-                    <div className={`${cursorClass} ${opacityClass} ${borderClass} overflow-hidden relative`} onClick={onClick}>
+                    <div className={`${cursorClass} ${opacityClass} ${borderClass} overflow-hidden relative aspect-[16/9]`} onClick={onClick}>
                       {index === centerIndex && (
                         <>
                           {/* Top Left Corner */}
@@ -159,9 +156,9 @@ export default function Screenshots({ images }: { images?: string[] }) {
                         <Image
                           src={src}
                           alt={`Screenshot ${index + 1}`}
-                          width={700}
-                          height={394}
-                          className="object-cover w-full h-full"
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          className="object-cover"
                           draggable={false}
                           priority={Math.abs(index - centerIndex) <= 1} // Priority load for visible images
                         />
@@ -226,7 +223,7 @@ function MobileScreenshots({ screenshots }: { screenshots: string[] }) {
             >
               <div className="w-full px-1">
                 <div 
-                  className="w-full relative bg-black/20 border-t border-b border-r border-l border-[#B4906C]/40"
+                  className="w-full relative bg-black/20 border-t border-b border-r border-l border-[#B4906C]/40 aspect-[16/9]"
                 >
                   <span className="absolute top-0 left-0 h-[1.2px] w-full z-10 bg-gradient-to-r from-[#AC8B6A] via-[#AC8B6A]/20 to-[#AC8B6A]" />
                   <picture>
@@ -234,9 +231,9 @@ function MobileScreenshots({ screenshots }: { screenshots: string[] }) {
                     <Image
                       src={src}
                       alt={`Screenshot ${index + 1}`}
-                      width={400}
-                      height={225}
-                      className="object-cover w-full h-auto"
+                      fill
+                      sizes="100vw"
+                      className="object-cover"
                       draggable={false}
                     />
                   </picture>

@@ -427,7 +427,7 @@ export default function Characters({ characters, backgroundClasses }: Characters
                                       fill
                                       className="object-cover w-full h-full select-none scale-[1.75]"
                                       draggable={false}
-                                      sizes="160px"
+                                      sizes="(max-width: 768px) 112px, 160px"
                                       style={{ userSelect: 'none' }}
                                     />
                                   </picture>

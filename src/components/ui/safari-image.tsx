@@ -25,6 +25,7 @@ export function SafariImage({ avifSrc, webpSrc, alt, ...props }: SafariImageProp
       <Image
         src={safariSrc}
         alt={alt}
+        quality={60}
         {...imageProps}
       />
     );
@@ -37,6 +38,7 @@ export function SafariImage({ avifSrc, webpSrc, alt, ...props }: SafariImageProp
       <Image
         src={fallbackSrc}
         alt={alt}
+        quality={60}
         {...imageProps}
       />
     </picture>
