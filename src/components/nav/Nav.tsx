@@ -85,16 +85,17 @@ export default function Nav() {
     <div className="flex items-center justify-end px-4 py-2 max-w-7xl mx-auto absolute top-2 left-0 right-0 z-30">
       {/* Left: Logo */}
       <Link
-  href="/"
-  className="absolute top-0 left-4 z-50 w-[90px] h-[112.5px] 3xl:w-[108px] 3xl:h-[135px] opacity-80 hover:opacity-100 transition-opacity duration-200 ease-[var(--ease-in-out-quad)]"
->
-  <div className="md:hidden">
-    <OcelotLogo className="w-34 mt-2 h-full text-[#FEE8D1]" />
-  </div>
-  <div className="hidden md:block">
-    <Ocelot />
-  </div>
-</Link>
+        href="/"
+        className="absolute top-0 left-4 z-50 w-[90px] h-[112.5px] 3xl:w-[108px] 3xl:h-[135px] opacity-80 hover:opacity-100 transition-opacity duration-200 ease-[var(--ease-in-out-quad)] focus:opacity-100 focus:outline-none"
+        aria-label="Navigate to Guild Saga home page"
+      >
+        <div className="md:hidden">
+          <OcelotLogo className="w-34 mt-2 h-full text-[#FEE8D1]" />
+        </div>
+        <div className="hidden md:block">
+          <Ocelot />
+        </div>
+      </Link>
 
       {/* Center: Navigation */}
       <NavigationMenu className='hidden md:block absolute top-3 left-1/2 transform -translate-x-1/2' onValueChange={(value) => {

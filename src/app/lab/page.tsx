@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Hero from "@/components/header/Hero";
 import { SmokeContainer } from "@/components/sections/SmokeContainer";
 import { Container } from "@/components/ui/container";
@@ -48,6 +49,32 @@ const labScreenshots = [
   "/webp/lab-screenshot6.webp",
   "/webp/lab-screenshot7.webp",
 ];
+
+export const metadata: Metadata = {
+  title: "Guild Saga: Labyrinths",
+  description: "Guild Saga: Labyrinths combines tactical RPG gameplay with Solana blockchain technology. Experience procedurally generated chambers and blockchain asset integration.",
+  keywords: ["Labyrinths", "Solana blockchain", "tactical RPG", "blockchain gaming", "procedural generation", "cryptocurrency gaming", "NFT gaming"],
+  openGraph: {
+    title: "Guild Saga: Labyrinths - Solana Blockchain RPG",
+    description: "Guild Saga: Labyrinths combines tactical RPG gameplay with Solana blockchain technology. Experience procedurally generated chambers and blockchain asset integration.",
+    images: [
+      {
+        url: '/webp/lab.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Guild Saga: Labyrinths',
+      },
+    ],
+  },
+  twitter: {
+    title: "Guild Saga: Labyrinths - Solana Blockchain RPG",
+    description: "Guild Saga: Labyrinths combines tactical RPG gameplay with Solana blockchain technology. Experience procedurally generated chambers and blockchain asset integration.",
+    images: ['/webp/lab.webp'],
+  },
+  alternates: {
+    canonical: '/lab',
+  },
+}
 
 export default function Home() {
   return (

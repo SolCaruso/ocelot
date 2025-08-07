@@ -121,11 +121,11 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
 
           {/* Subtitle for lab page - positioned absolutely */}
           {config.subtitle && config.videoSrc.includes('lab-hero') && (
-            <h3
+            <h4
               className="my-0 py-0 leading-none lg:mt-6 font-bold text-[#B9B9B9] md:text-lg text-center filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] whitespace-nowrap absolute left-1/2 -translate-x-1/2 z-20 top-[calc(50%+8rem)] md:top-[calc(50%+10rem)]"
             >
               {config.subtitle}
-            </h3>
+            </h4>
           )}
 
           {/* Text */}
@@ -143,7 +143,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
                   </h2>
                 </div>
                 {config.subtitle && (
-                  <h3
+                  <h4
                     className={`font-bold text-[#B9B9B9] md:text-lg text-center filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] whitespace-nowrap
                       ${config.videoSrc.includes('lab-hero') ? 'absolute top-0 left-1/2 transform -translate-x-1/2' : ''}
                       ${config.videoSrc.includes('lab-hero') ? 'mt-0 mb-0 pt-0 pb-0 leading-none' : ''}
@@ -151,12 +151,12 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
                     style={config.videoSrc.includes('lab-hero') ? { marginTop: 0, marginBottom: 0, paddingTop: 0, paddingBottom: 0, lineHeight: 1 } : {}}
                   >
                     {config.subtitle}
-                  </h3>
+                  </h4>
                 )}
               </div>
             ) : (
               config.subtitle && (
-                <h3
+                <h4
                   className={`font-bold text-[#B9B9B9] md:text-lg text-center filter drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] whitespace-nowrap
                     ${config.videoSrc.includes('lab-hero') ? 'absolute top-0 left-1/2 transform -translate-x-1/2' : ''}
                     ${config.videoSrc.includes('lab-hero') ? 'mt-0 mb-0 pt-0 pb-0 leading-none' : ''}
@@ -164,7 +164,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
                   style={config.videoSrc.includes('lab-hero') ? { marginTop: 0, marginBottom: 0, paddingTop: 0, paddingBottom: 0, lineHeight: 1 } : {}}
                 >
                   {config.subtitle}
-                </h3>
+                </h4>
               )
             )
           )}

@@ -54,6 +54,7 @@ const Trailer: React.FC = () => {
                         href="https://x.com/GuildSaga"
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label="Follow Guild Saga on X (Twitter)"
                     >
                         <X className="w-12 lg:w-14 h-auto opacity-60 hover:opacity-100 transition-all duration-200 ease-[var(--ease-in-out-quad)]" />
                     </a>
@@ -63,6 +64,7 @@ const Trailer: React.FC = () => {
                         href="https://discord.gg/GuildSaga"
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label="Join Guild Saga Discord server"
                     >
                         <Discord className="w-10 lg:w-13 h-auto m-2 opacity-60 hover:opacity-100 transition-all duration-200 ease-[var(--ease-in-out-quad)]" />
                     </a>
@@ -72,6 +74,7 @@ const Trailer: React.FC = () => {
                         href="https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label="View Guild Saga on Steam"
                     >
                         <Steam className="w-9 lg:w-11 h-auto m-1.5 opacity-60 hover:opacity-100 transition-all duration-200 ease-[var(--ease-in-out-quad)]" />
                     </a>
@@ -81,6 +84,7 @@ const Trailer: React.FC = () => {
                         href="https://www.youtube.com/@GuildSaga"
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label="Subscribe to Guild Saga on YouTube"
                     >
                         <Youtube className="w-12 lg:w-14 h-auto opacity-60 hover:opacity-100 transition-all duration-200 ease-[var(--ease-in-out-quad)]" />
                     </a>

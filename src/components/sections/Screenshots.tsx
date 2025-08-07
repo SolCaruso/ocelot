@@ -39,7 +39,11 @@ export default function Screenshots({ images }: { images?: string[] }) {
   const [zoomed, setZoomed] = React.useState(false)
   const [zoomedIndex, setZoomedIndex] = React.useState<number | null>(null)
   const [isAnimating, setIsAnimating] = React.useState(false)
+  const [isInView, setIsInView] = React.useState(false)
+  const [loadedImages, setLoadedImages] = React.useState<Set<number>>(new Set())
+  const [modalImagesLoaded, setModalImagesLoaded] = React.useState<Set<number>>(new Set())
   const timeoutRef = React.useRef<NodeJS.Timeout>()
+  const sectionRef = React.useRef<HTMLDivElement>(null)
 
   // Debounce zoom state to prevent rapid toggling
   const debouncedSetZoomed = React.useCallback((value: boolean) => {
@@ -78,8 +82,37 @@ export default function Screenshots({ images }: { images?: string[] }) {
     }
   }, [isAnimating, debouncedSetZoomed])
 
+  // Intersection Observer to detect when section is in view
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true)
+          observer.disconnect() // Only trigger once
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
+  // Handle image load
+  const handleImageLoad = React.useCallback((index: number) => {
+    setLoadedImages(prev => new Set([...prev, index]))
+  }, [])
+
+  // Handle modal image load (high-res versions)
+  const handleModalImageLoad = React.useCallback((index: number) => {
+    setModalImagesLoaded(prev => new Set([...prev, index]))
+  }, [])
+
   return (
-    <div className="lg:mb-42 mb-24 lg:mt-34 sm:mt-24 mt-12 relative">
+    <div ref={sectionRef} className="lg:mb-42 mb-24 lg:mt-34 sm:mt-24 mt-12 relative">
       <h2
         className="text-xl md:text-2xl font-medium tracking-widest md:mb-6 mb-5 font-oldFenris drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] uppercase text-center text-transparent bg-clip-text"
         style={{ backgroundImage: 'linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)' }}
@@ -151,18 +184,22 @@ export default function Screenshots({ images }: { images?: string[] }) {
                           </div>
                         </>
                       )}
-                      <picture>
-                        <source srcSet={src.replace('/webp/', '/avif/').replace('.webp', '.avif')} type="image/avif" />
-                        <Image
-                          src={src}
-                          alt={`Screenshot ${index + 1}`}
-                          fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          className="object-cover"
-                          draggable={false}
-                          priority={Math.abs(index - centerIndex) <= 1} // Priority load for visible images
-                        />
-                      </picture>
+                      {isInView ? (
+                        <picture>
+                          <source srcSet={src.replace('/webp/', '/avif/').replace('.webp', '.avif')} type="image/avif" />
+                          <Image
+                            src={src}
+                            alt={`Screenshot ${index + 1}`}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            className="object-cover"
+                            draggable={false}
+                            onLoad={() => handleImageLoad(index)}
+                          />
+                        </picture>
+                      ) : (
+                        <div className="w-full h-full bg-gray-800 animate-pulse" />
+                      )}
                     </div>
                   </CarouselItem>
                 )
@@ -174,8 +211,32 @@ export default function Screenshots({ images }: { images?: string[] }) {
 
       {/* Mobile version (under lg) */}
       <div className="lg:hidden w-full px-0.5">
-        <MobileScreenshots screenshots={screenshots} />
+        <MobileScreenshots 
+          screenshots={screenshots} 
+          isInView={isInView}
+          loadedImages={loadedImages}
+          onImageLoad={handleImageLoad}
+        />
       </div>
+
+      {/* Hidden high-resolution images for modal - load when section is in view */}
+      {isInView && (
+        <div className="hidden">
+          {screenshots.map((src, index) => (
+            <picture key={`modal-${index}`}>
+              <source srcSet={src.replace('/webp/', '/avif/').replace('.webp', '.avif')} type="image/avif" />
+              <Image
+                src={src}
+                alt={`Screenshot ${index + 1} - Modal`}
+                width={1920}
+                height={1080}
+                className="object-cover"
+                onLoad={() => handleModalImageLoad(index)}
+              />
+            </picture>
+          ))}
+        </div>
+      )}
 
       {/* Modal Zoom Overlay - only for desktop */}
       <AnimatePresence mode="wait">
@@ -195,7 +256,17 @@ export default function Screenshots({ images }: { images?: string[] }) {
 }
 
 // Mobile Screenshots component
-function MobileScreenshots({ screenshots }: { screenshots: string[] }) {
+function MobileScreenshots({ 
+  screenshots, 
+  isInView, 
+  loadedImages, 
+  onImageLoad 
+}: { 
+  screenshots: string[]
+  isInView: boolean
+  loadedImages: Set<number>
+  onImageLoad: (index: number) => void
+}) {
   const [emblaRef] = useEmblaCarousel({
     align: "center",
     loop: true,
@@ -226,17 +297,22 @@ function MobileScreenshots({ screenshots }: { screenshots: string[] }) {
                   className="w-full relative bg-black/20 border-t border-b border-r border-l border-[#B4906C]/40 aspect-[16/9]"
                 >
                   <span className="absolute top-0 left-0 h-[1.2px] w-full z-10 bg-gradient-to-r from-[#AC8B6A] via-[#AC8B6A]/20 to-[#AC8B6A]" />
-                  <picture>
-                    <source srcSet={src.replace('/webp/', '/avif/').replace('.webp', '.avif')} type="image/avif" />
-                    <Image
-                      src={src}
-                      alt={`Screenshot ${index + 1}`}
-                      fill
-                      sizes="100vw"
-                      className="object-cover"
-                      draggable={false}
-                    />
-                  </picture>
+                  {isInView ? (
+                    <picture>
+                      <source srcSet={src.replace('/webp/', '/avif/').replace('.webp', '.avif')} type="image/avif" />
+                      <Image
+                        src={src}
+                        alt={`Screenshot ${index + 1}`}
+                        fill
+                        sizes="100vw"
+                        className="object-cover"
+                        draggable={false}
+                        onLoad={() => onImageLoad(index)}
+                      />
+                    </picture>
+                  ) : (
+                    <div className="w-full h-full bg-gray-800 animate-pulse" />
+                  )}
                 </div>
               </div>
             </div>
@@ -307,7 +383,6 @@ function ModalCarousel({ screenshots, initialIndex, onClose }: {
     
     return visibleSlides
   }, [currentIndex, screenshots.length])
-
   return (
     <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center bg-transparent backdrop-blur-sm"
@@ -364,21 +439,19 @@ function ModalCarousel({ screenshots, initialIndex, onClose }: {
                       <SvgComponent className="w-42 h-42" />
                     </div>
                     
-                    {/* Only render images that are visible or adjacent for performance */}
-                    {getVisibleSlides.has(idx) && (
-                      <picture>
-                        <source srcSet={src.replace('/webp/', '/avif/').replace('.webp', '.avif')} type="image/avif" />
-                        <Image
-                          src={src}
-                          alt={`Screenshot ${idx + 1}`}
-                          fill
-                          className="object-cover"
-                          draggable={false}
-                          priority={idx === currentIndex}
-                          sizes="80vw"
-                        />
-                      </picture>
-                    )}
+                    {/* Render all images in modal since they're preloaded */}
+                    <picture>
+                      <source srcSet={src.replace('/webp/', '/avif/').replace('.webp', '.avif')} type="image/avif" />
+                      <Image
+                        src={src}
+                        alt={`Screenshot ${idx + 1}`}
+                        fill
+                        className="object-cover"
+                        draggable={false}
+                        priority={idx === currentIndex}
+                        sizes="80vw"
+                      />
+                    </picture>
                   </div>
                 </div>
               </div>

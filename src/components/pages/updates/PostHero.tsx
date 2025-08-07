@@ -50,6 +50,9 @@ export default function PostHero({ post }: PostHeroProps) {
             sizes="100vw"
             className="object-cover w-full h-full select-none scale-110"
             draggable={false}
+            priority
+            fetchPriority="high"
+            quality={90}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/0" />
         </div>

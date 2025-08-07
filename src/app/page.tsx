@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Hero from "@/components/header/Hero";
 import { SmokeContainer } from "@/components/sections/SmokeContainer";
 import { Container } from "@/components/ui/container";
@@ -201,6 +202,32 @@ const vwScreenshots = [
   "/webp/Screenshot8.webp",
   "/webp/Screenshot9.webp",
 ];
+
+export const metadata: Metadata = {
+  title: "Guild Saga: Vanished Worlds",
+  description: "Experience tactical turn-based combat in Guild Saga: Vanished Worlds. Recruit heroes, explore dungeons, and master strategic gameplay in this fantasy RPG.",
+  keywords: ["Vanished Worlds", "tactical RPG", "turn-based combat", "fantasy game", "strategy game", "hero recruitment", "dungeon exploration"],
+  openGraph: {
+    title: "Guild Saga: Vanished Worlds - Tactical RPG",
+    description: "Experience tactical turn-based combat in Guild Saga: Vanished Worlds. Recruit heroes, explore dungeons, and master strategic gameplay.",
+    images: [
+      {
+        url: '/webp/vw.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Guild Saga: Vanished Worlds',
+      },
+    ],
+  },
+  twitter: {
+    title: "Guild Saga: Vanished Worlds - Tactical RPG",
+    description: "Experience tactical turn-based combat in Guild Saga: Vanished Worlds. Recruit heroes, explore dungeons, and master strategic gameplay.",
+    images: ['/webp/vw.webp'],
+  },
+  alternates: {
+    canonical: '/',
+  },
+}
 
 export default function Home() {
   return (

@@ -69,6 +69,7 @@ export default function BlogImage({
         sizes={sizes}
         className={className}
         priority
+        fetchPriority="high"
         placeholder="blur"
         quality={60}
         {...rest}
@@ -82,6 +83,7 @@ export default function BlogImage({
         height={height}
         className={className}
         priority
+        fetchPriority="high"
         placeholder="blur"
         quality={60}
         {...rest}
@@ -98,6 +100,7 @@ export default function BlogImage({
       sizes={sizes || "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"}
       className={className}
       priority
+      fetchPriority="high"
       placeholder="blur"
       quality={60}
       {...rest}
@@ -111,6 +114,7 @@ export default function BlogImage({
       height={height}
       className={className}
       priority
+      fetchPriority="high"
       placeholder="blur"
       quality={60}
       {...rest}

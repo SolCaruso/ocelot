@@ -77,6 +77,7 @@ export default function HeroVideo({ videoSrc, posterSrc }: HeroVideoProps) {
       >
         <source src={videoSrc} type="video/webm" />
         <source src={videoSrc.replace('.webm', '.mp4')} type="video/mp4" />
+        <track kind="captions" src="/captions/hero-captions.vtt" srcLang="en" label="English" />
       </video>
     </div>
   )

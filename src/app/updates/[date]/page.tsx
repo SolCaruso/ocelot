@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import PostHero from "@/components/pages/updates/PostHero"
 import { ClientPost } from "@/components/pages/updates/ClientPost"
@@ -30,6 +31,69 @@ function formatDateUTC(dateString: string): string {
 }
 
 const FALLBACKS = ["/avif/post.avif", "/avif/post1.avif", "/avif/post2.avif", "/avif/post3.avif"]
+
+export async function generateMetadata({ params }: { params: { date: string } }): Promise<Metadata> {
+  const { date } = params
+
+  try {
+    const cachePath = join(process.cwd(), 'public', 'cached-posts.json')
+    const cacheData = JSON.parse(readFileSync(cachePath, 'utf-8'))
+    const posts: BlogPost[] = cacheData.posts || []
+    const post = posts.find((p: BlogPost) => p.date === date)
+
+    if (!post) {
+      return {
+        title: "Post Not Found",
+        description: "The requested blog post could not be found.",
+      }
+    }
+
+    // Fallback image logic
+    let image = post.image && post.image.trim() !== "" ? post.image : null
+    if (!image) {
+      const postIndex = posts.findIndex((p: BlogPost) => p.date === date)
+      if (postIndex !== -1) {
+        image = FALLBACKS[postIndex % FALLBACKS.length]
+      } else {
+        image = FALLBACKS[0]
+      }
+    }
+
+    return {
+      title: post.title,
+      description: post.summary,
+      keywords: ["Guild Saga", "game development", "tactical RPG", "blog post", post.title.toLowerCase()],
+      openGraph: {
+        title: post.title,
+        description: post.summary,
+        images: [
+          {
+            url: image || '/webp/post.webp',
+            width: 1200,
+            height: 630,
+            alt: post.title,
+          },
+        ],
+        type: 'article',
+        publishedTime: post.date,
+      },
+      twitter: {
+        title: post.title,
+        description: post.summary,
+        images: [image || '/webp/post.webp'],
+        card: 'summary_large_image',
+      },
+      alternates: {
+        canonical: `/updates/${date}`,
+      },
+    }
+  } catch (error) {
+    return {
+      title: "Post Not Found",
+      description: "The requested blog post could not be found.",
+    }
+  }
+}
 
 export default async function Page({ params }: { params: { date: string } }) {
   const { date } = params

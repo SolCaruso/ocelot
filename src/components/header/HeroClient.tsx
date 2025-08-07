@@ -94,6 +94,7 @@ export default function HeroClient({ onPlay }: HeroClientProps) {
                         fill
                         draggable={false}
                         priority
+                        fetchPriority="high"
                         placeholder="blur"
                         quality={15}
                       />
@@ -118,21 +119,21 @@ export default function HeroClient({ onPlay }: HeroClientProps) {
               {/* Text block */}
               <div className="md:ml-8 flex-1 text-center lg:text-left max-w-xl min-w-[20rem]">
                 {/* Simple text for screens under xl */}
-                <h3 
+                <h2 
                   className="xl:hidden text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4 tracking-[0.02em] text-transparent bg-clip-text"
                   style={{ backgroundImage: "linear-gradient(135deg, #fff, #fbcea0 66%, #fbcfa0)" }}
                 >
                   FANTASY TACTICS
-                </h3>
+                </h2>
                 {/* Smoke effect for xl+ screens */}
-                <h3
+                <h2
                   className="max-xl:hidden smoke text-4xl md:text-5xl font-oldFenris filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] pb-4 tracking-[0.02em]"
                   id="fantasy-tactics-smoke"
                 >
                   <div>
                     <span>F</span><span>A</span><span>N</span><span>T</span><span>A</span><span>S</span><span>Y</span><span>&nbsp;</span><span>T</span><span>A</span><span>C</span><span>T</span><span>I</span><span>C</span><span>S</span>
                   </div>
-                </h3>
+                </h2>
                 <p className="mt-4 text-stone-50 md:text-xl font-quattrocento filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] ">
                   Tactical, isometric turn-based combat draws inspiration from the classic RPGs of old, offering both
                   depth and strategy.
