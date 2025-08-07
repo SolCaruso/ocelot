@@ -3,6 +3,8 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import postAvif from '@/assets/avif/post.avif'
+import postWebp from '@/assets/webp/post.webp'
 
 interface PostHeroProps {
   post: {
@@ -20,7 +22,7 @@ export default function PostHero({ post }: PostHeroProps) {
     setLoaded(true)
   }, [])
 
-  const heroImage = post.image && post.image.trim() !== '' ? post.image : '/jpg/post.jpg';
+  const heroImage = post.image && post.image.trim() !== '' ? post.image : postWebp;
 
   return (
     <article className="mb-12 max-w-7xl mx-auto relative h-[350px] md:h-[500px] overflow-hidden">
@@ -43,17 +45,20 @@ export default function PostHero({ post }: PostHeroProps) {
             loaded ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <Image
-            src={heroImage}
-            alt={post.title}
-            fill
-            sizes="100vw"
-            className="object-cover w-full h-full select-none scale-110"
-            draggable={false}
-            priority
-            fetchPriority="high"
-            quality={90}
-          />
+          <picture>
+            <source srcSet={postAvif.src} type="image/avif" />
+            <Image
+              src={heroImage}
+              alt={post.title}
+              fill
+              sizes="100vw"
+              className="object-cover w-full h-full select-none scale-110"
+              draggable={false}
+              priority
+              fetchPriority="high"
+              quality={90}
+            />
+          </picture>
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/0" />
         </div>
       </div>
