@@ -20,7 +20,7 @@ export default function PostHero({ post }: PostHeroProps) {
     setLoaded(true)
   }, [])
 
-  const heroImage = post.image && post.image.trim() !== '' ? post.image : '/avif/post.avif';
+  const heroImage = post.image && post.image.trim() !== '' ? post.image : '/jpg/post.jpg';
 
   return (
     <article className="mb-12 max-w-7xl mx-auto relative h-[350px] md:h-[500px] overflow-hidden">
