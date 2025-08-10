@@ -7,7 +7,7 @@ import X from '@/components/logos/social/X';
 import Youtube from '@/components/logos/social/Youtube';
 import Discord from '@/components/logos/social/Discord';
 import Steam from '@/components/logos/social/Steam';
-import Image from 'next/image';
+// import Image from 'next/image';
 import Link from 'next/link';
 
 const Trailer: React.FC = () => {
