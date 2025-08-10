@@ -129,10 +129,10 @@ const Trailer: React.FC = () => {
                         </div>
                     </div>
                     {/* Rating */}
-                    <div className='flex gap-2 mt-5 w-24 md:w-auto'>
+                    {/* <div className='flex gap-2 mt-5 w-24 md:w-auto'>
                         <Image src={'/webp/esrb.webp'} alt={'ESRB'} width={65} height={97} ></Image>
                         <Image src={'/webp/mature.webp'} alt={'Mature'} width={65} height={97} ></Image>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </footer>
