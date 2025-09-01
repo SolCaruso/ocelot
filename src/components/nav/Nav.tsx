@@ -230,7 +230,7 @@ export default function Nav() {
                   onMouseEnter={() => handlePreview('/gif/lab-hero.gif')}
                 >
                   <span className="line-clamp-2 text-sm leading-snug opacity-50 group-hover:opacity-80 text-white">
-                    Pvp gauntlet mode game built on Solana (coming soon).
+                    Gauntlet mode game built on Solana (coming soon).
                   </span>
                 </ListItem>
                 <ListItem
