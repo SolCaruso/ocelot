@@ -235,7 +235,7 @@ const Faq: React.FC = () => {
                 {/* Read More Button */}
                 <div className="flex justify-start pt-4">
                   <a 
-                    href="https://store.epicgames.com/en-US/p/guild-saga-tales-of-respite-ca0f96"
+                    href="https://store.epicgames.com/en-US/p/guild-saga-labyrinths-ca0f96"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group cursor-pointer relative overflow-hidden px-8 py-3.5 gradient-border-top transition-all duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] opacity-100 translate-y-0 backdrop-blur-sm bg-black/20"
