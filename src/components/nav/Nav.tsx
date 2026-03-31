@@ -7,6 +7,7 @@ import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { NavDrawer } from "@/components/nav/Mobile"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import Image from "next/image"
 import Ocelot from "@/components/logos/Ocelot";
 import OcelotLogo from "@/components/logos/OcelotLogo";
@@ -32,6 +33,7 @@ import labNavAvif from '@/assets/avif/lab-nav.avif'
 import labNavWebp from '@/assets/webp/lab-nav.webp'
 
 export default function Nav() {
+  const pathname = usePathname()
   const defaultImage = '/gif/vw.gif';
   const [isOpen, setIsOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState<string>(defaultImage);
@@ -44,6 +46,11 @@ export default function Nav() {
   const prevIndexRef = useRef(imageOrder.indexOf(defaultImage));
   const { posts: recentPosts } = useRecentPosts();
   const MAX_SUMMARY_LENGTH = 71;
+  const isLabPage = pathname === "/lab"
+  const ctaHref = isLabPage
+    ? "https://store.epicgames.com/en-US/p/guild-saga-labyrinths-ca0f96"
+    : "https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"
+  const ctaLabel = isLabPage ? "COMING SOON" : "BUY NOW"
 
   // Thumbnail mapping
   const thumbnailMap = {
@@ -309,7 +316,7 @@ export default function Nav() {
 
       <div className="justify-start mt-1 3xl:mt-1.5 hidden md:flex">
         <Link
-          href="https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"
+          href={ctaHref}
           target="_blank"
           rel="noopener noreferrer"
           className="group cursor-pointer relative overflow-hidden 3xl:px-8 3xl:py-3 py-3 px-8 gradient-border-top transition-all duration-200 ease-[var(--ease-in-out-quad)] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] opacity-100 translate-y-0 backdrop-blur-sm bg-black/20"
@@ -338,7 +345,7 @@ export default function Nav() {
           
           <div className="relative">
             <p className="uppercase font-quattrocento text-base tracking-wide font-semibold text-[#fbcea0] group-hover:text-white text-center">
-              BUY NOW
+              {ctaLabel}
             </p>
           </div>
         </Link>
