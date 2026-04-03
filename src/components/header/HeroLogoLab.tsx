@@ -65,7 +65,7 @@ export default function HeroLogoLab({ widthClasses }: HeroLogoLabProps) {
       <div className="hidden md:block">
         <video
           ref={videoRef}
-          className="w-full h-auto animate-glitch-main"
+          className="w-full h-auto animate-glitch-main brightness-125 contrast-110 saturate-125"
           autoPlay
           muted
           playsInline

@@ -11,10 +11,10 @@ const heroConfig = {
   videoSrc: "/video/lab-hero.webm",
   posterSrc: "/assets/webp/lab-hero-thumb.webp",
   logo: {
-    widthClasses: "w-[20rem] md:w-[30rem] lg:w-[36rem]"
+    widthClasses: "w-[20rem] sm:w-[25rem] md:w-[29rem] lg:w-[34rem] 3xl:w-[36rem]"
   },
   title: "",
-  subtitle: "COMING SOON",
+  subtitle: "",
   characterIllustration: {
     src: "/webp/thal.webp",
     alt: "Thal Character Illustration"
@@ -24,12 +24,15 @@ const heroConfig = {
     showSteam: false,
   },
   layout: {
-    logoPadding: "lg:pt-16 pb-20 md:pt-20", 
+    logoPadding: "lg:pt-14 3xl:pt-7 pb-28 md:pt-18",
     partnerMargin: "md:mb-8",
     buttonPosition: "mt-4 sm:mt-8",
     buttonSize: "text-sm md:text-base 3xl:text-xl",
     buttonTop: "68%",
-    showButton: false,
+    buttonHueClass: " saturate-200 brightness-110",
+    showButton: true,
+    buttonLabel: "WISHLIST",
+    buttonHref: "https://store.epicgames.com/en-US/p/guild-saga-labyrinths-ca0f96",
     showTrailer: false,
     characterSize: "w-[500px] 3xl:w-[550px] 4xl:w-[650px]"
   },

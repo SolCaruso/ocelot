@@ -50,7 +50,7 @@ export default function Nav() {
   const ctaHref = isLabPage
     ? "https://store.epicgames.com/en-US/p/guild-saga-labyrinths-ca0f96"
     : "https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"
-  const ctaLabel = isLabPage ? "COMING SOON" : "BUY NOW"
+  const ctaLabel = isLabPage ? "WISHLIST" : "BUY NOW"
 
   // Thumbnail mapping
   const thumbnailMap = {

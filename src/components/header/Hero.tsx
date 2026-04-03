@@ -52,7 +52,10 @@ interface HeroProps {
       buttonPosition: string
       buttonSize: string
       buttonTop: string
+      buttonHueClass?: string
       showButton?: boolean
+      buttonLabel?: string
+      buttonHref?: string
       showTrailer?: boolean
       characterSize?: string
     }
@@ -111,7 +114,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
           />
         </div>
 
-        <div className={`absolute inset-x-0 top-0 bottom-0 transform-gpu z-20 flex flex-col items-center justify-center md:justify-start text-center ${config.layout.logoPadding} ${config.videoSrc.includes('lab-hero') ? 'translate-y-8 md:translate-y-12' : ''}`}>
+        <div className={`absolute inset-x-0 top-0 bottom-0 transform-gpu z-20 flex flex-col items-center justify-center md:justify-start text-center ${config.layout.logoPadding} ${config.videoSrc.includes('lab-hero') ? 'md:translate-y-12' : ''}`}>
           {/* Logo */}
           {config.videoSrc.includes('lab-hero') ? (
             <HeroLogoLab widthClasses={config.logo.widthClasses} />
@@ -172,9 +175,9 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
 
         {/* Button - positioned separately to avoid layout shifts */}
         {config.layout.showButton !== false && (
-          <div className={`absolute inset-x-0 transform-gpu z-20 flex items-center hue-rotate-[200deg] justify-center ${config.layout.buttonPosition}`} style={{ top: config.layout.buttonTop }}>
+          <div className={`absolute inset-x-0 transform-gpu z-20 flex items-center justify-center ${config.layout.buttonHueClass ?? "hue-rotate-[200deg]"} ${config.layout.buttonPosition}`} style={{ top: config.layout.buttonTop }}>
             <a
-              href="https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"
+              href={config.layout.buttonHref ?? "https://store.steampowered.com/app/2184350/Guild_Saga_Vanished_Worlds/"}
               target="_blank"
               rel="noopener noreferrer"
               className={`px-8 py-2 font-oldFenris bg-black hover:bg-[#18160d] opacity-80 hover:opacity-100 cursor-pointer transition-all duration-200 ease-[var(--ease-in-out-quad)] ${config.layout.buttonSize}`}
@@ -183,7 +186,7 @@ const Hero: React.FC<HeroProps> = ({ className, height, children, config }) => {
                 borderImage: 'url("/webp/temp-btn.webp") 20 round',
               }}
             >
-              BUY NOW
+              {config.layout.buttonLabel ?? "BUY NOW"}
             </a>
           </div>
         )}
